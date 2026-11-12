@@ -1,0 +1,32 @@
+# secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+# node
+node_modules/
+.next/
+dist/
+build/
+apps/web/playwright-report/
+apps/web/test-results/
+# generated / private data
+data/processed/
+evals/datasets/*hidden*
+evals/datasets/*test_set*
+# local model + db volumes
+.ollama/
+pgdata/
+# editor / OS
+.DS_Store
+.idea/
+.vscode/
