@@ -1,0 +1,46 @@
+# Models are chosen per node HERE, never in code. Tune by measurement (R&D questions A/B/C).
+marketplace:
+  mode: gigsim            # gigsim | upwork
+  max_requests_per_minute: 20
+  live_poll_interval_minutes: 180
+
+profiles:
+  open:                   # REQUIRED: open-weight only (local Ollama/vLLM or hosted open provider)
+    provider: openrouter  # ollama | openrouter | groq | together
+    nodes:
+      scout: {model: TBD-small}
+      analyst: {model: TBD-small}
+      risk_assessor: {model: TBD-small}
+      fit_matcher: {model: TBD-small}
+      pricing: {model: TBD-small}
+      verifier: {model: TBD-mid}
+      writer: {model: TBD-large}
+      critic: {model: TBD-large}
+      compliance: {model: TBD-small}
+      client_liaison: {model: TBD-large}
+    fallback_model: TBD-small
+    embeddings: nomic-embed-text      # open model, CPU-friendly
+    reranker: bge-reranker-v2-m3
+  paid:                   # OPTIONAL
+    provider: openai
+    nodes: {}
+
+active_profile: open
+
+rag:
+  variant: v0_naive       # changed ONLY after measurement (R6)
+
+budgets:
+  max_graph_steps: 30
+  max_revisions: 2
+  max_tokens_per_job: 12000
+  declared_p95_latency_s: {job_analysed: TBD, proposal: TBD}
+  declared_cost_usd: {job_analysed: TBD, proposal: TBD}
+
+thresholds:
+  minimum_fit_score: 0.60
+  maximum_risk_score: 0.70
+
+policy:                   # rules in config, not code (change-request readiness)
+  version: 1
+  path: data/policy_pack/policy.yaml

@@ -1,0 +1,2 @@
+# TODO Phase 6: web, api, worker, 3 MCP servers, gigsim, postgres(+pgvector), redis, ollama.
+services: {}
