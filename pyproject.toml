@@ -1,0 +1,31 @@
+[project]
+name = "gigbid"
+version = "0.1.0"
+description = "GigBid: multi-agent freelancer copilot (AI-4016 R&D assignment)"
+requires-python = ">=3.11"
+# Unpinned here on purpose; `uv lock` writes exact versions to uv.lock (commit it).
+dependencies = [
+  "fastapi", "uvicorn[standard]", "pydantic", "pydantic-settings", "pyyaml", "httpx",
+  "python-dotenv", "sse-starlette", "cryptography", "python-jose[cryptography]", "passlib[bcrypt]",
+  "langgraph", "langgraph-checkpoint-postgres", "langgraph-supervisor", "langchain-core",
+  "langchain-mcp-adapters", "mcp[cli]",
+  "psycopg[binary,pool]", "pgvector", "redis", "arq",
+  "rank-bm25", "sentence-transformers", "pypdf", "langsmith",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-asyncio", "pytest-cov", "ruff", "mypy", "syrupy", "httpx"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["agent*", "apps*", "rag*", "mcp_servers*", "worker*", "evals*", "gigsim*", "data*"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests", "mcp_servers"]
