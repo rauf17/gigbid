@@ -1,0 +1,11 @@
+name: Smoke eval
+on: [pull_request]
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --extra dev
+      # TODO Phase 5: 30-job smoke eval; fail if unsupported-claims rises or bid/skip F1 drops
+      - run: echo "smoke eval placeholder"
