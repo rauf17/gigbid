@@ -14,7 +14,7 @@ lint:
 check:
 	uv run python scripts/check_repo_rules.py
 seed:
-	@echo "TODO: load personas + GigSim seed data (Phase 1)"
+	uv run python gigsim/seed.py
 eval:
 	@echo "TODO: retrieval + decision + GigSim outcome evals -> evals/results/*.json (Phase 5)"
 demo:
