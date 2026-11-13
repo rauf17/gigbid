@@ -201,13 +201,13 @@ def test_admin_tick_and_proposal_evaluation(client: TestClient):
     assert tick_data["released_jobs"] == 5
     assert tick_data["proposals_evaluated"] >= 1
 
-    # Check that proposal advanced from 'submitted' to 'replied' or 'interview'
+    # Check that proposal advanced from 'submitted' to one of the valid outcomes
     proposals = client.get("/proposals").json()
     target_prop = next(p for p in proposals if p["id"] == prop_id)
-    assert target_prop["status"] in {"replied", "interview", "viewed"}
+    assert target_prop["status"] in {"ignored", "viewed", "replied", "interview", "hired"}
 
-    # If replied or interview, verify conversation was created
-    if target_prop["status"] in {"replied", "interview"}:
+    # If replied, interview, or hired, verify conversation was created
+    if target_prop["status"] in {"replied", "interview", "hired"}:
         convs = client.get("/conversations").json()
         assert len(convs) >= 1
         conv_id = convs[0]["id"]

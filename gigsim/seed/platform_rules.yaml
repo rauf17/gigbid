@@ -38,3 +38,5 @@ simulation:
   time_advance_hours_per_tick: 24
   fault_injection_rate: 0.03     # 3% simulated transient 500 errors
   latency_ms: 0                  # default 0ms added latency
+  client_llm: false              # OFF by default; deterministic simulation mode
+

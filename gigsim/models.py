@@ -53,6 +53,7 @@ class ProposalCreateRequest(BaseModel):
     screening_answers: Any = None
     bid_amount: float = Field(gt=0)
     dry_run: bool = False
+    id: str | None = None
 
 
 class ProposalResponse(BaseModel):

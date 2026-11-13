@@ -11,7 +11,6 @@ REST API simulator providing:
 from __future__ import annotations
 
 import json
-import re
 import sqlite3
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
@@ -22,6 +21,7 @@ from uuid import uuid4
 import yaml
 from fastapi import Depends, FastAPI, Header, HTTPException, Query
 
+from gigsim.clients import evaluate_proposal
 from gigsim.models import (
     ConnectsBalanceResponse,
     ConversationResponse,
@@ -250,7 +250,7 @@ def create_proposal(
     # 3. Dry-Run Check (returns what would be stored/sent + connects cost; no Connects spent, no DB insert)
     if body.dry_run:
         resp = ProposalResponse(
-            id=f"draft_preview_{body.job_id}",
+            id=body.id or f"draft_preview_{body.job_id}",
             job_id=body.job_id,
             cover_letter=body.cover_letter,
             screening_answers=body.screening_answers,
@@ -264,7 +264,7 @@ def create_proposal(
         return resp
 
     # 4. Create Draft Proposal (no Connects spent until /submit)
-    prop_id = f"prop_{uuid4().hex[:10]}"
+    prop_id = body.id or f"prop_{uuid4().hex[:10]}"
     answers_json = json.dumps(body.screening_answers) if body.screening_answers else None
 
     with conn:
@@ -514,69 +514,68 @@ def admin_tick(
     with conn:
         conn.execute("UPDATE meta SET value = ? WHERE key = 'simulated_time'", (new_sim_time,))
 
-    # 3. Fast deterministic evaluation of submitted proposals against client hidden preferences
+    # 3. Fast deterministic evaluation of submitted proposals using Client Decision Engine
     submitted_props = conn.execute("""
-    SELECT p.*, j.client_id, c.hidden_json, c.company
+    SELECT p.*, j.client_id, j.title AS job_title, j.description AS job_desc,
+           j.posted_at AS job_posted_at, j.skills_json AS job_skills_json, j.category AS job_category,
+           c.company, c.industry, c.country, c.payment_verified, c.total_spent,
+           c.hire_rate, c.avg_rating, c.jobs_posted, c.review_count, c.hidden_json
     FROM proposals p
     JOIN jobs j ON p.job_id = j.id
     JOIN clients c ON j.client_id = c.id
     WHERE p.status = 'submitted'
     """).fetchall()
 
+    rules = load_platform_rules()
+    client_llm = rules.get("simulation", {}).get("client_llm", False)
     updates: list[dict[str, Any]] = []
 
     for prop in submitted_props:
         hidden = json.loads(prop["hidden_json"])
-        cover = prop["cover_letter"].lower()
-        score = 0.50
+        client_public = {
+            "company": prop["company"],
+            "industry": prop["industry"],
+            "country": prop["country"],
+            "payment_verified": bool(prop["payment_verified"]),
+            "total_spent": prop["total_spent"],
+            "hire_rate": prop["hire_rate"],
+            "avg_rating": prop["avg_rating"],
+            "jobs_posted": prop["jobs_posted"],
+            "review_count": prop["review_count"],
+        }
+        job_data = {
+            "title": prop["job_title"],
+            "description": prop["job_desc"],
+            "posted_at": prop["job_posted_at"],
+            "skills": json.loads(prop["job_skills_json"]) if prop["job_skills_json"] else [],
+            "category": prop["job_category"],
+            "company": prop["company"],
+        }
 
-        # Preference 1: Metrics
-        has_metrics = bool(re.search(r"\d+%|\$\d+|\b\d+\b", cover))
-        if hidden.get("likes_metrics", False):
-            score += 0.25 if has_metrics else -0.15
-
-        # Preference 2: Dislikes generic openers
-        is_generic = any(
-            phrase in cover for phrase in [
-                "very interested in your job posting", "100% job success",
-                "hire me and i will get started", "great reviews. please check my profile",
-                "lowest price, 24/7 support"
-            ]
+        # Check for scam indicators
+        desc_lower = str(prop["job_desc"]).lower()
+        is_scam = (
+            (not bool(prop["payment_verified"]) and prop["total_spent"] == 0)
+            or any(s in desc_lower for s in ["telegram", "whatsapp", "crypto", "unpaid test"])
         )
-        if hidden.get("dislikes_generic_openers", False):
-            score -= 0.35 if is_generic else -0.10
 
-        # Preference 3: Must-have skills matching
-        must_skills = [s.lower() for s in hidden.get("must_have_skills", [])]
-        matched_skills = sum(1 for s in must_skills if s in cover)
-        if matched_skills >= 2:
-            score += 0.20
-
-        # Preference 4: Budget ceiling
-        if prop["bid_amount"] <= hidden.get("budget_ceiling", 999999):
-            score += 0.10
-        else:
-            score -= 0.30
-
-        # Determine transition based on score
-        if score >= 0.72:
-            new_status = "interview"
-            feedback = "Strong proposal with verifiable metrics and concrete solution architecture."
-        elif score >= 0.52:
-            new_status = "replied"
-            feedback = "Good technical profile; requested preliminary clarifications on availability."
-        else:
-            new_status = "viewed"
-            feedback = "Profile viewed; did not meet specificity or rate criteria."
+        eval_res = evaluate_proposal(
+            proposal=dict(prop),
+            client_hidden=hidden,
+            job=job_data,
+            client_public=client_public,
+            is_scam=is_scam,
+            client_llm=client_llm,
+        )
 
         with conn:
             conn.execute(
                 "UPDATE proposals SET status = ?, score = ?, client_feedback = ? WHERE id = ?",
-                (new_status, score, feedback, prop["id"])
+                (eval_res.status, eval_res.score, eval_res.feedback, prop["id"])
             )
 
-            # If client replied or scheduled interview, open a conversation and post client message
-            if new_status in {"replied", "interview"}:
+            # If client replied, invited to interview, or hired, create conversation and client message
+            if eval_res.status in {"replied", "interview", "hired"} and eval_res.message:
                 conv_id = f"conv_{uuid4().hex[:8]}"
                 msg_id = f"msg_{uuid4().hex[:8]}"
                 conn.execute(
@@ -584,19 +583,12 @@ def admin_tick(
                     (conv_id, prop["id"], prop["job_id"], prop["client_id"], new_sim_time, new_sim_time)
                 )
 
-                initial_text = (
-                    f"Hi! We reviewed your proposal for our {prop['company']} position and were very impressed by your track record. "
-                    "When are you available for a brief introductory call?"
-                    if new_status == "interview" else
-                    f"Thanks for applying to {prop['company']}. Could you confirm your weekly availability and experience with our stack?"
-                )
-
                 conn.execute(
                     "INSERT INTO messages (id, conversation_id, sender, text, created_at) VALUES (?, ?, 'client', ?, ?)",
-                    (msg_id, conv_id, initial_text, new_sim_time)
+                    (msg_id, conv_id, eval_res.message, new_sim_time)
                 )
 
-        updates.append({"id": prop["id"], "status": new_status, "score": score, "client_id": prop["client_id"]})
+        updates.append({"id": prop["id"], "status": eval_res.status, "score": eval_res.score, "client_id": prop["client_id"]})
 
     return TickResponse(
         released_jobs=released_count,
