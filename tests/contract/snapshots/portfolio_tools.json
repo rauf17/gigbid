@@ -1,0 +1,517 @@
+[
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": null
+    },
+    "description": "Retrieve full Markdown text and verified metadata for a specific case study by ID.\nWhen to use: Use when a client job requires deep proof of a particular past project, or when citing a case study referenced in search_evidence.\nWhen NOT to use: Do NOT use to search across all case studies (use search_evidence instead).",
+    "inputSchema": {
+      "properties": {
+        "id": {
+          "description": "Unique case study ID (e.g. cs_01 or cs_01.md)",
+          "title": "Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "get_case_studyArguments",
+      "type": "object"
+    },
+    "name": "get_case_study",
+    "outputSchema": {
+      "$defs": {
+        "CaseStudyOutput": {
+          "description": "Full detail view of a single project case study.",
+          "properties": {
+            "client_industry": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Client industry sector",
+              "title": "Client Industry"
+            },
+            "date": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Completion date",
+              "title": "Date"
+            },
+            "id": {
+              "description": "Case study identifier (e.g. cs_01)",
+              "title": "Id",
+              "type": "string"
+            },
+            "outcome": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Key measurable outcomes or impact",
+              "title": "Outcome"
+            },
+            "persona": {
+              "description": "Persona who authored the case study",
+              "title": "Persona",
+              "type": "string"
+            },
+            "project": {
+              "description": "Title of the project or engagement",
+              "title": "Project",
+              "type": "string"
+            },
+            "skills": {
+              "description": "Skills exercised in this project",
+              "items": {
+                "type": "string"
+              },
+              "title": "Skills",
+              "type": "array"
+            },
+            "source_path": {
+              "description": "Path to source markdown file",
+              "title": "Source Path",
+              "type": "string"
+            },
+            "text": {
+              "description": "Full markdown narrative of the case study",
+              "title": "Text",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "persona",
+            "project",
+            "text",
+            "source_path"
+          ],
+          "title": "CaseStudyOutput",
+          "type": "object"
+        },
+        "PortfolioErrorOutput": {
+          "description": "Structured error payload for failed tool calls.",
+          "properties": {
+            "detail": {
+              "description": "Human-readable explanation of the error",
+              "title": "Detail",
+              "type": "string"
+            },
+            "error": {
+              "description": "Error category code (not_found, invalid_argument, persona_not_found)",
+              "title": "Error",
+              "type": "string"
+            },
+            "persona": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Persona context during the failure",
+              "title": "Persona"
+            }
+          },
+          "required": [
+            "error",
+            "detail"
+          ],
+          "title": "PortfolioErrorOutput",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CaseStudyOutput"
+            },
+            {
+              "$ref": "#/$defs/PortfolioErrorOutput"
+            }
+          ],
+          "title": "Result"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "get_case_studyOutput",
+      "type": "object"
+    }
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": null
+    },
+    "description": "List all technical and domain skills claimed across the persona's verified artifacts, with counts of how many evidence items back each skill.\nWhen to use: Use during the scouting and qualification phase to check if a persona possesses the must-have skills requested by a client.\nWhen NOT to use: Do NOT use to fetch detailed proof of a project (use get_case_study or search_evidence).",
+    "inputSchema": {
+      "properties": {},
+      "title": "list_skillsArguments",
+      "type": "object"
+    },
+    "name": "list_skills",
+    "outputSchema": {
+      "$defs": {
+        "ListSkillsOutput": {
+          "description": "Aggregated skill inventory across all persona portfolio artifacts.",
+          "properties": {
+            "persona": {
+              "description": "Active freelancer persona",
+              "title": "Persona",
+              "type": "string"
+            },
+            "skills": {
+              "description": "Deduplicated skill list sorted by backing evidence count",
+              "items": {
+                "$ref": "#/$defs/SkillCount"
+              },
+              "title": "Skills",
+              "type": "array"
+            },
+            "total_skills": {
+              "description": "Total number of unique skills identified",
+              "title": "Total Skills",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "persona",
+            "total_skills"
+          ],
+          "title": "ListSkillsOutput",
+          "type": "object"
+        },
+        "PortfolioErrorOutput": {
+          "description": "Structured error payload for failed tool calls.",
+          "properties": {
+            "detail": {
+              "description": "Human-readable explanation of the error",
+              "title": "Detail",
+              "type": "string"
+            },
+            "error": {
+              "description": "Error category code (not_found, invalid_argument, persona_not_found)",
+              "title": "Error",
+              "type": "string"
+            },
+            "persona": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Persona context during the failure",
+              "title": "Persona"
+            }
+          },
+          "required": [
+            "error",
+            "detail"
+          ],
+          "title": "PortfolioErrorOutput",
+          "type": "object"
+        },
+        "SkillCount": {
+          "description": "Skill name and total evidence count backing it.",
+          "properties": {
+            "count": {
+              "description": "Number of evidence items mentioning or demonstrating this skill",
+              "title": "Count",
+              "type": "integer"
+            },
+            "skill": {
+              "description": "Canonical skill name",
+              "title": "Skill",
+              "type": "string"
+            }
+          },
+          "required": [
+            "skill",
+            "count"
+          ],
+          "title": "SkillCount",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ListSkillsOutput"
+            },
+            {
+              "$ref": "#/$defs/PortfolioErrorOutput"
+            }
+          ],
+          "title": "Result"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "list_skillsOutput",
+      "type": "object"
+    }
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": null
+    },
+    "description": "Search verified portfolio evidence chunks matching a client job requirement or technical topic.\nWhen to use: Use when analyzing a job description or screening question to find concrete past projects, code samples, case studies, or proposal proof points backing a capability claim.\nWhen NOT to use: Do NOT use if you already have the specific case study ID (use get_case_study instead). Do NOT use to browse the overall skill inventory (use list_skills instead).",
+    "inputSchema": {
+      "properties": {
+        "filters": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional metadata filters: type in {cv, case_study, repo_readme, repo_code, review, proposal}, skills list[str], outcome in {won, replied, ignored}",
+          "title": "Filters"
+        },
+        "k": {
+          "default": 5,
+          "description": "Maximum number of evidence items to return (1..20)",
+          "maximum": 20,
+          "minimum": 1,
+          "title": "K",
+          "type": "integer"
+        },
+        "requirement": {
+          "description": "Client requirement, query string, or technical capability to search for (3..500 characters)",
+          "maxLength": 500,
+          "minLength": 3,
+          "title": "Requirement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "requirement"
+      ],
+      "title": "search_evidenceArguments",
+      "type": "object"
+    },
+    "name": "search_evidence",
+    "outputSchema": {
+      "$defs": {
+        "EvidenceOutputItem": {
+          "description": "Normalized evidence item returned by portfolio search tools.",
+          "properties": {
+            "date": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "ISO date or approximate timeframe",
+              "title": "Date"
+            },
+            "id": {
+              "description": "Unique evidence chunk identifier",
+              "title": "Id",
+              "type": "string"
+            },
+            "outcome": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Proposal outcome if applicable (won, replied, ignored)",
+              "title": "Outcome"
+            },
+            "project": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Associated project or client initiative",
+              "title": "Project"
+            },
+            "score": {
+              "description": "Relevance score (cosine similarity or hybrid score)",
+              "title": "Score",
+              "type": "number"
+            },
+            "skills": {
+              "description": "Extracted skills evidenced by this chunk",
+              "items": {
+                "type": "string"
+              },
+              "title": "Skills",
+              "type": "array"
+            },
+            "source": {
+              "description": "Relative file path or origin of the chunk",
+              "title": "Source",
+              "type": "string"
+            },
+            "text": {
+              "description": "Body excerpt of the evidence",
+              "title": "Text",
+              "type": "string"
+            },
+            "type": {
+              "description": "Evidence type (cv, case_study, repo_readme, repo_code, review, proposal)",
+              "title": "Type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "type",
+            "source",
+            "text",
+            "score"
+          ],
+          "title": "EvidenceOutputItem",
+          "type": "object"
+        },
+        "PortfolioErrorOutput": {
+          "description": "Structured error payload for failed tool calls.",
+          "properties": {
+            "detail": {
+              "description": "Human-readable explanation of the error",
+              "title": "Detail",
+              "type": "string"
+            },
+            "error": {
+              "description": "Error category code (not_found, invalid_argument, persona_not_found)",
+              "title": "Error",
+              "type": "string"
+            },
+            "persona": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Persona context during the failure",
+              "title": "Persona"
+            }
+          },
+          "required": [
+            "error",
+            "detail"
+          ],
+          "title": "PortfolioErrorOutput",
+          "type": "object"
+        },
+        "SearchEvidenceOutput": {
+          "description": "Output envelope for search_evidence tool.",
+          "properties": {
+            "count": {
+              "description": "Number of evidence items returned",
+              "title": "Count",
+              "type": "integer"
+            },
+            "items": {
+              "description": "Top matching evidence items",
+              "items": {
+                "$ref": "#/$defs/EvidenceOutputItem"
+              },
+              "title": "Items",
+              "type": "array"
+            },
+            "persona": {
+              "description": "Freelancer persona whose portfolio was queried",
+              "title": "Persona",
+              "type": "string"
+            },
+            "requirement": {
+              "description": "Input requirement or query string",
+              "title": "Requirement",
+              "type": "string"
+            }
+          },
+          "required": [
+            "persona",
+            "requirement",
+            "count"
+          ],
+          "title": "SearchEvidenceOutput",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SearchEvidenceOutput"
+            },
+            {
+              "$ref": "#/$defs/PortfolioErrorOutput"
+            }
+          ],
+          "title": "Result"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "search_evidenceOutput",
+      "type": "object"
+    }
+  }
+]

@@ -69,12 +69,55 @@ All external marketplace interactions in GigBid are strictly mediated through Mo
 
 ---
 
-## 3. Tool Permissions & Allowlist
+## 3. Portfolio MCP Server (`portfolio`)
+
+- **Host & Port**: `http://127.0.0.1:8001/mcp` (or stdio mode via `gigbid-portfolio-mcp --stdio`)
+- **Transport**: Streamable HTTP (`POST /mcp`) and stdio
+- **Authentication**: Optional Bearer Token via `PORTFOLIO_MCP_TOKEN` (HTTP 401 on unauthorized access when configured; unauthenticated in local dev; bypassed in stdio mode).
+- **Context Routing**: Persona dynamically switched via `X-Persona` HTTP header (defaults to `PORTFOLIO_PERSONA` env var, fallback `ai_ml`).
+
+### Tool Registry Table
+
+| Tool Name | Server | Read / Write | Annotations | Auth | Owner | Test |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `search_evidence` | `portfolio` | Read | `readOnlyHint=true`<br>`idempotentHint=true`<br>`destructiveHint=false`<br>`openWorldHint=false` | Optional Bearer (`PORTFOLIO_MCP_TOKEN`) | `evidence_gatherer`, `proposal_writer` | `mcp_servers/portfolio/tests/test_portfolio.py`<br>`tests/contract/test_portfolio_schema_snapshot.py` |
+| `get_case_study` | `portfolio` | Read | `readOnlyHint=true`<br>`idempotentHint=true`<br>`destructiveHint=false`<br>`openWorldHint=false` | Optional Bearer (`PORTFOLIO_MCP_TOKEN`) | `evidence_gatherer`, `proposal_writer` | `mcp_servers/portfolio/tests/test_portfolio.py` |
+| `list_skills` | `portfolio` | Read | `readOnlyHint=true`<br>`idempotentHint=true`<br>`destructiveHint=false`<br>`openWorldHint=false` | Optional Bearer (`PORTFOLIO_MCP_TOKEN`) | `scout`, `evidence_gatherer` | `mcp_servers/portfolio/tests/test_portfolio.py` |
+
+### Tool Usage Guidance & Constraints
+
+#### `search_evidence`
+- **When to use**: During evidence collection to retrieve top-k matching portfolio chunks (case studies, code excerpts, past winning proposals, reviews) for a job requirement.
+- **When NOT to use**: Do NOT use if you already have the specific case study ID (use `get_case_study` instead).
+- **Constraints**: `requirement` 3–500 characters; `k` between 1 and 20 (default 5); `filters` by type, skills, and proposal outcome.
+
+#### `get_case_study`
+- **When to use**: Deep inspection of a specific past project narrative, client industry, and outcomes when citing an evidence proof point.
+- **When NOT to use**: Do NOT use for keyword search across all artifacts (use `search_evidence`).
+- **Constraints**: `id` string identifier (e.g. `cs_01`).
+
+#### `list_skills`
+- **When to use**: Fast qualification check to see if the active persona claims required technical skills, with counts of backing evidence items.
+- **When NOT to use**: Do NOT use to inspect project text.
+
+### Resource Templates
+- `portfolio://case/{id}`: Returns the full case study markdown text for URI-based browsing.
+- `portfolio://proposal/{id}`: Returns historical proposal text and outcome status.
+
+### Prompt Templates
+- `Answer a screening question from my portfolio`: Guides the model to search evidence and cite verifiable IDs without hallucinating experience.
+- `Summarise my most relevant experience for this job`: Guides the model to retrieve top 3 evidence items matching a target job description.
+
+---
+
+## 4. Tool Permissions & Allowlist
 
 | Agent Role | Permitted Tools | Access Level |
 | :--- | :--- | :--- |
-| `scout` | `search_jobs`, `get_job` | Read-only |
+| `scout` | `search_jobs`, `get_job`, `list_skills` | Read-only |
+| `evidence_gatherer` | `search_evidence`, `get_case_study`, `list_skills` | Read-only |
+| `proposal_writer` | `search_evidence`, `get_case_study` | Read-only |
 | `risk_assessor` | `get_job`, `get_client_history` | Read-only |
 | `pricing` | `get_job`, `get_client_history`, `get_connects_balance` | Read-only |
-| `client_liaison` | `get_job`, `get_client_history`, `list_messages`, `send_message` | Read + Messaging |
+| `client_liaison` | `get_job`, `get_client_history`, `list_messages`, `send_message`, `search_evidence` | Read + Messaging |
 | `approval` / `submit` | `get_job`, `get_client_history`, `get_connects_balance`, `create_proposal_draft`, `submit_proposal` | Full (Read + Destructive Write) |
