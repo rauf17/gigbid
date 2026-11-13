@@ -1,10 +1,14 @@
-.PHONY: install dev api test eval seed data demo lint check lock
+.PHONY: install dev api test eval seed data demo lint check lock mcp-marketplace
 install:
 	uv sync --extra dev
 lock:
 	uv lock
 dev:
+	# Starts local infrastructure (Postgres, Redis) or run services individually:
+	# make api (port 8000), make mcp-marketplace (port 8002), make seed (port 8081)
 	docker compose -f infra/docker-compose.yml up --build
+mcp-marketplace:
+	uv run uvicorn mcp_servers.marketplace.server:app --port 8002 --reload
 api:
 	uv run uvicorn apps.api.main:app --reload --port 8000
 test:
