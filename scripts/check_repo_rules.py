@@ -50,7 +50,8 @@ def gigsim_hash() -> str:
             and "__pycache__" not in p.parts
             and "state" not in p.parts
         ):
-            h.update(p.relative_to(ROOT).as_posix().encode()); h.update(p.read_bytes())
+            h.update(p.relative_to(ROOT).as_posix().encode())
+            h.update(p.read_bytes().replace(b"\r\n", b"\n"))
     return h.hexdigest()
 if lock.exists():
     if lock.read_text().strip() != gigsim_hash():

@@ -22,7 +22,7 @@ def gigsim_hash() -> str:
             and "state" not in p.parts
         ):
             h.update(p.relative_to(ROOT).as_posix().encode())
-            h.update(p.read_bytes())
+            h.update(p.read_bytes().replace(b"\r\n", b"\n"))
     return h.hexdigest()
 
 
