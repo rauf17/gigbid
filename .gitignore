@@ -27,6 +27,7 @@ evals/datasets/*test_set*
 .ollama/
 pgdata/
 gigsim/state/
+mcp_servers/**/state/
 # editor / OS
 .DS_Store
 .idea/
