@@ -1,0 +1,40 @@
+# GigBid Platform Rules and Policies
+# This configuration file defines marketplace rules, connects tariffs, rate limits,
+# and fault injection parameters. Policy updates are performed here without code changes.
+
+version: 1
+platform_name: GigSim
+
+connects:
+  initial_balance: 150
+  weekly_grant: 80
+  # Connects cost per bid by job budget tier (fixed or equivalent hourly)
+  tier_thresholds:
+    tier_1_max_budget: 100       # < $100 -> 4 connects
+    tier_1_cost: 4
+    tier_2_max_budget: 600       # $100 - $599 -> 8 connects
+    tier_2_cost: 8
+    tier_3_max_budget: 3000      # $600 - $2999 -> 12 connects
+    tier_3_cost: 12
+    tier_4_cost: 16              # >= $3000 -> 16 connects
+
+proposals:
+  max_proposals_per_day: 15
+  requires_screening_answers: false
+  banned_phrases:
+    - "telegram"
+    - "whatsapp"
+    - "crypto payment"
+    - "pay outside"
+    - "free work"
+    - "bypass escrow"
+
+limits:
+  rate_limit_per_minute: 30
+  retry_after_seconds: 60
+
+simulation:
+  default_tick_release_count: 5
+  time_advance_hours_per_tick: 24
+  fault_injection_rate: 0.03     # 3% simulated transient 500 errors
+  latency_ms: 0                  # default 0ms added latency
