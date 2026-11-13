@@ -1,0 +1,39 @@
+# Gold Evaluation Rules and Thresholds (AI-4016 Assignment B4)
+# Seed=42, deterministic rule-based evaluation ground truth.
+version: 1
+
+# Minimum skill overlap ratio between job required skills and persona claimed skills:
+# Overlap Ratio = |Job_Skills ∩ Persona_Skills| / |Job_Skills|
+min_skill_overlap_ratio: 0.35
+
+# Evidence retrieval relevance threshold:
+# Jaccard similarity between job skills and evidence chunk skills:
+# Jaccard = |Job_Skills ∩ Chunk_Skills| / |Job_Skills ∪ Chunk_Skills|
+evidence_jaccard_threshold: 0.20
+min_evidence_items: 1
+max_evidence_items: 8
+
+# Dev set sampling configuration per persona (Total 200 jobs)
+# In-category: jobs matching persona's primary domain (~75% = 150 jobs)
+# Out-of-category: jobs from other domains to test skip behavior (~25% = 50 jobs)
+target_total_jobs: 200
+target_in_category: 150
+target_out_category: 50
+
+# Persona baseline thresholds
+personas:
+  ai_ml:
+    primary_category: "AI/ML"
+    floor_hourly_rate: 70.0
+    min_fixed_rate: 1500.0
+    min_skill_overlap_ratio: 0.35
+  fullstack:
+    primary_category: "Full-Stack Web"
+    floor_hourly_rate: 65.0
+    min_fixed_rate: 1200.0
+    min_skill_overlap_ratio: 0.35
+  data_analyst:
+    primary_category: "Data Analysis"
+    floor_hourly_rate: 55.0
+    min_fixed_rate: 1000.0
+    min_skill_overlap_ratio: 0.35
