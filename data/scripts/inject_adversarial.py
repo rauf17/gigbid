@@ -158,18 +158,24 @@ def inject_adversarial_instances(
         dupe_job["budget_min"] = orig["budget_min"]
         dupe_job["budget_max"] = orig["budget_max"]
         dupe_job["client_country"] = orig["client_country"]
+        dupe_job["client_id"] = orig.get("client_id", f"client_{rng.randint(36, 300):03d}")
         dupe_job["posted_at"] = dupe_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
         dupe_job["connects_cost"] = orig["connects_cost"]
 
         gold_labels[dupe_job["id"]]["is_duplicate_of"] = orig["id"]
 
     # 2. Scams (~8%): free work, unpaid test, off-platform contact, crypto payment
+    # Scam jobs are mostly tied to poor-history clients (client_001 to client_035)
     scam_types = list(SCAM_PATTERNS.keys())
     for idx, s_idx in enumerate(scam_indices):
         stype = scam_types[idx % len(scam_types)]
         pattern = rng.choice(SCAM_PATTERNS[stype])
         job = jobs[s_idx]
         job["description"] = job["description"] + pattern
+        # 90% of scams tied to poor-history unverified clients
+        if rng.random() < 0.90:
+            poor_client_num = rng.randint(1, 35)
+            job["client_id"] = f"client_{poor_client_num:03d}"
 
         gold_labels[job["id"]]["is_scam"] = True
         gold_labels[job["id"]]["scam_type"] = stype

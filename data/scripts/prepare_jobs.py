@@ -266,7 +266,8 @@ def generate_synthetic_job(
     category: str,
     base_date: datetime,
     rng: random.Random,
-    is_stream: bool = False
+    is_stream: bool = False,
+    client_id: str | None = None
 ) -> dict:
     """Generates a single realistic synthetic job posting."""
     title_template, desc_template = rng.choice(JOB_TEMPLATES[category])
@@ -295,6 +296,11 @@ def generate_synthetic_job(
     posted_dt = base_date - timedelta(hours=offset_hours)
     connects = calculate_connects_cost(budget_type, b_min, b_max)
 
+    # Assign from established clients (client_036 to client_300) by default
+    if client_id is None:
+        client_num = rng.randint(36, 300)
+        client_id = f"client_{client_num:03d}"
+
     return {
         "id": job_id,
         "title": title_template,
@@ -305,6 +311,7 @@ def generate_synthetic_job(
         "budget_min": b_min,
         "budget_max": b_max,
         "client_country": country,
+        "client_id": client_id,
         "posted_at": posted_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "connects_cost": connects,
         "synthetic": True,

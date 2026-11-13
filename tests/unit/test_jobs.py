@@ -77,3 +77,4 @@ def test_jobs_stream_schema_and_adversarial_rates():
     # Verify injection styles diversity
     injection_styles = {i["injection_style"] for i in injections}
     assert {"direct_override", "hidden_middle", "delimiter_confusion", "xml_tag"}.issubset(injection_styles)
+
