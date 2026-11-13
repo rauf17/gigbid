@@ -29,6 +29,7 @@ data:
 	uv run python data/scripts/inject_adversarial.py
 	uv run python gigsim/seed.py
 eval:
-	@echo "TODO: retrieval + decision + GigSim outcome evals -> evals/results/*.json (Phase 5)"
+	uv run python -m evals.runners.rag_eval --variant v0_naive
+	uv run python scripts/results_table.py
 demo:
 	@echo "TODO: run one job inbox -> approval -> reply against GigSim (Phase 4)"

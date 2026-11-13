@@ -724,8 +724,7 @@ def main() -> None:
 
         out_file = output_dir / f"dev_{persona_id}.jsonl"
         with open(out_file, "w", encoding="utf-8") as f:
-            for r in rows:
-                f.write(json.dumps(r) + "\n")
+            f.writelines(json.dumps(r) + "\n" for r in rows)
 
         bids = sum(1 for r in rows if r["gold"]["bid_or_skip"] == "bid")
         skips = sum(1 for r in rows if r["gold"]["bid_or_skip"] == "skip")
@@ -741,8 +740,7 @@ def main() -> None:
     tool_tasks = build_tool_tasks()
     tasks_file = output_dir / "tool_tasks.jsonl"
     with open(tasks_file, "w", encoding="utf-8") as f:
-        for t in tool_tasks:
-            f.write(json.dumps(t) + "\n")
+        f.writelines(json.dumps(t) + "\n" for t in tool_tasks)
 
     print(f"[build_dev_set] Generated {len(tool_tasks)} tool tasks -> {tasks_file.name}")
 
