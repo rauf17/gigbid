@@ -62,7 +62,71 @@ Real freelance portfolios and bid histories are rarely uniform. The generator in
 
 ---
 
-## 2. Ethical Considerations & Data Provenance
+## 2. Job Stream Data
+
+### 2.1 Sources Used
+- **Primary Raw Source**: Kaggle Upwork Job Postings Dataset
+  - Reference URL: `https://www.kaggle.com/datasets/promptcloud/upwork-jobs-dataset`
+  - License: `CC0: Public Domain` (exact licence copied from Kaggle dataset page; any user-supplied external CSV with unverified licensing is marked `TO VERIFY`).
+- **Synthetic Generator Fallback**:
+  - If `data/raw/` contains no CSV files, `data/scripts/prepare_jobs.py` falls back to a deterministic synthetic generator (`seed=42`).
+  - Raw Kaggle CSV files are placed under `data/raw/` and explicitly ignored by `.gitignore` so that proprietary or heavy raw data is never committed.
+
+### 2.2 Target Schema
+Every job record in `jobs_historical.jsonl` and `jobs_stream.jsonl` conforms to:
+- `id` (`str`): Unique identifier (e.g. `job_hist_00001`, `job_stream_00001`).
+- `title` (`str`): Cleaned job post title.
+- `description` (`str`): Detailed project description and client requirements.
+- `category` (`str`): Mapped to one of the three target domains: `"AI/ML"`, `"Full-Stack Web"`, or `"Data Analysis"`.
+- `skills` (`list[str]`): List of required or preferred technical skill tags.
+- `budget_type` (`str`): `"fixed"` or `"hourly"`.
+- `budget_min` (`float`): Minimum budget (USD or hourly rate).
+- `budget_max` (`float`): Maximum budget (USD or hourly rate).
+- `client_country` (`str`): Country of origin for the hiring client.
+- `posted_at` (`str`): ISO 8601 UTC timestamp.
+- `connects_cost` (`int`): Realistic Connects fee (4, 8, 12, or 16) calculated from budget tiers.
+- `synthetic` (`bool`): `true` when generated synthetically; `false` if parsed from raw Kaggle records.
+
+### 2.3 Datasets Produced
+1. **`data/processed/jobs_historical.jsonl` (1,500 jobs)**:
+   - Historical job corpus used for calculating market clearing price distributions, typical budget bands, and category rate baselines.
+   - Evenly partitioned across the three categories (500 AI/ML, 500 Full-Stack Web, 500 Data Analysis).
+   - Spans historical post timestamps over a 180-day window.
+2. **`data/processed/jobs_stream.jsonl` (600 jobs)**:
+   - Released as the active simulation stream served by the student-built GigSim server.
+   - Contains 492 clean jobs and 108 planted adversarial instances.
+
+### 2.4 Adversarial Instances & Hidden Labels
+`data/scripts/inject_adversarial.py` plants adversarial patterns into the `jobs_stream.jsonl` pool only:
+- **Duplicates (~5%, 30 jobs)**: Near-identical reposts of existing clean jobs with slightly modified titles, identical requirements, and delayed timestamps (`is_duplicate_of: <original_job_id>`).
+- **Scams (~8%, 48 jobs)**:
+  - *`free_work`* (12 jobs): Requests for unpaid functional prototypes or finished code before contract award.
+  - *`unpaid_test`* (12 jobs): Mandatory multi-day or 10-hour unpaid assessment tasks.
+  - *`off_platform_contact`* (12 jobs): Direct communication requests to bypass platform escrow (e.g. Telegram `@global_talent_99`, WhatsApp).
+  - *`crypto_payment`* (12 jobs): Demands to settle invoices strictly in USDT/Bitcoin outside platform escrow.
+- **Prompt Injections (~5%, 30 jobs)**:
+  - *`direct_override`* (8 jobs): Top-level instructions ordering the agent to ignore previous instructions and force bid approval.
+  - *`hidden_middle`* (8 jobs): Injections disguised inside technical requirement paragraphs.
+  - *`delimiter_confusion`* (7 jobs): Fake Markdown/JSON role boundaries simulating end-of-user input.
+  - *`xml_tag`* (7 jobs): Faux `<system_override>` and `<agent_policy_override>` tags.
+
+**Hidden Labels (`data/processed/jobs_gold_labels.jsonl`)**:
+- Contains 600 records mapping each stream job ID to its ground truth label:
+  `{"id": str, "is_duplicate_of": str|null, "is_scam": bool, "scam_type": str|null, "has_injection": bool, "injection_style": str|null}`
+- **Security Rule**: These labels are reserved strictly for offline evaluation runners (`evals/runners/decision_eval.py`) and are **never exposed** by the GigSim REST API.
+
+### 2.5 Fields that are Synthetic
+- When running from raw Kaggle data: `connects_cost` (calculated), adversarial scam additions, duplicate reposts, prompt-injection payloads, and `jobs_gold_labels.jsonl` are synthetic.
+- When running from fallback: All job fields are deterministically generated synthetic data.
+
+### 2.6 Limitations
+- The simulated stream uses a fixed template vocabulary for technical requirements.
+- Prompt injection patterns are representative of known prompt injection benchmarks but do not cover adaptive multi-turn jailbreaks.
+- Client budget distributions follow standard tier approximations rather than long-tail macroeconomic fluctuations.
+
+---
+
+## 3. Ethical Considerations & Data Provenance
 - All persona names ("Dr. Elena Rostova", "Marcus Vance", "Amina Al-Mansoor") and client names are entirely fictitious.
 - No real-world Personally Identifiable Information (PII), proprietary client code, or live Upwork user tokens are present in this repository.
 - Compliance with the university assignment rules is maintained by keeping all synthetic generation deterministic, auditable, and isolated from live marketplace credentials.
