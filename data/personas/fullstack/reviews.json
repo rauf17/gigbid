@@ -1,0 +1,134 @@
+[
+  {
+    "review_id": "rev_fullstack_001",
+    "client_name": "Sarah Chen",
+    "client_industry": "FinTech / SaaS",
+    "project_title": "Multi-Tenant B2B SaaS Billing Platform",
+    "rating": 4.9,
+    "amount_earned_usd": 12468,
+    "feedback": "Exceptional work by Marcus Vance on our Multi-Tenant B2B SaaS Billing Platform. Delivered ahead of schedule and the results were stunning: Scaled to 45,000 active subscriptions with zero billing discrepancies across $12M volume.",
+    "date": "2024-01-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_fullstack_002",
+    "client_name": "David Miller",
+    "client_industry": "Productivity",
+    "project_title": "Real-Time Collaborative Document Canvas",
+    "rating": 4.8,
+    "amount_earned_usd": 6485,
+    "feedback": "Marcus Vance is a true expert. Handled all complexity with React effortlessly. Would hire again in a heartbeat.",
+    "date": "2024-02-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_fullstack_003",
+    "client_name": "Jessica Dubois",
+    "client_industry": "Logistics",
+    "project_title": "High-Throughput Logistics Dispatch Dashboard",
+    "rating": 5.0,
+    "amount_earned_usd": 13759,
+    "feedback": "Outstanding technical competence and communication. Solved our bottleneck with High-Throughput Logistics Dispatch Dashboard and saved us hundreds of engineering hours.",
+    "date": "2024-03-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_fullstack_004",
+    "client_name": "Michael Kowalski",
+    "client_industry": "HealthTech",
+    "project_title": "HIPAA-Compliant Telehealth Consultation Portal",
+    "rating": 5.0,
+    "amount_earned_usd": 6674,
+    "feedback": "High quality, deep domain mastery, and flawless execution. HIPAA-Compliant Telehealth Consultation Portal was delivered cleanly and documented impeccably.",
+    "date": "2024-04-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_fullstack_005",
+    "client_name": "Emily Patel",
+    "client_industry": "Retail",
+    "project_title": "Headless E-Commerce Storefront & Checkout Engine",
+    "rating": 4.9,
+    "amount_earned_usd": 8736,
+    "feedback": "Exceptional work by Marcus Vance on our Headless E-Commerce Storefront & Checkout Engine. Delivered ahead of schedule and the results were stunning: Decreased page load time by 62% resulting in a 24% boost in mobile checkout conversion.",
+    "date": "2024-05-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_fullstack_006",
+    "client_name": "Robert Johansson",
+    "client_industry": "Automotive",
+    "project_title": "Real-Time IoT Fleet Monitoring Portal",
+    "rating": 4.8,
+    "amount_earned_usd": 9022,
+    "feedback": "Marcus Vance is a true expert. Handled all complexity with React effortlessly. Would hire again in a heartbeat.",
+    "date": "2024-06-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_fullstack_007",
+    "client_name": "Chloe Nakamura",
+    "client_industry": "FinTech",
+    "project_title": "Corporate Expense Management & Card System",
+    "rating": 4.9,
+    "amount_earned_usd": 15494,
+    "feedback": "Outstanding technical competence and communication. Solved our bottleneck with Corporate Expense Management & Card System and saved us hundreds of engineering hours.",
+    "date": "2024-07-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_fullstack_008",
+    "client_name": "Alexander O'Connor",
+    "client_industry": "SaaS",
+    "project_title": "Automated Customer Support Helpdesk Portal",
+    "rating": 5.0,
+    "amount_earned_usd": 12406,
+    "feedback": "High quality, deep domain mastery, and flawless execution. Automated Customer Support Helpdesk Portal was delivered cleanly and documented impeccably.",
+    "date": "2024-08-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_fullstack_009",
+    "client_name": "Rachel Rossi",
+    "client_industry": "PropTech",
+    "project_title": "Interactive Real Estate Property Tour & Booking App",
+    "rating": 5.0,
+    "amount_earned_usd": 16225,
+    "feedback": "Exceptional work by Marcus Vance on our Interactive Real Estate Property Tour & Booking App. Delivered ahead of schedule and the results were stunning: Doubled tour booking rate with interactive 3D floorplans and automated calendar sync.",
+    "date": "2024-09-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_fullstack_010",
+    "client_name": "Daniel Schmidt",
+    "client_industry": "DevTools",
+    "project_title": "Developer API Platform & Documentation Portal",
+    "rating": 5.0,
+    "amount_earned_usd": 16847,
+    "feedback": "Marcus Vance is a true expert. Handled all complexity with Next.js effortlessly. Would hire again in a heartbeat.",
+    "date": "2024-10-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_fullstack_011",
+    "client_name": "Samantha Alvarez",
+    "client_industry": "Media",
+    "project_title": "Digital Asset Management & Processing Workspace",
+    "rating": 4.8,
+    "amount_earned_usd": 15573,
+    "feedback": "Outstanding technical competence and communication. Solved our bottleneck with Digital Asset Management & Processing Workspace and saved us hundreds of engineering hours.",
+    "date": "2024-01-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_fullstack_012",
+    "client_name": "Marcus Taylor",
+    "client_industry": "EdTech",
+    "project_title": "University Course Registration & Portal",
+    "rating": 4.8,
+    "amount_earned_usd": 13052,
+    "feedback": "High quality, deep domain mastery, and flawless execution. University Course Registration & Portal was delivered cleanly and documented impeccably.",
+    "date": "2024-02-15",
+    "synthetic": true
+  }
+]

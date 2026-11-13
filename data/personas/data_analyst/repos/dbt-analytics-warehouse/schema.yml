@@ -1,0 +1,12 @@
+# synthetic: true
+version: 2
+models:
+  - name: fct_customer_retention
+    description: Monthly cohort retention table tracking user activity across tenures.
+    columns:
+      - name: cohort_month
+        tests:
+          - not_null
+      - name: active_users
+        tests:
+          - not_null

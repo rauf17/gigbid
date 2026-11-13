@@ -1,0 +1,46 @@
+{
+  "id": "data_analyst",
+  "name": "Amina Al-Mansoor",
+  "title": "Lead Data Analyst & Analytics Engineering Specialist",
+  "hourly_rate": 75,
+  "floor_hourly_rate": 55,
+  "min_fixed_rate": 1000,
+  "weekly_connects_budget": 70,
+  "filters": {
+    "min_client_spend": 2500,
+    "min_client_rating": 4.6,
+    "disallowed_keywords": [
+      "data entry",
+      "copy paste",
+      "pdf to excel manual",
+      "scrape email"
+    ],
+    "preferred_job_types": [
+      "fixed_price",
+      "hourly"
+    ],
+    "preferred_categories": [
+      "Data Analytics",
+      "Business Intelligence",
+      "SQL / Databases",
+      "Data Visualization",
+      "ETL Pipelines"
+    ]
+  },
+  "skills": [
+    "SQL",
+    "Python",
+    "PostgreSQL",
+    "Snowflake",
+    "dbt",
+    "Power BI",
+    "Tableau",
+    "Pandas",
+    "DuckDB",
+    "Looker",
+    "Airflow"
+  ],
+  "bio": "Lead Data Analyst and Analytics Engineer with 6+ years transforming messy transactional databases into clean dbt semantic layers, executive Power BI/Tableau dashboards, and cohort retention models.",
+  "education": "M.S. in Business Analytics & Statistics, NYU Stern, 2018",
+  "synthetic": true
+}

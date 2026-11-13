@@ -1,0 +1,134 @@
+[
+  {
+    "review_id": "rev_data_analyst_001",
+    "client_name": "Sarah Chen",
+    "client_industry": "SaaS",
+    "project_title": "SaaS Customer Churn & Cohort Retention Analysis",
+    "rating": 5.0,
+    "amount_earned_usd": 8188,
+    "feedback": "Exceptional work by Amina Al-Mansoor on our SaaS Customer Churn & Cohort Retention Analysis. Delivered ahead of schedule and the results were stunning: Identified churn driver reducing annual gross dollar churn by 2.8% ($950k ARR).",
+    "date": "2024-01-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_data_analyst_002",
+    "client_name": "David Miller",
+    "client_industry": "E-Commerce",
+    "project_title": "E-Commerce Multi-Touch Attribution & Marketing ROI",
+    "rating": 5.0,
+    "amount_earned_usd": 4745,
+    "feedback": "Amina Al-Mansoor is a true expert. Handled all complexity with SQL effortlessly. Would hire again in a heartbeat.",
+    "date": "2024-02-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_data_analyst_003",
+    "client_name": "Jessica Dubois",
+    "client_industry": "HealthTech",
+    "project_title": "Hospital Emergency Department Patient Flow Optimization",
+    "rating": 4.9,
+    "amount_earned_usd": 3085,
+    "feedback": "Outstanding technical competence and communication. Solved our bottleneck with Hospital Emergency Department Patient Flow Optimization and saved us hundreds of engineering hours.",
+    "date": "2024-03-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_data_analyst_004",
+    "client_name": "Michael Kowalski",
+    "client_industry": "FinTech",
+    "project_title": "Subscription Revenue Recognition & ASC 606 Reporting",
+    "rating": 5.0,
+    "amount_earned_usd": 10286,
+    "feedback": "High quality, deep domain mastery, and flawless execution. Subscription Revenue Recognition & ASC 606 Reporting was delivered cleanly and documented impeccably.",
+    "date": "2024-04-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_data_analyst_005",
+    "client_name": "Emily Patel",
+    "client_industry": "Retail",
+    "project_title": "Retail Inventory Stockout Prediction & Reorder Modeling",
+    "rating": 5.0,
+    "amount_earned_usd": 15473,
+    "feedback": "Exceptional work by Amina Al-Mansoor on our Retail Inventory Stockout Prediction & Reorder Modeling. Delivered ahead of schedule and the results were stunning: Lowered inventory stockout events by 36% while reducing safety stock holding cost by 14%.",
+    "date": "2024-05-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_data_analyst_006",
+    "client_name": "Robert Johansson",
+    "client_industry": "Professional Services",
+    "project_title": "B2B Sales Pipeline Velocity & Win-Rate Analytics",
+    "rating": 5.0,
+    "amount_earned_usd": 4674,
+    "feedback": "Amina Al-Mansoor is a true expert. Handled all complexity with Salesforce API effortlessly. Would hire again in a heartbeat.",
+    "date": "2024-06-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_data_analyst_007",
+    "client_name": "Chloe Nakamura",
+    "client_industry": "Gaming",
+    "project_title": "Mobile Gaming Player Lifetime Value (LTV) Segmentation",
+    "rating": 5.0,
+    "amount_earned_usd": 4430,
+    "feedback": "Outstanding technical competence and communication. Solved our bottleneck with Mobile Gaming Player Lifetime Value (LTV) Segmentation and saved us hundreds of engineering hours.",
+    "date": "2024-07-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_data_analyst_008",
+    "client_name": "Alexander O'Connor",
+    "client_industry": "Logistics",
+    "project_title": "Supply Chain Freight Cost & Delivery SLA Benchmarking",
+    "rating": 5.0,
+    "amount_earned_usd": 10061,
+    "feedback": "High quality, deep domain mastery, and flawless execution. Supply Chain Freight Cost & Delivery SLA Benchmarking was delivered cleanly and documented impeccably.",
+    "date": "2024-08-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_data_analyst_009",
+    "client_name": "Rachel Rossi",
+    "client_industry": "Telecom",
+    "project_title": "Customer Support CSAT & Agent Productivity Dashboard",
+    "rating": 5.0,
+    "amount_earned_usd": 12125,
+    "feedback": "Exceptional work by Amina Al-Mansoor on our Customer Support CSAT & Agent Productivity Dashboard. Delivered ahead of schedule and the results were stunning: Surfaced repetitive ticket causes, resolving 22% of issues via self-service KB.",
+    "date": "2024-09-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_data_analyst_010",
+    "client_name": "Daniel Schmidt",
+    "client_industry": "Banking",
+    "project_title": "Banking Credit Risk & Loan Delinquency Monitoring",
+    "rating": 4.8,
+    "amount_earned_usd": 11395,
+    "feedback": "Amina Al-Mansoor is a true expert. Handled all complexity with SQL effortlessly. Would hire again in a heartbeat.",
+    "date": "2024-10-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_data_analyst_011",
+    "client_name": "Samantha Alvarez",
+    "client_industry": "SaaS",
+    "project_title": "Product Feature Adoption & Funnel Drop-Off Audit",
+    "rating": 5.0,
+    "amount_earned_usd": 4692,
+    "feedback": "Outstanding technical competence and communication. Solved our bottleneck with Product Feature Adoption & Funnel Drop-Off Audit and saved us hundreds of engineering hours.",
+    "date": "2024-01-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_data_analyst_012",
+    "client_name": "Marcus Taylor",
+    "client_industry": "HR / Enterprise",
+    "project_title": "Employee Retention & Compensation Equity Analysis",
+    "rating": 4.9,
+    "amount_earned_usd": 4468,
+    "feedback": "High quality, deep domain mastery, and flawless execution. Employee Retention & Compensation Equity Analysis was delivered cleanly and documented impeccably.",
+    "date": "2024-02-15",
+    "synthetic": true
+  }
+]

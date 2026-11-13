@@ -1,0 +1,46 @@
+{
+  "id": "fullstack",
+  "name": "Marcus Vance",
+  "title": "Full-Stack Web & Cloud Systems Architect",
+  "hourly_rate": 85,
+  "floor_hourly_rate": 65,
+  "min_fixed_rate": 1200,
+  "weekly_connects_budget": 75,
+  "filters": {
+    "min_client_spend": 3000,
+    "min_client_rating": 4.6,
+    "disallowed_keywords": [
+      "wordpress theme tweak",
+      "wix",
+      "squarespace",
+      "fixed $50"
+    ],
+    "preferred_job_types": [
+      "fixed_price",
+      "hourly"
+    ],
+    "preferred_categories": [
+      "Full Stack Development",
+      "Frontend Development",
+      "Backend Development",
+      "Web Applications",
+      "API Development"
+    ]
+  },
+  "skills": [
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Node.js",
+    "Python",
+    "FastAPI",
+    "Tailwind CSS",
+    "PostgreSQL",
+    "Redis",
+    "Docker",
+    "AWS"
+  ],
+  "bio": "Senior Full-Stack Architect with 8+ years building enterprise React/Next.js web apps, robust FastAPI/Node backend APIs, Stripe billing infrastructures, and scalable cloud systems.",
+  "education": "B.S. in Software Engineering, University of Waterloo, 2016",
+  "synthetic": true
+}

@@ -1,0 +1,47 @@
+{
+  "id": "ai_ml",
+  "name": "Dr. Elena Rostova",
+  "title": "Lead AI/ML Systems Engineer & LLM Specialist",
+  "hourly_rate": 95,
+  "floor_hourly_rate": 70,
+  "min_fixed_rate": 1500,
+  "weekly_connects_budget": 80,
+  "filters": {
+    "min_client_spend": 5000,
+    "min_client_rating": 4.7,
+    "disallowed_keywords": [
+      "homework",
+      "exam",
+      "crypto bot",
+      "trading bot",
+      "unpaid test"
+    ],
+    "preferred_job_types": [
+      "fixed_price",
+      "hourly"
+    ],
+    "preferred_categories": [
+      "Machine Learning",
+      "Artificial Intelligence",
+      "NLP",
+      "LLM",
+      "Data Science"
+    ]
+  },
+  "skills": [
+    "Python",
+    "PyTorch",
+    "Transformers",
+    "LangChain",
+    "FastAPI",
+    "Docker",
+    "vLLM",
+    "PostgreSQL",
+    "pgvector",
+    "RAG",
+    "MLOps"
+  ],
+  "bio": "PhD in Applied Machine Learning with 7+ years delivering production LLM and RAG pipelines, vector databases, real-time fraud models, and autonomous evaluation systems for enterprise clients.",
+  "education": "Ph.D. in Computer Science (Machine Learning), Technical University of Munich, 2018",
+  "synthetic": true
+}

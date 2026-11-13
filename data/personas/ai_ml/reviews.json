@@ -1,0 +1,134 @@
+[
+  {
+    "review_id": "rev_ai_ml_001",
+    "client_name": "Sarah Chen",
+    "client_industry": "LegalTech",
+    "project_title": "Enterprise RAG Document Intelligence System",
+    "rating": 4.9,
+    "amount_earned_usd": 3409,
+    "feedback": "Exceptional work by Dr. Elena Rostova on our Enterprise RAG Document Intelligence System. Delivered ahead of schedule and the results were stunning: Sub-second retrieval latency on 4.5M pages with 91% factual accuracy.",
+    "date": "2024-01-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_ai_ml_002",
+    "client_name": "David Miller",
+    "client_industry": "FinTech",
+    "project_title": "Real-Time Transaction Fraud Detection",
+    "rating": 5.0,
+    "amount_earned_usd": 7012,
+    "feedback": "Dr. Elena Rostova is a true expert. Handled all complexity with PyTorch effortlessly. Would hire again in a heartbeat.",
+    "date": "2024-02-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_ai_ml_003",
+    "client_name": "Jessica Dubois",
+    "client_industry": "HealthTech",
+    "project_title": "Clinical Trial Patient Eligibility Matching",
+    "rating": 5.0,
+    "amount_earned_usd": 5286,
+    "feedback": "Outstanding technical competence and communication. Solved our bottleneck with Clinical Trial Patient Eligibility Matching and saved us hundreds of engineering hours.",
+    "date": "2024-03-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_ai_ml_004",
+    "client_name": "Michael Kowalski",
+    "client_industry": "E-Commerce",
+    "project_title": "Automated Customer Support Agentic Triage",
+    "rating": 4.9,
+    "amount_earned_usd": 14087,
+    "feedback": "High quality, deep domain mastery, and flawless execution. Automated Customer Support Agentic Triage was delivered cleanly and documented impeccably.",
+    "date": "2024-04-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_ai_ml_005",
+    "client_name": "Emily Patel",
+    "client_industry": "Manufacturing",
+    "project_title": "Predictive Equipment Maintenance Anomaly Detector",
+    "rating": 4.8,
+    "amount_earned_usd": 4424,
+    "feedback": "Exceptional work by Dr. Elena Rostova on our Predictive Equipment Maintenance Anomaly Detector. Delivered ahead of schedule and the results were stunning: Prevented 14 unplanned downtime events saving $420k in first two quarters.",
+    "date": "2024-05-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_ai_ml_006",
+    "client_name": "Robert Johansson",
+    "client_industry": "Retail",
+    "project_title": "Multi-Modal E-Commerce Visual Search",
+    "rating": 4.8,
+    "amount_earned_usd": 9912,
+    "feedback": "Dr. Elena Rostova is a true expert. Handled all complexity with PyTorch effortlessly. Would hire again in a heartbeat.",
+    "date": "2024-06-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_ai_ml_007",
+    "client_name": "Chloe Nakamura",
+    "client_industry": "FinTech",
+    "project_title": "Autonomous Regulatory Compliance Auditor",
+    "rating": 4.9,
+    "amount_earned_usd": 3488,
+    "feedback": "Outstanding technical competence and communication. Solved our bottleneck with Autonomous Regulatory Compliance Auditor and saved us hundreds of engineering hours.",
+    "date": "2024-07-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_ai_ml_008",
+    "client_name": "Alexander O'Connor",
+    "client_industry": "HealthTech",
+    "project_title": "Speech-to-Text Clinical Scribe",
+    "rating": 4.9,
+    "amount_earned_usd": 6582,
+    "feedback": "High quality, deep domain mastery, and flawless execution. Speech-to-Text Clinical Scribe was delivered cleanly and documented impeccably.",
+    "date": "2024-08-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_ai_ml_009",
+    "client_name": "Rachel Rossi",
+    "client_industry": "Logistics",
+    "project_title": "Supply Chain Demand Forecasting Engine",
+    "rating": 5.0,
+    "amount_earned_usd": 11279,
+    "feedback": "Exceptional work by Dr. Elena Rostova on our Supply Chain Demand Forecasting Engine. Delivered ahead of schedule and the results were stunning: Lowered mean absolute error by 27% across 15,000 SKUs.",
+    "date": "2024-09-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_ai_ml_010",
+    "client_name": "Daniel Schmidt",
+    "client_industry": "CyberSec",
+    "project_title": "Cybersecurity Threat Log Anomaly Hunter",
+    "rating": 4.8,
+    "amount_earned_usd": 3434,
+    "feedback": "Dr. Elena Rostova is a true expert. Handled all complexity with Autoencoders effortlessly. Would hire again in a heartbeat.",
+    "date": "2024-10-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_ai_ml_011",
+    "client_name": "Samantha Alvarez",
+    "client_industry": "EdTech",
+    "project_title": "Personalized Educational Curriculum Recommender",
+    "rating": 4.8,
+    "amount_earned_usd": 6257,
+    "feedback": "Outstanding technical competence and communication. Solved our bottleneck with Personalized Educational Curriculum Recommender and saved us hundreds of engineering hours.",
+    "date": "2024-01-15",
+    "synthetic": true
+  },
+  {
+    "review_id": "rev_ai_ml_012",
+    "client_name": "Marcus Taylor",
+    "client_industry": "Professional Services",
+    "project_title": "Automated RFP Proposal Generator",
+    "rating": 4.8,
+    "amount_earned_usd": 9873,
+    "feedback": "High quality, deep domain mastery, and flawless execution. Automated RFP Proposal Generator was delivered cleanly and documented impeccably.",
+    "date": "2024-02-15",
+    "synthetic": true
+  }
+]
