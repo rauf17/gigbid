@@ -4,14 +4,21 @@
 4. no hidden test set committed   (5. README numbers -> evals/results: added in Phase 5)
 """
 from __future__ import annotations
-import ast, hashlib, re, subprocess, sys
+
+import ast
+import hashlib
+import re
+import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 fails: list[str] = []
 
 def tracked() -> list[Path]:
-    out = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True).stdout
+    out = subprocess.run(
+        ["git", "ls-files"], check=False, cwd=ROOT, capture_output=True, text=True
+    ).stdout
     return [ROOT / l for l in out.splitlines() if (ROOT / l).is_file()]
 
 SECRET_PATTERNS = [r"sk-[A-Za-z0-9]{20,}", r"AKIA[0-9A-Z]{16}", r"ghp_[A-Za-z0-9]{30,}",
@@ -26,7 +33,7 @@ for f in files:
         continue
     try:
         txt = f.read_text(errors="ignore")
-    except Exception:
+    except OSError:
         continue
     for pat in SECRET_PATTERNS:
         if re.search(pat, txt):
@@ -53,9 +60,13 @@ for f in (ROOT / "agent").rglob("*.py"):
     except SyntaxError:
         continue
     for n in ast.walk(tree):
-        if isinstance(n, ast.Constant) and isinstance(n.value, str) and len(n.value) > 300:
-            if n is not (tree.body[0].value if tree.body and isinstance(tree.body[0], ast.Expr) else None):
-                fails.append(f"long inline string (prompt?) in {f.relative_to(ROOT)}:{n.lineno}")
+        if (
+            isinstance(n, ast.Constant)
+            and isinstance(n.value, str)
+            and len(n.value) > 300
+            and n is not (tree.body[0].value if tree.body and isinstance(tree.body[0], ast.Expr) else None)
+        ):
+            fails.append(f"long inline string (prompt?) in {f.relative_to(ROOT)}:{n.lineno}")
 
 # hidden set
 for f in files:
