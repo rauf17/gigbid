@@ -760,14 +760,14 @@ def main() -> None:
             continue
 
         persona_profile = json.loads(persona_file.read_text(encoding="utf-8"))
-        evidence_chunks = load_persona_evidence_chunks(data_dir, persona_id)
+        evidence_items = load_persona_evidence_items(data_dir, persona_id)
 
         rows = build_dev_set_for_persona(
             persona_id=persona_id,
             all_jobs=all_jobs,
             historical_jobs=historical_jobs,
             labels_map=labels_map,
-            evidence_chunks=evidence_chunks,
+            evidence_items=evidence_items,
             persona_profile=persona_profile,
             rules=rules,
             seed=args.seed,
