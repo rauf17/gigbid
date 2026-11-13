@@ -1,4 +1,4 @@
-.PHONY: install dev api test eval seed data demo lint check lock mcp-marketplace
+.PHONY: install dev api test eval seed data demo lint check lock mcp-marketplace ingest
 install:
 	uv sync --extra dev
 lock:
@@ -9,6 +9,8 @@ dev:
 	docker compose -f infra/docker-compose.yml up --build
 mcp-marketplace:
 	uv run uvicorn mcp_servers.marketplace.server:app --port 8002 --reload
+ingest:
+	uv run python -m rag.ingest --persona all
 api:
 	uv run uvicorn apps.api.main:app --reload --port 8000
 test:
