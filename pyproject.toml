@@ -10,8 +10,11 @@ dependencies = [
   "langgraph", "langgraph-checkpoint-postgres", "langgraph-supervisor", "langchain-core",
   "langchain-mcp-adapters", "mcp[cli]",
   "psycopg[binary,pool]", "pgvector", "redis", "arq",
-  "rank-bm25", "sentence-transformers", "pypdf", "langsmith",
+  "rank-bm25", "sentence-transformers", "pypdf", "langsmith", "qdrant-client",
 ]
+
+[project.scripts]
+gigbid-portfolio-mcp = "mcp_servers.portfolio.server:main"
 
 [project.optional-dependencies]
 dev = ["pytest", "pytest-asyncio", "pytest-cov", "ruff", "mypy", "syrupy", "httpx"]

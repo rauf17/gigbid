@@ -21,6 +21,7 @@ apps/web/playwright-report/
 apps/web/test-results/
 # generated / private data
 data/raw/
+data/processed/index/
 evals/datasets/*hidden*
 evals/datasets/*test_set*
 # local model + db volumes
