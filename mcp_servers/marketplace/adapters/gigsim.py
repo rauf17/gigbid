@@ -187,6 +187,8 @@ class GigSimAdapter(MarketplaceAdapter):
             params["cursor"] = cursor
 
         data = await self._request_with_retry("GET", "/jobs", params=params)
+        if isinstance(data, dict):
+            return data.get("items", [])
         return data if isinstance(data, list) else []
 
     async def get_job(self, job_id: str) -> dict[str, Any]:
@@ -247,7 +249,9 @@ class GigSimAdapter(MarketplaceAdapter):
                 raise NotFound(f"Proposal {proposal_id} not found.")
 
             balance_data = await self.get_connects_balance()
-            balance = balance_data.get("connects_balance", 0)
+            balance = balance_data.get("balance")
+            if balance is None:
+                balance = balance_data.get("connects_balance", 0)
             cost = target.get("connects_cost", 0)
 
             return {

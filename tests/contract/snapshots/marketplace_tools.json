@@ -1,0 +1,1460 @@
+[
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": null,
+      "readOnlyHint": false,
+      "title": null
+    },
+    "description": "Create a draft proposal or dry-run preview for an approved job posting.\nWhen to use: Use after risk and fit checks to persist a proposal draft or preview Connects cost with dry_run=True. Never spends Connects.\nWhen NOT to use: Do NOT use for initial job scouting or without an approved cover letter. Does NOT submit the proposal.",
+    "inputSchema": {
+      "properties": {
+        "bid_amount": {
+          "description": "Proposed project or hourly bid in USD.",
+          "exclusiveMinimum": 0.0,
+          "maximum": 500000.0,
+          "title": "Bid Amount",
+          "type": "number"
+        },
+        "cover_letter": {
+          "description": "Full proposal cover letter.",
+          "maxLength": 10000,
+          "minLength": 10,
+          "title": "Cover Letter",
+          "type": "string"
+        },
+        "dry_run": {
+          "default": false,
+          "description": "If true, returns preview with Connects cost without creating record.",
+          "title": "Dry Run",
+          "type": "boolean"
+        },
+        "idempotency_key": {
+          "description": "Idempotency key to prevent duplicate drafts.",
+          "maxLength": 128,
+          "minLength": 8,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "job_id": {
+          "description": "Target job identifier.",
+          "maxLength": 64,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Job Id",
+          "type": "string"
+        },
+        "screening_answers": {
+          "anyOf": [
+            {
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Screening Answers"
+        }
+      },
+      "required": [
+        "job_id",
+        "cover_letter",
+        "bid_amount",
+        "idempotency_key"
+      ],
+      "title": "create_proposal_draftArguments",
+      "type": "object"
+    },
+    "name": "create_proposal_draft",
+    "outputSchema": {
+      "$defs": {
+        "ErrorOutput": {
+          "description": "Structured error output schema returned in degraded or failure modes.",
+          "properties": {
+            "detail": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional diagnostic details.",
+              "title": "Detail"
+            },
+            "error": {
+              "description": "Machine-readable error code.",
+              "title": "Error",
+              "type": "string"
+            },
+            "retry_after": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Seconds to wait before retry.",
+              "title": "Retry After"
+            },
+            "retryable": {
+              "description": "Whether client may retry.",
+              "title": "Retryable",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "error",
+            "retryable"
+          ],
+          "title": "ErrorOutput",
+          "type": "object"
+        },
+        "ProposalDraftOutput": {
+          "description": "Output schema for create_proposal_draft tool.",
+          "properties": {
+            "bid_amount": {
+              "description": "Bid amount in USD.",
+              "title": "Bid Amount",
+              "type": "number"
+            },
+            "connects_cost": {
+              "description": "Connects cost to submit.",
+              "title": "Connects Cost",
+              "type": "integer"
+            },
+            "cover_letter": {
+              "description": "Generated cover letter.",
+              "title": "Cover Letter",
+              "type": "string"
+            },
+            "created_at": {
+              "description": "ISO 8601 creation timestamp.",
+              "title": "Created At",
+              "type": "string"
+            },
+            "dry_run": {
+              "default": false,
+              "description": "Whether draft was created as a preview.",
+              "title": "Dry Run",
+              "type": "boolean"
+            },
+            "id": {
+              "description": "Proposal identifier.",
+              "title": "Id",
+              "type": "string"
+            },
+            "job_id": {
+              "description": "Target job identifier.",
+              "title": "Job Id",
+              "type": "string"
+            },
+            "message": {
+              "description": "Status explanation.",
+              "title": "Message",
+              "type": "string"
+            },
+            "screening_answers": {
+              "anyOf": [
+                {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Answers to client screening questions.",
+              "title": "Screening Answers"
+            },
+            "status": {
+              "description": "Proposal status (e.g. 'draft').",
+              "title": "Status",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "job_id",
+            "cover_letter",
+            "bid_amount",
+            "connects_cost",
+            "status",
+            "created_at",
+            "message"
+          ],
+          "title": "ProposalDraftOutput",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProposalDraftOutput"
+            },
+            {
+              "$ref": "#/$defs/ErrorOutput"
+            }
+          ],
+          "title": "Result"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "create_proposal_draftOutput",
+      "type": "object"
+    }
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true,
+      "readOnlyHint": true,
+      "title": null
+    },
+    "description": "Retrieve public hiring history and reputation metrics for a client.\nWhen to use: Use during risk assessment and client vetting to check spend, hire rate, ratings, and payment verification.\nWhen NOT to use: Do NOT use if evaluating job technical fit (use get_job instead).",
+    "inputSchema": {
+      "properties": {
+        "client_id": {
+          "description": "Client identifier.",
+          "maxLength": 64,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Client Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "client_id"
+      ],
+      "title": "get_client_historyArguments",
+      "type": "object"
+    },
+    "name": "get_client_history",
+    "outputSchema": {
+      "$defs": {
+        "ClientHistoryOutput": {
+          "description": "Output schema for get_client_history tool.",
+          "properties": {
+            "avg_rating": {
+              "description": "Average client rating (1.0 to 5.0).",
+              "title": "Avg Rating",
+              "type": "number"
+            },
+            "company": {
+              "description": "Client company or display name.",
+              "title": "Company",
+              "type": "string"
+            },
+            "country": {
+              "description": "Client country location.",
+              "title": "Country",
+              "type": "string"
+            },
+            "hire_rate": {
+              "description": "Hire rate between 0.0 and 1.0.",
+              "title": "Hire Rate",
+              "type": "number"
+            },
+            "id": {
+              "description": "Client identifier.",
+              "title": "Id",
+              "type": "string"
+            },
+            "industry": {
+              "description": "Client industry sector.",
+              "title": "Industry",
+              "type": "string"
+            },
+            "jobs_posted": {
+              "description": "Total jobs posted by client.",
+              "title": "Jobs Posted",
+              "type": "integer"
+            },
+            "payment_verified": {
+              "description": "Whether payment method is verified.",
+              "title": "Payment Verified",
+              "type": "boolean"
+            },
+            "review_count": {
+              "description": "Number of completed freelancer reviews.",
+              "title": "Review Count",
+              "type": "integer"
+            },
+            "total_spent": {
+              "description": "Total lifetime freelancer spend in USD.",
+              "title": "Total Spent",
+              "type": "number"
+            }
+          },
+          "required": [
+            "id",
+            "company",
+            "industry",
+            "country",
+            "payment_verified",
+            "total_spent",
+            "hire_rate",
+            "avg_rating",
+            "jobs_posted",
+            "review_count"
+          ],
+          "title": "ClientHistoryOutput",
+          "type": "object"
+        },
+        "ErrorOutput": {
+          "description": "Structured error output schema returned in degraded or failure modes.",
+          "properties": {
+            "detail": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional diagnostic details.",
+              "title": "Detail"
+            },
+            "error": {
+              "description": "Machine-readable error code.",
+              "title": "Error",
+              "type": "string"
+            },
+            "retry_after": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Seconds to wait before retry.",
+              "title": "Retry After"
+            },
+            "retryable": {
+              "description": "Whether client may retry.",
+              "title": "Retryable",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "error",
+            "retryable"
+          ],
+          "title": "ErrorOutput",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ClientHistoryOutput"
+            },
+            {
+              "$ref": "#/$defs/ErrorOutput"
+            }
+          ],
+          "title": "Result"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "get_client_historyOutput",
+      "type": "object"
+    }
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true,
+      "readOnlyHint": true,
+      "title": null
+    },
+    "description": "Check current available Connects balance for proposal submissions.\nWhen to use: Use during pricing and proposal planning to verify sufficient Connects before preparing bids.\nWhen NOT to use: Do NOT use repeatedly in tight loops; query once during job evaluation.",
+    "inputSchema": {
+      "properties": {},
+      "title": "get_connects_balanceArguments",
+      "type": "object"
+    },
+    "name": "get_connects_balance",
+    "outputSchema": {
+      "$defs": {
+        "ConnectsBalanceOutput": {
+          "description": "Output schema for get_connects_balance tool.",
+          "properties": {
+            "balance": {
+              "description": "Current available Connects balance.",
+              "title": "Balance",
+              "type": "integer"
+            },
+            "currency": {
+              "default": "Connects",
+              "description": "Currency unit.",
+              "title": "Currency",
+              "type": "string"
+            }
+          },
+          "required": [
+            "balance"
+          ],
+          "title": "ConnectsBalanceOutput",
+          "type": "object"
+        },
+        "ErrorOutput": {
+          "description": "Structured error output schema returned in degraded or failure modes.",
+          "properties": {
+            "detail": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional diagnostic details.",
+              "title": "Detail"
+            },
+            "error": {
+              "description": "Machine-readable error code.",
+              "title": "Error",
+              "type": "string"
+            },
+            "retry_after": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Seconds to wait before retry.",
+              "title": "Retry After"
+            },
+            "retryable": {
+              "description": "Whether client may retry.",
+              "title": "Retryable",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "error",
+            "retryable"
+          ],
+          "title": "ErrorOutput",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConnectsBalanceOutput"
+            },
+            {
+              "$ref": "#/$defs/ErrorOutput"
+            }
+          ],
+          "title": "Result"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "get_connects_balanceOutput",
+      "type": "object"
+    }
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true,
+      "readOnlyHint": true,
+      "title": null
+    },
+    "description": "Retrieve complete details for a specific marketplace job posting.\nWhen to use: Use when analyzing a candidate job's scope, requirements, budget type, and Connects cost.\nWhen NOT to use: Do NOT use for general discovery or searching without an ID (use search_jobs instead).",
+    "inputSchema": {
+      "properties": {
+        "job_id": {
+          "description": "Unique job identifier.",
+          "maxLength": 64,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Job Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "job_id"
+      ],
+      "title": "get_jobArguments",
+      "type": "object"
+    },
+    "name": "get_job",
+    "outputSchema": {
+      "$defs": {
+        "ErrorOutput": {
+          "description": "Structured error output schema returned in degraded or failure modes.",
+          "properties": {
+            "detail": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional diagnostic details.",
+              "title": "Detail"
+            },
+            "error": {
+              "description": "Machine-readable error code.",
+              "title": "Error",
+              "type": "string"
+            },
+            "retry_after": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Seconds to wait before retry.",
+              "title": "Retry After"
+            },
+            "retryable": {
+              "description": "Whether client may retry.",
+              "title": "Retryable",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "error",
+            "retryable"
+          ],
+          "title": "ErrorOutput",
+          "type": "object"
+        },
+        "JobItem": {
+          "description": "Cleaned public job representation.",
+          "properties": {
+            "budget_max": {
+              "description": "Maximum budget or hourly rate.",
+              "title": "Budget Max",
+              "type": "number"
+            },
+            "budget_min": {
+              "description": "Minimum budget or hourly rate.",
+              "title": "Budget Min",
+              "type": "number"
+            },
+            "budget_type": {
+              "description": "Budget structure: 'fixed' or 'hourly'.",
+              "title": "Budget Type",
+              "type": "string"
+            },
+            "category": {
+              "description": "Job category (e.g. AI/ML, Full-Stack Web, Data Analysis).",
+              "title": "Category",
+              "type": "string"
+            },
+            "client_country": {
+              "description": "Client country location.",
+              "title": "Client Country",
+              "type": "string"
+            },
+            "client_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Hiring client identifier.",
+              "title": "Client Id"
+            },
+            "connects_cost": {
+              "description": "Connects required to submit proposal.",
+              "title": "Connects Cost",
+              "type": "integer"
+            },
+            "description": {
+              "description": "Job requirements and context.",
+              "title": "Description",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique job identifier.",
+              "title": "Id",
+              "type": "string"
+            },
+            "posted_at": {
+              "description": "ISO 8601 posting timestamp.",
+              "title": "Posted At",
+              "type": "string"
+            },
+            "skills": {
+              "description": "Tagged skill requirements.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Skills",
+              "type": "array"
+            },
+            "synthetic": {
+              "default": true,
+              "description": "Indicates synthetic test data.",
+              "title": "Synthetic",
+              "type": "boolean"
+            },
+            "title": {
+              "description": "Job posting title.",
+              "title": "Title",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "title",
+            "description",
+            "category",
+            "budget_type",
+            "budget_min",
+            "budget_max",
+            "client_country",
+            "posted_at",
+            "connects_cost"
+          ],
+          "title": "JobItem",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JobItem"
+            },
+            {
+              "$ref": "#/$defs/ErrorOutput"
+            }
+          ],
+          "title": "Result"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "get_jobOutput",
+      "type": "object"
+    }
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true,
+      "readOnlyHint": true,
+      "title": null
+    },
+    "description": "Retrieve message history for an active client conversation.\nWhen to use: Use during client liaison interactions to read client questions, feedback, or interview invitations.\nWhen NOT to use: Do NOT use on closed proposals or when initiating a first bid.",
+    "inputSchema": {
+      "properties": {
+        "conversation_id": {
+          "description": "Conversation thread identifier.",
+          "maxLength": 64,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Conversation Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "conversation_id"
+      ],
+      "title": "list_messagesArguments",
+      "type": "object"
+    },
+    "name": "list_messages",
+    "outputSchema": {
+      "$defs": {
+        "ErrorOutput": {
+          "description": "Structured error output schema returned in degraded or failure modes.",
+          "properties": {
+            "detail": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional diagnostic details.",
+              "title": "Detail"
+            },
+            "error": {
+              "description": "Machine-readable error code.",
+              "title": "Error",
+              "type": "string"
+            },
+            "retry_after": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Seconds to wait before retry.",
+              "title": "Retry After"
+            },
+            "retryable": {
+              "description": "Whether client may retry.",
+              "title": "Retryable",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "error",
+            "retryable"
+          ],
+          "title": "ErrorOutput",
+          "type": "object"
+        },
+        "ListMessagesOutput": {
+          "description": "Output schema for list_messages tool.",
+          "properties": {
+            "conversation_id": {
+              "description": "Conversation thread identifier.",
+              "title": "Conversation Id",
+              "type": "string"
+            },
+            "messages": {
+              "description": "List of messages.",
+              "items": {
+                "$ref": "#/$defs/MessageItem"
+              },
+              "title": "Messages",
+              "type": "array"
+            }
+          },
+          "required": [
+            "conversation_id"
+          ],
+          "title": "ListMessagesOutput",
+          "type": "object"
+        },
+        "MessageItem": {
+          "description": "Individual conversation message.",
+          "properties": {
+            "conversation_id": {
+              "description": "Conversation thread identifier.",
+              "title": "Conversation Id",
+              "type": "string"
+            },
+            "created_at": {
+              "description": "ISO 8601 creation timestamp.",
+              "title": "Created At",
+              "type": "string"
+            },
+            "dry_run": {
+              "default": false,
+              "description": "Whether message was a dry-run preview.",
+              "title": "Dry Run",
+              "type": "boolean"
+            },
+            "id": {
+              "description": "Unique message identifier.",
+              "title": "Id",
+              "type": "string"
+            },
+            "sender": {
+              "description": "Message sender ('freelancer' or 'client').",
+              "title": "Sender",
+              "type": "string"
+            },
+            "text": {
+              "description": "Message text content.",
+              "title": "Text",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "conversation_id",
+            "sender",
+            "text",
+            "created_at"
+          ],
+          "title": "MessageItem",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ListMessagesOutput"
+            },
+            {
+              "$ref": "#/$defs/ErrorOutput"
+            }
+          ],
+          "title": "Result"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "list_messagesOutput",
+      "type": "object"
+    }
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true,
+      "readOnlyHint": true,
+      "title": null
+    },
+    "description": "Search active marketplace job listings by keyword query, category filter, and recency.\nWhen to use: Use during the scouting phase to discover newly posted jobs or search jobs matching specific persona domain criteria.\nWhen NOT to use: Do NOT use if you already know the specific job ID (use get_job instead). Do NOT use for bidding or submitting proposals.",
+    "inputSchema": {
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Target job category filter.",
+          "title": "Category"
+        },
+        "limit": {
+          "default": 20,
+          "description": "Max jobs to return (1 to 50).",
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "query": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Keyword search query.",
+          "title": "Query"
+        },
+        "since": {
+          "anyOf": [
+            {
+              "maxLength": 50,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO timestamp for recent jobs.",
+          "title": "Since"
+        }
+      },
+      "title": "search_jobsArguments",
+      "type": "object"
+    },
+    "name": "search_jobs",
+    "outputSchema": {
+      "$defs": {
+        "ErrorOutput": {
+          "description": "Structured error output schema returned in degraded or failure modes.",
+          "properties": {
+            "detail": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional diagnostic details.",
+              "title": "Detail"
+            },
+            "error": {
+              "description": "Machine-readable error code.",
+              "title": "Error",
+              "type": "string"
+            },
+            "retry_after": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Seconds to wait before retry.",
+              "title": "Retry After"
+            },
+            "retryable": {
+              "description": "Whether client may retry.",
+              "title": "Retryable",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "error",
+            "retryable"
+          ],
+          "title": "ErrorOutput",
+          "type": "object"
+        },
+        "JobItem": {
+          "description": "Cleaned public job representation.",
+          "properties": {
+            "budget_max": {
+              "description": "Maximum budget or hourly rate.",
+              "title": "Budget Max",
+              "type": "number"
+            },
+            "budget_min": {
+              "description": "Minimum budget or hourly rate.",
+              "title": "Budget Min",
+              "type": "number"
+            },
+            "budget_type": {
+              "description": "Budget structure: 'fixed' or 'hourly'.",
+              "title": "Budget Type",
+              "type": "string"
+            },
+            "category": {
+              "description": "Job category (e.g. AI/ML, Full-Stack Web, Data Analysis).",
+              "title": "Category",
+              "type": "string"
+            },
+            "client_country": {
+              "description": "Client country location.",
+              "title": "Client Country",
+              "type": "string"
+            },
+            "client_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Hiring client identifier.",
+              "title": "Client Id"
+            },
+            "connects_cost": {
+              "description": "Connects required to submit proposal.",
+              "title": "Connects Cost",
+              "type": "integer"
+            },
+            "description": {
+              "description": "Job requirements and context.",
+              "title": "Description",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique job identifier.",
+              "title": "Id",
+              "type": "string"
+            },
+            "posted_at": {
+              "description": "ISO 8601 posting timestamp.",
+              "title": "Posted At",
+              "type": "string"
+            },
+            "skills": {
+              "description": "Tagged skill requirements.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Skills",
+              "type": "array"
+            },
+            "synthetic": {
+              "default": true,
+              "description": "Indicates synthetic test data.",
+              "title": "Synthetic",
+              "type": "boolean"
+            },
+            "title": {
+              "description": "Job posting title.",
+              "title": "Title",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "title",
+            "description",
+            "category",
+            "budget_type",
+            "budget_min",
+            "budget_max",
+            "client_country",
+            "posted_at",
+            "connects_cost"
+          ],
+          "title": "JobItem",
+          "type": "object"
+        },
+        "SearchJobsOutput": {
+          "description": "Output schema for search_jobs tool.",
+          "properties": {
+            "jobs": {
+              "description": "List of matched jobs.",
+              "items": {
+                "$ref": "#/$defs/JobItem"
+              },
+              "title": "Jobs",
+              "type": "array"
+            },
+            "total": {
+              "description": "Total count of returned jobs.",
+              "title": "Total",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "total"
+          ],
+          "title": "SearchJobsOutput",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SearchJobsOutput"
+            },
+            {
+              "$ref": "#/$defs/ErrorOutput"
+            }
+          ],
+          "title": "Result"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "search_jobsOutput",
+      "type": "object"
+    }
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": null,
+      "readOnlyHint": false,
+      "title": null
+    },
+    "description": "Send a message to a client in an active conversation thread.\nWhen to use: Use during negotiation or client inquiries to reply to client questions or schedule interviews.\nWhen NOT to use: Do NOT use for initial proposal submission (use submit_proposal instead).",
+    "inputSchema": {
+      "properties": {
+        "conversation_id": {
+          "description": "Conversation thread identifier.",
+          "maxLength": 64,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Conversation Id",
+          "type": "string"
+        },
+        "dry_run": {
+          "default": false,
+          "description": "If true, returns preview without sending message.",
+          "title": "Dry Run",
+          "type": "boolean"
+        },
+        "idempotency_key": {
+          "description": "Idempotency key to prevent duplicate messages.",
+          "maxLength": 128,
+          "minLength": 8,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "text": {
+          "description": "Message body text.",
+          "maxLength": 5000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "conversation_id",
+        "text",
+        "idempotency_key"
+      ],
+      "title": "send_messageArguments",
+      "type": "object"
+    },
+    "name": "send_message",
+    "outputSchema": {
+      "$defs": {
+        "ErrorOutput": {
+          "description": "Structured error output schema returned in degraded or failure modes.",
+          "properties": {
+            "detail": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional diagnostic details.",
+              "title": "Detail"
+            },
+            "error": {
+              "description": "Machine-readable error code.",
+              "title": "Error",
+              "type": "string"
+            },
+            "retry_after": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Seconds to wait before retry.",
+              "title": "Retry After"
+            },
+            "retryable": {
+              "description": "Whether client may retry.",
+              "title": "Retryable",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "error",
+            "retryable"
+          ],
+          "title": "ErrorOutput",
+          "type": "object"
+        },
+        "MessageItem": {
+          "description": "Individual conversation message.",
+          "properties": {
+            "conversation_id": {
+              "description": "Conversation thread identifier.",
+              "title": "Conversation Id",
+              "type": "string"
+            },
+            "created_at": {
+              "description": "ISO 8601 creation timestamp.",
+              "title": "Created At",
+              "type": "string"
+            },
+            "dry_run": {
+              "default": false,
+              "description": "Whether message was a dry-run preview.",
+              "title": "Dry Run",
+              "type": "boolean"
+            },
+            "id": {
+              "description": "Unique message identifier.",
+              "title": "Id",
+              "type": "string"
+            },
+            "sender": {
+              "description": "Message sender ('freelancer' or 'client').",
+              "title": "Sender",
+              "type": "string"
+            },
+            "text": {
+              "description": "Message text content.",
+              "title": "Text",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "conversation_id",
+            "sender",
+            "text",
+            "created_at"
+          ],
+          "title": "MessageItem",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MessageItem"
+            },
+            {
+              "$ref": "#/$defs/ErrorOutput"
+            }
+          ],
+          "title": "Result"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "send_messageOutput",
+      "type": "object"
+    }
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": null,
+      "readOnlyHint": false,
+      "title": null
+    },
+    "description": "Submit a draft proposal to the marketplace, spending Connects.\nWhen to use: Use ONLY during the final human-approved submission phase to formally transmit a bid and charge Connects (or preview with dry_run=True).\nWhen NOT to use: Do NOT use during analysis, drafting, or unapproved evaluation. Destructive: spends real Connects.",
+    "inputSchema": {
+      "properties": {
+        "dry_run": {
+          "default": false,
+          "description": "If true, returns preview with Connects cost without deducting Connects.",
+          "title": "Dry Run",
+          "type": "boolean"
+        },
+        "idempotency_key": {
+          "description": "Idempotency key to prevent double charge.",
+          "maxLength": 128,
+          "minLength": 8,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "proposal_id": {
+          "description": "Draft proposal identifier.",
+          "maxLength": 64,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Proposal Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "proposal_id",
+        "idempotency_key"
+      ],
+      "title": "submit_proposalArguments",
+      "type": "object"
+    },
+    "name": "submit_proposal",
+    "outputSchema": {
+      "$defs": {
+        "ErrorOutput": {
+          "description": "Structured error output schema returned in degraded or failure modes.",
+          "properties": {
+            "detail": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional diagnostic details.",
+              "title": "Detail"
+            },
+            "error": {
+              "description": "Machine-readable error code.",
+              "title": "Error",
+              "type": "string"
+            },
+            "retry_after": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Seconds to wait before retry.",
+              "title": "Retry After"
+            },
+            "retryable": {
+              "description": "Whether client may retry.",
+              "title": "Retryable",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "error",
+            "retryable"
+          ],
+          "title": "ErrorOutput",
+          "type": "object"
+        },
+        "ProposalSubmitOutput": {
+          "description": "Output schema for submit_proposal tool.",
+          "properties": {
+            "connects_balance": {
+              "description": "Remaining Connects balance.",
+              "title": "Connects Balance",
+              "type": "integer"
+            },
+            "connects_cost": {
+              "description": "Connects deducted.",
+              "title": "Connects Cost",
+              "type": "integer"
+            },
+            "dry_run": {
+              "default": false,
+              "description": "Whether submission was a dry-run preview.",
+              "title": "Dry Run",
+              "type": "boolean"
+            },
+            "id": {
+              "description": "Proposal identifier.",
+              "title": "Id",
+              "type": "string"
+            },
+            "job_id": {
+              "description": "Target job identifier.",
+              "title": "Job Id",
+              "type": "string"
+            },
+            "message": {
+              "description": "Submission outcome message.",
+              "title": "Message",
+              "type": "string"
+            },
+            "status": {
+              "description": "Proposal status ('submitted' or 'draft').",
+              "title": "Status",
+              "type": "string"
+            },
+            "submitted_at": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Submission timestamp.",
+              "title": "Submitted At"
+            }
+          },
+          "required": [
+            "id",
+            "job_id",
+            "status",
+            "connects_cost",
+            "connects_balance",
+            "message"
+          ],
+          "title": "ProposalSubmitOutput",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProposalSubmitOutput"
+            },
+            {
+              "$ref": "#/$defs/ErrorOutput"
+            }
+          ],
+          "title": "Result"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "submit_proposalOutput",
+      "type": "object"
+    }
+  }
+]

@@ -231,8 +231,10 @@ def create_mcp_server(
 
         try:
             raw_bal = await app_adapter.get_connects_balance()
-            balance = raw_bal.get("connects_balance", 0)
-            result = ConnectsBalanceOutput(balance=balance)
+            balance = raw_bal.get("balance")
+            if balance is None:
+                balance = raw_bal.get("connects_balance", 0)
+            result = ConnectsBalanceOutput(balance=int(balance))
             app_audit.record_audit(user_id, "get_connects_balance", {}, result.model_dump(), "success", trace_id)
             return result
         except MarketplaceUnavailable as exc:
