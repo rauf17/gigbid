@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Synthetic Persona Data Generator (AI-4016 GigBid Phase 1a).
 
 Deterministic generator producing synthetic persona corpora under data/personas/<persona_id>/:

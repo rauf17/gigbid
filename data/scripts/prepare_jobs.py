@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Job Dataset Preparation and Synthesis (AI-4016 GigBid Phase 1b).
 
 Processes raw Kaggle CSV files if present in data/raw/, otherwise falls back

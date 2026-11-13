@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Adversarial Injection for Job Stream (AI-4016 GigBid Phase 1b).
 
 Plants adversarial instances into the STREAM pool only (data/processed/jobs_stream.jsonl):
