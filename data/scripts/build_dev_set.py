@@ -36,11 +36,23 @@ PERSONA_CATEGORIES = {
 
 TYPE_PRIORITY = {
     "case_study": 1,
-    "repo_readme": 2,
-    "repo_code": 3,
-    "proposal": 4,
-    "cv": 5,
-    "review": 6,
+    "repo": 2,
+    "review": 3,
+}
+
+PERSONA_REPO_SKILLS: dict[str, dict[str, list[str]]] = {
+    "ai_ml": {
+        "llm-guardrails": ["Python", "PyTorch", "Transformers", "FastAPI", "MLOps", "vLLM"],
+        "rag-eval-pipeline": ["Python", "LangChain", "FastAPI", "pgvector", "RAG", "Docker"],
+    },
+    "fullstack": {
+        "realtime-ops-dashboard": ["TypeScript", "React", "Next.js", "WebSockets", "Tailwind CSS"],
+        "saas-subscription-core": ["TypeScript", "FastAPI", "Stripe", "PostgreSQL", "Docker"],
+    },
+    "data_analyst": {
+        "dbt-analytics-warehouse": ["SQL", "dbt", "Snowflake", "BigQuery", "PostgreSQL"],
+        "kpi-executive-dashboard": ["Python", "SQL", "Tableau", "Power BI", "DuckDB"],
+    },
 }
 
 
@@ -79,22 +91,61 @@ def load_all_jobs(processed_dir: Path) -> tuple[list[dict[str, Any]], dict[str, 
     return all_jobs, labels_map
 
 
-def load_persona_evidence_chunks(data_dir: Path, persona_id: str) -> list[dict[str, Any]]:
-    """Loads indexed evidence chunks for a specific persona."""
-    index_cache = data_dir / "processed" / "index" / f"{persona_id}_chunks.jsonl"
-    if index_cache.is_file():
-        chunks: list[dict[str, Any]] = []
-        for line in index_cache.read_text(encoding="utf-8").splitlines():
-            if line.strip():
-                chunks.append(json.loads(line))
-        return chunks
-
-    # Fallback to building chunks dynamically if index cache not found
-    from rag.ingest.chunkers import build_chunks_for_persona
+def load_persona_evidence_items(data_dir: Path, persona_id: str) -> list[dict[str, Any]]:
+    """Loads distinct experience evidence items (case studies, repos, reviews) for a persona."""
+    from rag.ingest.loaders import load_case_studies, load_reviews
 
     persona_dir = data_dir / "personas" / persona_id
-    raw_chunks = build_chunks_for_persona(persona_id, persona_dir)
-    return [c.model_dump() for c in raw_chunks]
+    items: list[dict[str, Any]] = []
+
+    # 1. Case studies (20 items)
+    case_studies = load_case_studies(persona_dir)
+    cs_skills_by_project: dict[str, list[str]] = {}
+    for cs in case_studies:
+        cid = f"{persona_id}_cs_{cs['id']}"
+        skills = cs.get("skills", [])
+        proj = cs.get("project", "")
+        if proj:
+            cs_skills_by_project[proj] = skills
+        items.append(
+            {
+                "id": cid,
+                "type": "case_study",
+                "project": proj,
+                "skills": skills,
+            }
+        )
+
+    # 2. Repositories (2 items per persona)
+    repo_skills = PERSONA_REPO_SKILLS.get(persona_id, {})
+    for rname, skills in repo_skills.items():
+        rid = f"{persona_id}_repo_{rname}"
+        items.append(
+            {
+                "id": rid,
+                "type": "repo",
+                "project": rname,
+                "skills": skills,
+            }
+        )
+
+    # 3. Reviews (12 items)
+    reviews = load_reviews(persona_dir)
+    for idx, rev in enumerate(reviews):
+        rev_id = rev.get("review_id", f"rev_{idx:03d}")
+        cid = f"{persona_id}_review_{rev_id}"
+        proj = rev.get("project_title", "")
+        skills = cs_skills_by_project.get(proj, [])
+        items.append(
+            {
+                "id": cid,
+                "type": "review",
+                "project": proj,
+                "skills": skills,
+            }
+        )
+
+    return items
 
 
 def compute_skill_jaccard(skills_a: list[str], skills_b: list[str]) -> float:

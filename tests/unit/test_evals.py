@@ -16,6 +16,8 @@ from evals.runners.rag_eval import (
     compute_ndcg_at_k,
     compute_recall_at_k,
     get_n_req_slice,
+    roll_up_retrieved_ids,
+    roll_up_to_item_id,
 )
 
 DATASETS_DIR = Path(__file__).resolve().parent.parent.parent / "evals" / "datasets"
@@ -117,6 +119,47 @@ def test_aggregate_metrics() -> None:
     assert agg["recall_at_5"] == 0.75
     assert agg["mrr"] == 0.75
     assert agg["ndcg_at_10"] == 0.75
+
+
+def test_roll_up_retrieved_ids_known_case() -> None:
+    """Verifies that retrieval chunk IDs roll up to item/project IDs, deduplicating while preserving best rank."""
+    # Chunk IDs from multiple code files and README of the same repo, multiple CV sections, and case studies:
+    raw_retrieved_chunk_ids = [
+        "ai_ml_cv_000",
+        "ai_ml_repo_rag-eval-pipeline_readme_00",
+        "ai_ml_cs_cs_aiml_001",
+        "ai_ml_repo_rag-eval-pipeline_pipeline_py_00",
+        "ai_ml_cv_001",
+        "ai_ml_repo_rag-eval-pipeline_utils_py_01",
+        "ai_ml_review_rev_ai_ml_001",
+        "ai_ml_cs_cs_aiml_002",
+        "fullstack_repo_realtime-ops-dashboard_page_tsx_00",
+        "fullstack_repo_realtime-ops-dashboard_readme_00",
+    ]
+
+    rolled = roll_up_retrieved_ids(raw_retrieved_chunk_ids)
+
+    # Expected:
+    # 1. ai_ml_cv_000 -> ai_ml_cv (rank 1)
+    # 2. ai_ml_repo_rag-eval-pipeline_readme_00 -> ai_ml_repo_rag-eval-pipeline (rank 2)
+    # 3. ai_ml_cs_cs_aiml_001 -> ai_ml_cs_cs_aiml_001 (rank 3)
+    # 4. ai_ml_repo_rag-eval-pipeline_pipeline_py_00 -> deduped, matches rank 2
+    # 5. ai_ml_cv_001 -> deduped, matches rank 1
+    # 6. ai_ml_repo_rag-eval-pipeline_utils_py_01 -> deduped, matches rank 2
+    # 7. ai_ml_review_rev_ai_ml_001 -> ai_ml_review_rev_ai_ml_001 (rank 4)
+    # 8. ai_ml_cs_cs_aiml_002 -> ai_ml_cs_cs_aiml_002 (rank 5)
+    # 9. fullstack_repo_realtime-ops-dashboard_page_tsx_00 -> fullstack_repo_realtime-ops-dashboard (rank 6)
+    # 10. fullstack_repo_realtime-ops-dashboard_readme_00 -> deduped, matches rank 6
+    expected = [
+        "ai_ml_cv",
+        "ai_ml_repo_rag-eval-pipeline",
+        "ai_ml_cs_cs_aiml_001",
+        "ai_ml_review_rev_ai_ml_001",
+        "ai_ml_cs_cs_aiml_002",
+        "fullstack_repo_realtime-ops-dashboard",
+    ]
+    assert rolled == expected
+    assert roll_up_to_item_id("data_analyst_repo_dbt-analytics-warehouse_models_sql_00") == "data_analyst_repo_dbt-analytics-warehouse"
 
 
 # -----------------------------------------------------------------------------

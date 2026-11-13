@@ -153,9 +153,11 @@ Thresholds and parameters are governed by `evals/datasets/gold_rules.yaml`. Each
 2. **`is_scam` (`bool`) & `has_injection` (`bool`)**:
    - Mapped from `data/processed/jobs_gold_labels.jsonl` (historical jobs default to `false`).
 3. **`relevant_evidence_ids` (`list[str]`)**:
-   - Ground truth chunk IDs selected from the persona's case studies, code repositories, and winning proposals.
-   - Filter rule: Jaccard similarity between job skills and chunk skills $\ge 0.20$.
-   - Bounded to $[1, 8]$ evidence items; falls back to highest overlap chunks if none meet the $0.20$ threshold.
+   - Ground-truth item-level evidence IDs selected from the persona's experience portfolio: case studies (`{persona}_cs_<id>`), code repositories (`{persona}_repo_<name>`), and verified client reviews (`{persona}_review_<id>`).
+   - Ground-truth items exclude past proposals (which represent historical bid outcome signals rather than direct experience evidence) and CV chunks (which are broad profile overviews).
+   - Filter rule: Jaccard similarity between job skills and item skills $\ge 0.20$, prioritizing case studies, code repositories, then client reviews.
+   - Bounded to $[1, 8]$ evidence items; falls back to highest overlap items if none meet the $0.20$ threshold.
+   - During evaluation, fine-grained retrieval chunks (e.g. repo source code chunks or README sections) are rolled up to their corresponding item/project IDs (deduplicating while preserving best rank) so evaluation operates at the unified item level.
 4. **`fair_price_band` (`list[float]`)**:
    - `[p25, p75]` percentiles of comparable jobs from `jobs_historical.jsonl` sharing category, budget type, and skill overlap.
 5. **`n_requirements` (`int`)**:

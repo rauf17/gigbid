@@ -7,8 +7,13 @@ version: 1
 min_skill_overlap_ratio: 0.35
 
 # Evidence retrieval relevance threshold:
-# Jaccard similarity between job skills and evidence chunk skills:
-# Jaccard = |Job_Skills ∩ Chunk_Skills| / |Job_Skills ∪ Chunk_Skills|
+# Allowed experience evidence types: case studies, code repos, and verified client reviews only.
+# (Past proposals are historical bid outcomes, not experience evidence; CV is background profile).
+allowed_evidence_types:
+  - case_study
+  - repo
+  - review
+
 evidence_jaccard_threshold: 0.20
 min_evidence_items: 1
 max_evidence_items: 8
@@ -37,3 +42,4 @@ personas:
     floor_hourly_rate: 55.0
     min_fixed_rate: 1000.0
     min_skill_overlap_ratio: 0.35
+

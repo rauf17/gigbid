@@ -24,6 +24,8 @@ import asyncio
 import hashlib
 import json
 import os
+import random
+import re
 import subprocess
 import time
 from datetime import UTC, datetime
@@ -35,6 +37,53 @@ import numpy as np
 DEFAULT_DATA_DIR = Path(__file__).resolve().parent.parent / "datasets"
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent.parent / "results"
 DEFAULT_PERSONAS = ["ai_ml", "fullstack", "data_analyst"]
+
+ALL_KNOWN_REPOS = {
+    "llm-guardrails",
+    "rag-eval-pipeline",
+    "realtime-ops-dashboard",
+    "saas-subscription-core",
+    "dbt-analytics-warehouse",
+    "kpi-executive-dashboard",
+}
+
+
+def roll_up_to_item_id(chunk_id: str) -> str:
+    """Rolls up fine-grained chunk IDs to item/project-level IDs.
+
+    - CV: {persona}_cv_xxx -> {persona}_cv
+    - Repo: {persona}_repo_{repo_name}_xxx -> {persona}_repo_{repo_name}
+    - Case study: {persona}_cs_{id} (already item-level)
+    - Review: {persona}_review_{id} (already item-level)
+    - Proposal: {persona}_prop_{id} (already item-level)
+    """
+    m_cv = re.match(r"^([a-z_]+_cv)_\d+$", chunk_id)
+    if m_cv:
+        return m_cv.group(1)
+
+    for rname in ALL_KNOWN_REPOS:
+        prefix = f"_repo_{rname}"
+        if prefix in chunk_id:
+            persona = chunk_id.split(prefix)[0]
+            return f"{persona}{prefix}"
+
+    m_repo = re.match(r"^([a-z_]+_repo_[a-zA-Z0-9\-]+?)_(?:readme|[a-zA-Z0-9_]+)_\d+$", chunk_id)
+    if m_repo:
+        return m_repo.group(1)
+
+    return chunk_id
+
+
+def roll_up_retrieved_ids(chunk_ids: list[str]) -> list[str]:
+    """Rolls chunk results up to item/project IDs, deduplicating while preserving best rank."""
+    seen: set[str] = set()
+    rolled_up: list[str] = []
+    for cid in chunk_ids:
+        item_id = roll_up_to_item_id(cid)
+        if item_id not in seen:
+            seen.add(item_id)
+            rolled_up.append(item_id)
+    return rolled_up
 
 
 def compute_recall_at_k(retrieved_ids: list[str], gold_ids: set[str], k: int = 5) -> float:
@@ -126,10 +175,30 @@ async def evaluate_dev_set(
     use_hash_embedder: bool = False,
 ) -> tuple[dict[str, Any], list[Path]]:
     """Runs evaluation on dev set jobs using specified retriever variant."""
+    from rag.index.bm25 import BM25Index
     from rag.retriever import get_retriever
 
     all_records: list[dict[str, Any]] = []
     evaluated_paths: list[Path] = []
+
+    # Shared index for lexical/oracle baselines
+    bm25_index: BM25Index | None = None
+    if variant in {"bm25_skills", "oracle"}:
+        bm25_index = BM25Index()
+
+    # Preload item texts for oracle baseline
+    item_texts_map: dict[str, list[str]] = {}
+    if variant == "oracle":
+        for p in personas:
+            chunks_file = data_dir.parent.parent / "data" / "processed" / "index" / f"{p}_chunks.jsonl"
+            if chunks_file.is_file():
+                for line in chunks_file.read_text(encoding="utf-8").splitlines():
+                    if line.strip():
+                        c = json.loads(line)
+                        iid = roll_up_to_item_id(c["id"])
+                        if iid not in item_texts_map:
+                            item_texts_map[iid] = []
+                        item_texts_map[iid].append(c["text"])
 
     for persona in personas:
         dev_file = data_dir / f"dev_{persona}.jsonl"
@@ -142,11 +211,28 @@ async def evaluate_dev_set(
         if limit and limit > 0:
             lines = lines[:limit]
 
-        retriever = get_retriever(
-            variant=variant,
-            persona=persona,
-            use_hash_embedder=use_hash_embedder,
-        )
+        # Candidate items for random baseline (34 experience items: case studies, repos, reviews)
+        candidate_items: list[str] = []
+        rng = random.Random(42 + sum(ord(c) for c in persona))
+        if variant == "random":
+            chunks_file = data_dir.parent.parent / "data" / "processed" / "index" / f"{persona}_chunks.jsonl"
+            if chunks_file.is_file():
+                raw_cids = [
+                    json.loads(line)["id"]
+                    for line in chunks_file.read_text(encoding="utf-8").splitlines()
+                    if line.strip()
+                ]
+                candidate_items = sorted(
+                    {roll_up_to_item_id(c) for c in raw_cids if "_prop_" not in c and "_cv_" not in c}
+                )
+
+        retriever = None
+        if variant in {"v0", "v0_naive"}:
+            retriever = get_retriever(
+                variant="v0_naive",
+                persona=persona,
+                use_hash_embedder=use_hash_embedder,
+            )
 
         print(f"[rag_eval] Evaluating {len(lines)} jobs for persona '{persona}' using variant '{variant}'...")
         t_start = time.time()
@@ -160,8 +246,28 @@ async def evaluate_dev_set(
             gold_ids = set(gold.get("relevant_evidence_ids", []))
             n_req = int(gold.get("n_requirements", 0))
 
-            items = await retriever.retrieve(query=query, k=10, filters={"persona": persona})
-            retrieved_ids = [item.id for item in items]
+            if variant == "random":
+                retrieved_ids = rng.sample(candidate_items, min(10, len(candidate_items)))
+            elif variant == "bm25_skills":
+                assert bm25_index is not None
+                skill_query = " ".join(job.get("skills", []))
+                hits = bm25_index.search(query=skill_query, k=25, persona=persona)
+                retrieved_ids = roll_up_retrieved_ids([c.id for c, _ in hits])[:10]
+            elif variant == "oracle":
+                assert bm25_index is not None
+                gold_item_ids = gold.get("relevant_evidence_ids", [])
+                raw_chunk_ids: list[str] = []
+                for gid in gold_item_ids:
+                    texts = item_texts_map.get(gid, [])
+                    if texts:
+                        hits = bm25_index.search(query=texts[0][:200], k=2, persona=persona)
+                        for c, _ in hits:
+                            raw_chunk_ids.append(c.id)
+                retrieved_ids = roll_up_retrieved_ids(raw_chunk_ids)[:10]
+            else:
+                assert retriever is not None
+                items = await retriever.retrieve(query=query, k=15, filters={"persona": persona})
+                retrieved_ids = roll_up_retrieved_ids([item.id for item in items])[:10]
 
             r5 = compute_recall_at_k(retrieved_ids, gold_ids, k=5)
             mrr = compute_mrr(retrieved_ids, gold_ids, k=10)
@@ -183,7 +289,7 @@ async def evaluate_dev_set(
                 elapsed = time.time() - t_start
                 print(f"  Processed {idx + 1}/{len(lines)} jobs ({elapsed:.1f}s)")
 
-        if hasattr(retriever, "close"):
+        if retriever and hasattr(retriever, "close"):
             retriever.close()
 
     # Slices aggregation
@@ -244,8 +350,10 @@ def run_rag_eval(
         "config": {
             "variant": variant,
             "k": 10,
-            "embedder": "HashEmbedder" if is_hash else "BAAI/bge-small-en-v1.5",
-            "dimension": 64 if is_hash else 384,
+            "embedder": "none"
+            if variant == "random"
+            else ("bm25" if variant in {"bm25_skills", "oracle"} else ("HashEmbedder" if is_hash else "BAAI/bge-small-en-v1.5")),
+            "dimension": 0 if variant in {"random", "bm25_skills", "oracle"} else (64 if is_hash else 384),
             "personas": personas,
             "limit": limit,
         },

@@ -1,8 +1,8 @@
 {
   "variant": "v0_naive",
-  "timestamp": "2026-11-13T20:47:30.742447+00:00",
-  "git_commit": "55984e907b9a3074926b10bf827a833cd48f76bf",
-  "dataset_hash": "6d1d7813ecd6495a",
+  "timestamp": "2026-11-13T21:27:30.418541+00:00",
+  "git_commit": "f2ccb94df6eb7fdf59f8e0edcc5db3f2cb73ed46",
+  "dataset_hash": "ac7d46be72b918cb",
   "config": {
     "variant": "v0_naive",
     "k": 10,
@@ -17,28 +17,28 @@
   },
   "overall": {
     "count": 600,
-    "recall_at_5": 0.0397,
-    "mrr": 0.0961,
-    "ndcg_at_10": 0.052
+    "recall_at_5": 0.0563,
+    "mrr": 0.1234,
+    "ndcg_at_10": 0.0603
   },
   "by_persona": {
     "ai_ml": {
       "count": 200,
-      "recall_at_5": 0.0356,
-      "mrr": 0.0803,
-      "ndcg_at_10": 0.0448
+      "recall_at_5": 0.0256,
+      "mrr": 0.0308,
+      "ndcg_at_10": 0.0234
     },
     "fullstack": {
       "count": 200,
-      "recall_at_5": 0.0344,
-      "mrr": 0.1061,
-      "ndcg_at_10": 0.0506
+      "recall_at_5": 0.105,
+      "mrr": 0.0977,
+      "ndcg_at_10": 0.0875
     },
     "data_analyst": {
       "count": 200,
-      "recall_at_5": 0.049,
-      "mrr": 0.1019,
-      "ndcg_at_10": 0.0606
+      "recall_at_5": 0.0383,
+      "mrr": 0.2417,
+      "ndcg_at_10": 0.0699
     }
   },
   "by_n_requirements": {
@@ -50,15 +50,15 @@
     },
     "3-4": {
       "count": 408,
-      "recall_at_5": 0.0309,
-      "mrr": 0.0756,
-      "ndcg_at_10": 0.0419
+      "recall_at_5": 0.0546,
+      "mrr": 0.1056,
+      "ndcg_at_10": 0.0561
     },
     "5+": {
       "count": 192,
-      "recall_at_5": 0.0582,
-      "mrr": 0.1396,
-      "ndcg_at_10": 0.0736
+      "recall_at_5": 0.0599,
+      "mrr": 0.1612,
+      "ndcg_at_10": 0.0691
     }
   }
 }
