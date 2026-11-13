@@ -71,7 +71,8 @@ class SentenceTransformerEmbedder(BaseEmbedder):
 
         self.model_name = model_name
         self.model = SentenceTransformer(model_name)
-        dim = self.model.get_sentence_embedding_dimension()
+        get_dim_fn = getattr(self.model, "get_embedding_dimension", getattr(self.model, "get_sentence_embedding_dimension", None))
+        dim = get_dim_fn() if get_dim_fn else EMBEDDING_DIM
         self.dimension = int(dim) if dim else EMBEDDING_DIM
 
     def embed_query(self, text: str) -> list[float]:
