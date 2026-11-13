@@ -1,0 +1,7475 @@
+[
+  {
+    "public": {
+      "id": "client_001",
+      "company": "Apex Labs 1",
+      "industry": "SaaS",
+      "country": "United States",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.06,
+      "avg_rating": 0.0,
+      "jobs_posted": 12,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "ClickHouse",
+        "Power BI"
+      ],
+      "budget_ceiling": 792.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_002",
+      "company": "Nexus Labs 2",
+      "industry": "LegalTech",
+      "country": "Sweden",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.02,
+      "avg_rating": 0.0,
+      "jobs_posted": 4,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Python",
+        "Power BI"
+      ],
+      "budget_ceiling": 716.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_003",
+      "company": "Veritas Labs 3",
+      "industry": "EdTech",
+      "country": "Ireland",
+      "payment_verified": false,
+      "total_spent": 50.0,
+      "hire_rate": 0.06,
+      "avg_rating": 2.6,
+      "jobs_posted": 1,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "React"
+      ],
+      "budget_ceiling": 532.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_004",
+      "company": "Quantum Labs 4",
+      "industry": "E-Commerce",
+      "country": "Germany",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.03,
+      "avg_rating": 0.0,
+      "jobs_posted": 7,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "BigQuery"
+      ],
+      "budget_ceiling": 467.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_005",
+      "company": "Stratum Labs 5",
+      "industry": "Manufacturing",
+      "country": "United States",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.03,
+      "avg_rating": 3.3,
+      "jobs_posted": 2,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "AWS",
+        "BigQuery"
+      ],
+      "budget_ceiling": 400.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_006",
+      "company": "Vanguard Labs 6",
+      "industry": "CleanTech",
+      "country": "Sweden",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.01,
+      "avg_rating": 0.0,
+      "jobs_posted": 4,
+      "review_count": 1
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "Docker"
+      ],
+      "budget_ceiling": 181.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_007",
+      "company": "Pinnacle Labs 7",
+      "industry": "PropTech",
+      "country": "Australia",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.04,
+      "avg_rating": 0.0,
+      "jobs_posted": 6,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "React",
+        "Kafka"
+      ],
+      "budget_ceiling": 786.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_008",
+      "company": "Helios Labs 8",
+      "industry": "LegalTech",
+      "country": "Sweden",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.18,
+      "avg_rating": 1.8,
+      "jobs_posted": 7,
+      "review_count": 1
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "Power BI"
+      ],
+      "budget_ceiling": 755.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_009",
+      "company": "Aura Labs 9",
+      "industry": "CyberSec",
+      "country": "Ireland",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.06,
+      "avg_rating": 0.0,
+      "jobs_posted": 1,
+      "review_count": 1
+    },
+    "hidden": {
+      "must_have_skills": [
+        "React",
+        "FastAPI"
+      ],
+      "budget_ceiling": 510.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_010",
+      "company": "Nova Labs 10",
+      "industry": "EdTech",
+      "country": "Sweden",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.05,
+      "avg_rating": 0.0,
+      "jobs_posted": 8,
+      "review_count": 1
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "pgvector"
+      ],
+      "budget_ceiling": 758.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_011",
+      "company": "Cipher Labs 11",
+      "industry": "Manufacturing",
+      "country": "Canada",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.13,
+      "avg_rating": 2.9,
+      "jobs_posted": 7,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "TypeScript"
+      ],
+      "budget_ceiling": 508.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_012",
+      "company": "Synapse Labs 12",
+      "industry": "E-Commerce",
+      "country": "Switzerland",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.22,
+      "avg_rating": 0.0,
+      "jobs_posted": 3,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "Redis"
+      ],
+      "budget_ceiling": 263.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_013",
+      "company": "Pulse Labs 13",
+      "industry": "LegalTech",
+      "country": "Singapore",
+      "payment_verified": false,
+      "total_spent": 50.0,
+      "hire_rate": 0.13,
+      "avg_rating": 3.3,
+      "jobs_posted": 1,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "Power BI"
+      ],
+      "budget_ceiling": 217.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_014",
+      "company": "Orion Labs 14",
+      "industry": "Manufacturing",
+      "country": "Ireland",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.11,
+      "avg_rating": 0.0,
+      "jobs_posted": 8,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "Pandas"
+      ],
+      "budget_ceiling": 369.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_015",
+      "company": "Cortex Labs 15",
+      "industry": "Logistics",
+      "country": "Switzerland",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.21,
+      "avg_rating": 0.0,
+      "jobs_posted": 9,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "pgvector",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 303.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_016",
+      "company": "Starlight Labs 16",
+      "industry": "Logistics",
+      "country": "Switzerland",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.23,
+      "avg_rating": 2.6,
+      "jobs_posted": 8,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "Next.js"
+      ],
+      "budget_ceiling": 214.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_017",
+      "company": "Beacon Labs 17",
+      "industry": "CyberSec",
+      "country": "United States",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.24,
+      "avg_rating": 1.7,
+      "jobs_posted": 8,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "pgvector"
+      ],
+      "budget_ceiling": 645.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_018",
+      "company": "Solas Labs 18",
+      "industry": "E-Commerce",
+      "country": "Ireland",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.04,
+      "avg_rating": 2.5,
+      "jobs_posted": 10,
+      "review_count": 1
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "Pandas"
+      ],
+      "budget_ceiling": 316.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_019",
+      "company": "Kinetics Labs 19",
+      "industry": "EdTech",
+      "country": "Australia",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.11,
+      "avg_rating": 0.0,
+      "jobs_posted": 9,
+      "review_count": 1
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "FastAPI"
+      ],
+      "budget_ceiling": 223.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_020",
+      "company": "Zenith Labs 20",
+      "industry": "DevTools",
+      "country": "United States",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.15,
+      "avg_rating": 0.0,
+      "jobs_posted": 1,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "TypeScript"
+      ],
+      "budget_ceiling": 746.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_021",
+      "company": "Omni Labs 21",
+      "industry": "LegalTech",
+      "country": "United States",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.13,
+      "avg_rating": 0.0,
+      "jobs_posted": 5,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "Power BI"
+      ],
+      "budget_ceiling": 597.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_022",
+      "company": "Element Labs 22",
+      "industry": "E-Commerce",
+      "country": "Sweden",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.2,
+      "avg_rating": 0.0,
+      "jobs_posted": 7,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Docker",
+        "Stripe API"
+      ],
+      "budget_ceiling": 196.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_023",
+      "company": "Apex Technologies 23",
+      "industry": "Gaming",
+      "country": "Netherlands",
+      "payment_verified": false,
+      "total_spent": 50.0,
+      "hire_rate": 0.22,
+      "avg_rating": 1.6,
+      "jobs_posted": 11,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "PostgreSQL"
+      ],
+      "budget_ceiling": 200.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_024",
+      "company": "Nexus Technologies 24",
+      "industry": "DevTools",
+      "country": "United Kingdom",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.13,
+      "avg_rating": 0.0,
+      "jobs_posted": 3,
+      "review_count": 1
+    },
+    "hidden": {
+      "must_have_skills": [
+        "React",
+        "SQL"
+      ],
+      "budget_ceiling": 287.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_025",
+      "company": "Veritas Technologies 25",
+      "industry": "CyberSec",
+      "country": "United Kingdom",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.02,
+      "avg_rating": 2.7,
+      "jobs_posted": 9,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "TypeScript"
+      ],
+      "budget_ceiling": 195.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_026",
+      "company": "Quantum Technologies 26",
+      "industry": "Logistics",
+      "country": "Singapore",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.22,
+      "avg_rating": 0.0,
+      "jobs_posted": 1,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Python",
+        "PostgreSQL"
+      ],
+      "budget_ceiling": 488.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_027",
+      "company": "Stratum Technologies 27",
+      "industry": "Manufacturing",
+      "country": "France",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.17,
+      "avg_rating": 2.4,
+      "jobs_posted": 4,
+      "review_count": 1
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "Tableau"
+      ],
+      "budget_ceiling": 322.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_028",
+      "company": "Vanguard Technologies 28",
+      "industry": "BioTech",
+      "country": "United States",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.01,
+      "avg_rating": 0.0,
+      "jobs_posted": 8,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "LangChain",
+        "PyTorch"
+      ],
+      "budget_ceiling": 643.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_029",
+      "company": "Pinnacle Technologies 29",
+      "industry": "Hospitality",
+      "country": "United Kingdom",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.15,
+      "avg_rating": 0.0,
+      "jobs_posted": 11,
+      "review_count": 0
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Docker",
+        "Tableau"
+      ],
+      "budget_ceiling": 513.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_030",
+      "company": "Helios Technologies 30",
+      "industry": "CyberSec",
+      "country": "Sweden",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.02,
+      "avg_rating": 2.7,
+      "jobs_posted": 10,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "React",
+        "Transformers"
+      ],
+      "budget_ceiling": 423.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_031",
+      "company": "Aura Technologies 31",
+      "industry": "DevTools",
+      "country": "Germany",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.17,
+      "avg_rating": 0.0,
+      "jobs_posted": 5,
+      "review_count": 1
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "FastAPI"
+      ],
+      "budget_ceiling": 423.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_032",
+      "company": "Nova Technologies 32",
+      "industry": "FinTech",
+      "country": "France",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.25,
+      "avg_rating": 1.6,
+      "jobs_posted": 4,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "pgvector",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 371.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_033",
+      "company": "Cipher Technologies 33",
+      "industry": "LegalTech",
+      "country": "Germany",
+      "payment_verified": false,
+      "total_spent": 0.0,
+      "hire_rate": 0.11,
+      "avg_rating": 0.0,
+      "jobs_posted": 9,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "AWS"
+      ],
+      "budget_ceiling": 409.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_034",
+      "company": "Synapse Technologies 34",
+      "industry": "Hospitality",
+      "country": "United States",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.07,
+      "avg_rating": 2.8,
+      "jobs_posted": 3,
+      "review_count": 1
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Docker",
+        "ClickHouse"
+      ],
+      "budget_ceiling": 218.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_035",
+      "company": "Pulse Technologies 35",
+      "industry": "BioTech",
+      "country": "Canada",
+      "payment_verified": false,
+      "total_spent": 120.0,
+      "hire_rate": 0.05,
+      "avg_rating": 2.2,
+      "jobs_posted": 11,
+      "review_count": 2
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "Snowflake"
+      ],
+      "budget_ceiling": 370.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.1
+    }
+  },
+  {
+    "public": {
+      "id": "client_036",
+      "company": "Orion Technologies 36",
+      "industry": "Manufacturing",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 5969.0,
+      "hire_rate": 0.72,
+      "avg_rating": 4.6,
+      "jobs_posted": 75,
+      "review_count": 40
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "pgvector"
+      ],
+      "budget_ceiling": 9239.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.5
+    }
+  },
+  {
+    "public": {
+      "id": "client_037",
+      "company": "Cortex Technologies 37",
+      "industry": "BioTech",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 46210.0,
+      "hire_rate": 0.64,
+      "avg_rating": 4.7,
+      "jobs_posted": 18,
+      "review_count": 11
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "BigQuery",
+        "ClickHouse",
+        "pgvector"
+      ],
+      "budget_ceiling": 5441.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.62
+    }
+  },
+  {
+    "public": {
+      "id": "client_038",
+      "company": "Starlight Technologies 38",
+      "industry": "CyberSec",
+      "country": "Canada",
+      "payment_verified": false,
+      "total_spent": 9141.0,
+      "hire_rate": 0.66,
+      "avg_rating": 5.0,
+      "jobs_posted": 113,
+      "review_count": 67
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Docker",
+        "PostgreSQL",
+        "PyTorch",
+        "Snowflake"
+      ],
+      "budget_ceiling": 16156.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.56
+    }
+  },
+  {
+    "public": {
+      "id": "client_039",
+      "company": "Beacon Technologies 39",
+      "industry": "CyberSec",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 6270.0,
+      "hire_rate": 0.68,
+      "avg_rating": 4.8,
+      "jobs_posted": 110,
+      "review_count": 58
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PostgreSQL",
+        "Stripe API",
+        "Power BI",
+        "Node.js"
+      ],
+      "budget_ceiling": 16161.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.62
+    }
+  },
+  {
+    "public": {
+      "id": "client_040",
+      "company": "Solas Technologies 40",
+      "industry": "FinTech",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 21702.0,
+      "hire_rate": 0.61,
+      "avg_rating": 4.8,
+      "jobs_posted": 96,
+      "review_count": 52
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "React",
+        "PyTorch",
+        "Kafka"
+      ],
+      "budget_ceiling": 7139.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.54
+    }
+  },
+  {
+    "public": {
+      "id": "client_041",
+      "company": "Kinetics Technologies 41",
+      "industry": "Gaming",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 230055.0,
+      "hire_rate": 0.93,
+      "avg_rating": 4.9,
+      "jobs_posted": 58,
+      "review_count": 43
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Docker",
+        "ClickHouse",
+        "Next.js",
+        "dbt"
+      ],
+      "budget_ceiling": 3146.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_042",
+      "company": "Zenith Technologies 42",
+      "industry": "Retail",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 5796.0,
+      "hire_rate": 0.67,
+      "avg_rating": 4.8,
+      "jobs_posted": 105,
+      "review_count": 61
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Next.js",
+        "Transformers"
+      ],
+      "budget_ceiling": 16791.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.64
+    }
+  },
+  {
+    "public": {
+      "id": "client_043",
+      "company": "Omni Technologies 43",
+      "industry": "Gaming",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 40473.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.8,
+      "jobs_posted": 51,
+      "review_count": 37
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "Next.js"
+      ],
+      "budget_ceiling": 6649.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.62
+    }
+  },
+  {
+    "public": {
+      "id": "client_044",
+      "company": "Element Technologies 44",
+      "industry": "CyberSec",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 174554.0,
+      "hire_rate": 0.9,
+      "avg_rating": 4.5,
+      "jobs_posted": 114,
+      "review_count": 95
+    },
+    "hidden": {
+      "must_have_skills": [
+        "pgvector",
+        "AWS"
+      ],
+      "budget_ceiling": 11431.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.67
+    }
+  },
+  {
+    "public": {
+      "id": "client_045",
+      "company": "Apex Solutions 45",
+      "industry": "FinTech",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 232429.0,
+      "hire_rate": 0.76,
+      "avg_rating": 4.8,
+      "jobs_posted": 39,
+      "review_count": 24
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "SQL",
+        "BigQuery"
+      ],
+      "budget_ceiling": 15130.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.7
+    }
+  },
+  {
+    "public": {
+      "id": "client_046",
+      "company": "Nexus Solutions 46",
+      "industry": "Hospitality",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 91722.0,
+      "hire_rate": 0.9,
+      "avg_rating": 4.7,
+      "jobs_posted": 71,
+      "review_count": 58
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "FastAPI",
+        "Kafka"
+      ],
+      "budget_ceiling": 6543.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_047",
+      "company": "Veritas Solutions 47",
+      "industry": "Retail",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 5119.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.7,
+      "jobs_posted": 47,
+      "review_count": 27
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "Redis"
+      ],
+      "budget_ceiling": 3052.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.66
+    }
+  },
+  {
+    "public": {
+      "id": "client_048",
+      "company": "Quantum Solutions 48",
+      "industry": "PropTech",
+      "country": "Sweden",
+      "payment_verified": false,
+      "total_spent": 47728.0,
+      "hire_rate": 0.6,
+      "avg_rating": 4.7,
+      "jobs_posted": 107,
+      "review_count": 59
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "Snowflake",
+        "React",
+        "Redis"
+      ],
+      "budget_ceiling": 17621.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.76
+    }
+  },
+  {
+    "public": {
+      "id": "client_049",
+      "company": "Stratum Solutions 49",
+      "industry": "Media",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 7979.0,
+      "hire_rate": 0.89,
+      "avg_rating": 5.0,
+      "jobs_posted": 14,
+      "review_count": 12
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "LangChain"
+      ],
+      "budget_ceiling": 11697.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_050",
+      "company": "Vanguard Solutions 50",
+      "industry": "HealthTech",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 39799.0,
+      "hire_rate": 0.87,
+      "avg_rating": 4.7,
+      "jobs_posted": 115,
+      "review_count": 76
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "AWS",
+        "FastAPI"
+      ],
+      "budget_ceiling": 3341.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.52
+    }
+  },
+  {
+    "public": {
+      "id": "client_051",
+      "company": "Pinnacle Solutions 51",
+      "industry": "HealthTech",
+      "country": "United States",
+      "payment_verified": false,
+      "total_spent": 4133.0,
+      "hire_rate": 0.68,
+      "avg_rating": 4.7,
+      "jobs_posted": 37,
+      "review_count": 21
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "ClickHouse",
+        "Kafka",
+        "Docker"
+      ],
+      "budget_ceiling": 5571.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_052",
+      "company": "Helios Solutions 52",
+      "industry": "Logistics",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 200941.0,
+      "hire_rate": 0.92,
+      "avg_rating": 4.7,
+      "jobs_posted": 58,
+      "review_count": 38
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "BigQuery",
+        "Docker"
+      ],
+      "budget_ceiling": 13315.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.74
+    }
+  },
+  {
+    "public": {
+      "id": "client_053",
+      "company": "Aura Solutions 53",
+      "industry": "HealthTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 68076.0,
+      "hire_rate": 0.83,
+      "avg_rating": 4.5,
+      "jobs_posted": 115,
+      "review_count": 86
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "pgvector",
+        "Redis"
+      ],
+      "budget_ceiling": 3729.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.81
+    }
+  },
+  {
+    "public": {
+      "id": "client_054",
+      "company": "Nova Solutions 54",
+      "industry": "Logistics",
+      "country": "Switzerland",
+      "payment_verified": false,
+      "total_spent": 45269.0,
+      "hire_rate": 0.75,
+      "avg_rating": 4.9,
+      "jobs_posted": 76,
+      "review_count": 44
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "SQL"
+      ],
+      "budget_ceiling": 6022.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.81
+    }
+  },
+  {
+    "public": {
+      "id": "client_055",
+      "company": "Cipher Solutions 55",
+      "industry": "PropTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 31300.0,
+      "hire_rate": 0.67,
+      "avg_rating": 4.9,
+      "jobs_posted": 95,
+      "review_count": 49
+    },
+    "hidden": {
+      "must_have_skills": [
+        "FastAPI",
+        "TypeScript"
+      ],
+      "budget_ceiling": 11767.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.5
+    }
+  },
+  {
+    "public": {
+      "id": "client_056",
+      "company": "Synapse Solutions 56",
+      "industry": "Gaming",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 219319.0,
+      "hire_rate": 0.77,
+      "avg_rating": 4.9,
+      "jobs_posted": 31,
+      "review_count": 18
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "dbt",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 8625.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.7
+    }
+  },
+  {
+    "public": {
+      "id": "client_057",
+      "company": "Pulse Solutions 57",
+      "industry": "Gaming",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 39736.0,
+      "hire_rate": 0.69,
+      "avg_rating": 4.6,
+      "jobs_posted": 57,
+      "review_count": 31
+    },
+    "hidden": {
+      "must_have_skills": [
+        "ClickHouse",
+        "Snowflake"
+      ],
+      "budget_ceiling": 14171.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.56
+    }
+  },
+  {
+    "public": {
+      "id": "client_058",
+      "company": "Orion Solutions 58",
+      "industry": "Manufacturing",
+      "country": "Sweden",
+      "payment_verified": false,
+      "total_spent": 6797.0,
+      "hire_rate": 0.89,
+      "avg_rating": 4.6,
+      "jobs_posted": 100,
+      "review_count": 66
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "Next.js"
+      ],
+      "budget_ceiling": 2231.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.52
+    }
+  },
+  {
+    "public": {
+      "id": "client_059",
+      "company": "Cortex Solutions 59",
+      "industry": "E-Commerce",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 53215.0,
+      "hire_rate": 0.7,
+      "avg_rating": 4.7,
+      "jobs_posted": 95,
+      "review_count": 50
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PostgreSQL",
+        "Snowflake"
+      ],
+      "budget_ceiling": 2841.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.54
+    }
+  },
+  {
+    "public": {
+      "id": "client_060",
+      "company": "Starlight Solutions 60",
+      "industry": "LegalTech",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 89111.0,
+      "hire_rate": 0.93,
+      "avg_rating": 4.5,
+      "jobs_posted": 71,
+      "review_count": 48
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PostgreSQL",
+        "SQL",
+        "Next.js",
+        "Tableau"
+      ],
+      "budget_ceiling": 14524.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_061",
+      "company": "Beacon Solutions 61",
+      "industry": "Gaming",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 2993.0,
+      "hire_rate": 0.93,
+      "avg_rating": 4.6,
+      "jobs_posted": 62,
+      "review_count": 44
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "SQL"
+      ],
+      "budget_ceiling": 3330.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.53
+    }
+  },
+  {
+    "public": {
+      "id": "client_062",
+      "company": "Solas Solutions 62",
+      "industry": "Media",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 28528.0,
+      "hire_rate": 0.62,
+      "avg_rating": 4.6,
+      "jobs_posted": 75,
+      "review_count": 42
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "TypeScript"
+      ],
+      "budget_ceiling": 12240.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.57
+    }
+  },
+  {
+    "public": {
+      "id": "client_063",
+      "company": "Kinetics Solutions 63",
+      "industry": "E-Commerce",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 13908.0,
+      "hire_rate": 0.81,
+      "avg_rating": 4.9,
+      "jobs_posted": 81,
+      "review_count": 53
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "Snowflake",
+        "SQL",
+        "FastAPI"
+      ],
+      "budget_ceiling": 9679.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.83
+    }
+  },
+  {
+    "public": {
+      "id": "client_064",
+      "company": "Zenith Solutions 64",
+      "industry": "HealthTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 7445.0,
+      "hire_rate": 0.68,
+      "avg_rating": 4.8,
+      "jobs_posted": 13,
+      "review_count": 8
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Snowflake",
+        "dbt"
+      ],
+      "budget_ceiling": 13014.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.77
+    }
+  },
+  {
+    "public": {
+      "id": "client_065",
+      "company": "Omni Solutions 65",
+      "industry": "Telecom",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 38566.0,
+      "hire_rate": 0.94,
+      "avg_rating": 4.7,
+      "jobs_posted": 112,
+      "review_count": 82
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Next.js",
+        "Stripe API",
+        "PostgreSQL"
+      ],
+      "budget_ceiling": 12979.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.64
+    }
+  },
+  {
+    "public": {
+      "id": "client_066",
+      "company": "Element Solutions 66",
+      "industry": "BioTech",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 5076.0,
+      "hire_rate": 0.94,
+      "avg_rating": 4.7,
+      "jobs_posted": 139,
+      "review_count": 118
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 2018.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.64
+    }
+  },
+  {
+    "public": {
+      "id": "client_067",
+      "company": "Apex AI 67",
+      "industry": "Media",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 120007.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.6,
+      "jobs_posted": 132,
+      "review_count": 63
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "Python",
+        "Redis"
+      ],
+      "budget_ceiling": 17944.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.75
+    }
+  },
+  {
+    "public": {
+      "id": "client_068",
+      "company": "Nexus AI 68",
+      "industry": "LegalTech",
+      "country": "Germany",
+      "payment_verified": false,
+      "total_spent": 9978.0,
+      "hire_rate": 0.83,
+      "avg_rating": 4.6,
+      "jobs_posted": 82,
+      "review_count": 56
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "pgvector",
+        "PostgreSQL"
+      ],
+      "budget_ceiling": 6479.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.67
+    }
+  },
+  {
+    "public": {
+      "id": "client_069",
+      "company": "Veritas AI 69",
+      "industry": "EdTech",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 18946.0,
+      "hire_rate": 0.87,
+      "avg_rating": 4.9,
+      "jobs_posted": 95,
+      "review_count": 77
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "Stripe API",
+        "Snowflake",
+        "pgvector"
+      ],
+      "budget_ceiling": 10318.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.75
+    }
+  },
+  {
+    "public": {
+      "id": "client_070",
+      "company": "Quantum AI 70",
+      "industry": "Telecom",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 249982.0,
+      "hire_rate": 0.73,
+      "avg_rating": 5.0,
+      "jobs_posted": 56,
+      "review_count": 39
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "ClickHouse"
+      ],
+      "budget_ceiling": 5912.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.77
+    }
+  },
+  {
+    "public": {
+      "id": "client_071",
+      "company": "Stratum AI 71",
+      "industry": "Media",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 7936.0,
+      "hire_rate": 0.64,
+      "avg_rating": 5.0,
+      "jobs_posted": 92,
+      "review_count": 54
+    },
+    "hidden": {
+      "must_have_skills": [
+        "ClickHouse",
+        "pgvector"
+      ],
+      "budget_ceiling": 16322.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.82
+    }
+  },
+  {
+    "public": {
+      "id": "client_072",
+      "company": "Vanguard AI 72",
+      "industry": "Gaming",
+      "country": "Ireland",
+      "payment_verified": false,
+      "total_spent": 40768.0,
+      "hire_rate": 0.82,
+      "avg_rating": 4.7,
+      "jobs_posted": 28,
+      "review_count": 21
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "Pandas",
+        "Snowflake",
+        "Power BI"
+      ],
+      "budget_ceiling": 15964.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.83
+    }
+  },
+  {
+    "public": {
+      "id": "client_073",
+      "company": "Pinnacle AI 73",
+      "industry": "HealthTech",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 109634.0,
+      "hire_rate": 0.63,
+      "avg_rating": 5.0,
+      "jobs_posted": 33,
+      "review_count": 17
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Next.js",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 13370.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.61
+    }
+  },
+  {
+    "public": {
+      "id": "client_074",
+      "company": "Helios AI 74",
+      "industry": "CleanTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 198354.0,
+      "hire_rate": 0.88,
+      "avg_rating": 4.6,
+      "jobs_posted": 28,
+      "review_count": 21
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "SQL"
+      ],
+      "budget_ceiling": 8267.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.82
+    }
+  },
+  {
+    "public": {
+      "id": "client_075",
+      "company": "Aura AI 75",
+      "industry": "Manufacturing",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 125400.0,
+      "hire_rate": 0.79,
+      "avg_rating": 4.5,
+      "jobs_posted": 96,
+      "review_count": 72
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "PostgreSQL",
+        "Snowflake"
+      ],
+      "budget_ceiling": 6901.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.59
+    }
+  },
+  {
+    "public": {
+      "id": "client_076",
+      "company": "Nova AI 76",
+      "industry": "SaaS",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 127561.0,
+      "hire_rate": 0.7,
+      "avg_rating": 5.0,
+      "jobs_posted": 109,
+      "review_count": 59
+    },
+    "hidden": {
+      "must_have_skills": [
+        "ClickHouse",
+        "Snowflake",
+        "Next.js",
+        "Pandas"
+      ],
+      "budget_ceiling": 11272.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.84
+    }
+  },
+  {
+    "public": {
+      "id": "client_077",
+      "company": "Cipher AI 77",
+      "industry": "CyberSec",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 22460.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.9,
+      "jobs_posted": 43,
+      "review_count": 31
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 16801.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_078",
+      "company": "Synapse AI 78",
+      "industry": "E-Commerce",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 5176.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.8,
+      "jobs_posted": 101,
+      "review_count": 55
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Next.js",
+        "ClickHouse",
+        "Node.js"
+      ],
+      "budget_ceiling": 16966.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.82
+    }
+  },
+  {
+    "public": {
+      "id": "client_079",
+      "company": "Pulse AI 79",
+      "industry": "SaaS",
+      "country": "France",
+      "payment_verified": false,
+      "total_spent": 227294.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.7,
+      "jobs_posted": 101,
+      "review_count": 61
+    },
+    "hidden": {
+      "must_have_skills": [
+        "ClickHouse",
+        "Stripe API",
+        "React",
+        "Tableau"
+      ],
+      "budget_ceiling": 8464.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.66
+    }
+  },
+  {
+    "public": {
+      "id": "client_080",
+      "company": "Orion AI 80",
+      "industry": "PropTech",
+      "country": "Ireland",
+      "payment_verified": false,
+      "total_spent": 3387.0,
+      "hire_rate": 0.82,
+      "avg_rating": 5.0,
+      "jobs_posted": 91,
+      "review_count": 69
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Next.js",
+        "AWS",
+        "Redis",
+        "Docker"
+      ],
+      "budget_ceiling": 5626.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.66
+    }
+  },
+  {
+    "public": {
+      "id": "client_081",
+      "company": "Cortex AI 81",
+      "industry": "E-Commerce",
+      "country": "United States",
+      "payment_verified": false,
+      "total_spent": 4993.0,
+      "hire_rate": 0.68,
+      "avg_rating": 4.8,
+      "jobs_posted": 107,
+      "review_count": 59
+    },
+    "hidden": {
+      "must_have_skills": [
+        "ClickHouse",
+        "pgvector",
+        "Redis",
+        "AWS"
+      ],
+      "budget_ceiling": 12985.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.69
+    }
+  },
+  {
+    "public": {
+      "id": "client_082",
+      "company": "Starlight AI 82",
+      "industry": "SaaS",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 12144.0,
+      "hire_rate": 0.68,
+      "avg_rating": 4.7,
+      "jobs_posted": 68,
+      "review_count": 42
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "PyTorch",
+        "PostgreSQL",
+        "React"
+      ],
+      "budget_ceiling": 3627.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.82
+    }
+  },
+  {
+    "public": {
+      "id": "client_083",
+      "company": "Beacon AI 83",
+      "industry": "EdTech",
+      "country": "United Kingdom",
+      "payment_verified": false,
+      "total_spent": 74031.0,
+      "hire_rate": 0.67,
+      "avg_rating": 4.8,
+      "jobs_posted": 13,
+      "review_count": 6
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "Power BI"
+      ],
+      "budget_ceiling": 7464.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.7
+    }
+  },
+  {
+    "public": {
+      "id": "client_084",
+      "company": "Solas AI 84",
+      "industry": "EdTech",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 9624.0,
+      "hire_rate": 0.88,
+      "avg_rating": 4.8,
+      "jobs_posted": 78,
+      "review_count": 63
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "Python"
+      ],
+      "budget_ceiling": 4370.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_085",
+      "company": "Kinetics AI 85",
+      "industry": "E-Commerce",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 25593.0,
+      "hire_rate": 0.61,
+      "avg_rating": 4.6,
+      "jobs_posted": 40,
+      "review_count": 22
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "Tableau",
+        "Docker"
+      ],
+      "budget_ceiling": 10619.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.66
+    }
+  },
+  {
+    "public": {
+      "id": "client_086",
+      "company": "Zenith AI 86",
+      "industry": "Telecom",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 240642.0,
+      "hire_rate": 0.78,
+      "avg_rating": 4.7,
+      "jobs_posted": 15,
+      "review_count": 8
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "FastAPI",
+        "Node.js",
+        "BigQuery"
+      ],
+      "budget_ceiling": 9847.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.54
+    }
+  },
+  {
+    "public": {
+      "id": "client_087",
+      "company": "Omni AI 87",
+      "industry": "E-Commerce",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 193748.0,
+      "hire_rate": 0.71,
+      "avg_rating": 5.0,
+      "jobs_posted": 83,
+      "review_count": 48
+    },
+    "hidden": {
+      "must_have_skills": [
+        "AWS",
+        "Pandas",
+        "Power BI",
+        "ClickHouse"
+      ],
+      "budget_ceiling": 11919.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.54
+    }
+  },
+  {
+    "public": {
+      "id": "client_088",
+      "company": "Element AI 88",
+      "industry": "EdTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 37119.0,
+      "hire_rate": 0.74,
+      "avg_rating": 4.9,
+      "jobs_posted": 88,
+      "review_count": 53
+    },
+    "hidden": {
+      "must_have_skills": [
+        "FastAPI",
+        "Redis",
+        "Docker"
+      ],
+      "budget_ceiling": 12897.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.74
+    }
+  },
+  {
+    "public": {
+      "id": "client_089",
+      "company": "Apex Systems 89",
+      "industry": "CleanTech",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 46804.0,
+      "hire_rate": 0.83,
+      "avg_rating": 4.7,
+      "jobs_posted": 116,
+      "review_count": 88
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "dbt"
+      ],
+      "budget_ceiling": 13813.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.61
+    }
+  },
+  {
+    "public": {
+      "id": "client_090",
+      "company": "Nexus Systems 90",
+      "industry": "EdTech",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 141780.0,
+      "hire_rate": 0.73,
+      "avg_rating": 4.9,
+      "jobs_posted": 65,
+      "review_count": 43
+    },
+    "hidden": {
+      "must_have_skills": [
+        "AWS",
+        "Power BI",
+        "Python",
+        "BigQuery"
+      ],
+      "budget_ceiling": 15847.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_091",
+      "company": "Veritas Systems 91",
+      "industry": "Manufacturing",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 30249.0,
+      "hire_rate": 0.6,
+      "avg_rating": 4.9,
+      "jobs_posted": 110,
+      "review_count": 47
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PostgreSQL",
+        "Redis"
+      ],
+      "budget_ceiling": 14140.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.76
+    }
+  },
+  {
+    "public": {
+      "id": "client_092",
+      "company": "Quantum Systems 92",
+      "industry": "Telecom",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 198791.0,
+      "hire_rate": 0.63,
+      "avg_rating": 4.5,
+      "jobs_posted": 48,
+      "review_count": 27
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "SQL",
+        "Redis"
+      ],
+      "budget_ceiling": 2815.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.73
+    }
+  },
+  {
+    "public": {
+      "id": "client_093",
+      "company": "Stratum Systems 93",
+      "industry": "Manufacturing",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 3432.0,
+      "hire_rate": 0.7,
+      "avg_rating": 4.8,
+      "jobs_posted": 132,
+      "review_count": 77
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "Next.js"
+      ],
+      "budget_ceiling": 7053.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.71
+    }
+  },
+  {
+    "public": {
+      "id": "client_094",
+      "company": "Vanguard Systems 94",
+      "industry": "EdTech",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 4871.0,
+      "hire_rate": 0.77,
+      "avg_rating": 4.7,
+      "jobs_posted": 41,
+      "review_count": 25
+    },
+    "hidden": {
+      "must_have_skills": [
+        "FastAPI",
+        "PostgreSQL",
+        "ClickHouse"
+      ],
+      "budget_ceiling": 13528.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.73
+    }
+  },
+  {
+    "public": {
+      "id": "client_095",
+      "company": "Pinnacle Systems 95",
+      "industry": "HealthTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 30516.0,
+      "hire_rate": 0.8,
+      "avg_rating": 4.9,
+      "jobs_posted": 114,
+      "review_count": 70
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "Kafka",
+        "Tailwind CSS",
+        "FastAPI"
+      ],
+      "budget_ceiling": 8636.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_096",
+      "company": "Helios Systems 96",
+      "industry": "Gaming",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 7324.0,
+      "hire_rate": 0.74,
+      "avg_rating": 4.7,
+      "jobs_posted": 94,
+      "review_count": 53
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "Pandas",
+        "Tailwind CSS",
+        "ClickHouse"
+      ],
+      "budget_ceiling": 14765.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.54
+    }
+  },
+  {
+    "public": {
+      "id": "client_097",
+      "company": "Aura Systems 97",
+      "industry": "E-Commerce",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 95481.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.9,
+      "jobs_posted": 27,
+      "review_count": 13
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "Stripe API",
+        "Tableau",
+        "AWS"
+      ],
+      "budget_ceiling": 14662.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.7
+    }
+  },
+  {
+    "public": {
+      "id": "client_098",
+      "company": "Nova Systems 98",
+      "industry": "DevTools",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 14475.0,
+      "hire_rate": 0.82,
+      "avg_rating": 4.9,
+      "jobs_posted": 22,
+      "review_count": 14
+    },
+    "hidden": {
+      "must_have_skills": [
+        "FastAPI",
+        "AWS",
+        "BigQuery"
+      ],
+      "budget_ceiling": 3215.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.52
+    }
+  },
+  {
+    "public": {
+      "id": "client_099",
+      "company": "Cipher Systems 99",
+      "industry": "Hospitality",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 167894.0,
+      "hire_rate": 0.83,
+      "avg_rating": 4.7,
+      "jobs_posted": 129,
+      "review_count": 88
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "FastAPI",
+        "dbt"
+      ],
+      "budget_ceiling": 17691.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.81
+    }
+  },
+  {
+    "public": {
+      "id": "client_100",
+      "company": "Synapse Systems 100",
+      "industry": "Logistics",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 187381.0,
+      "hire_rate": 0.81,
+      "avg_rating": 4.7,
+      "jobs_posted": 80,
+      "review_count": 52
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "FastAPI",
+        "Docker",
+        "Power BI"
+      ],
+      "budget_ceiling": 14688.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_101",
+      "company": "Pulse Systems 101",
+      "industry": "PropTech",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 49498.0,
+      "hire_rate": 0.63,
+      "avg_rating": 4.8,
+      "jobs_posted": 97,
+      "review_count": 48
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Next.js",
+        "Power BI"
+      ],
+      "budget_ceiling": 12748.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.71
+    }
+  },
+  {
+    "public": {
+      "id": "client_102",
+      "company": "Orion Systems 102",
+      "industry": "PropTech",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 225666.0,
+      "hire_rate": 0.89,
+      "avg_rating": 4.9,
+      "jobs_posted": 31,
+      "review_count": 24
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "Pandas"
+      ],
+      "budget_ceiling": 8937.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.61
+    }
+  },
+  {
+    "public": {
+      "id": "client_103",
+      "company": "Cortex Systems 103",
+      "industry": "Media",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 20154.0,
+      "hire_rate": 0.9,
+      "avg_rating": 4.6,
+      "jobs_posted": 17,
+      "review_count": 13
+    },
+    "hidden": {
+      "must_have_skills": [
+        "LangChain",
+        "Kafka"
+      ],
+      "budget_ceiling": 16358.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_104",
+      "company": "Starlight Systems 104",
+      "industry": "Logistics",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 166444.0,
+      "hire_rate": 0.7,
+      "avg_rating": 4.9,
+      "jobs_posted": 122,
+      "review_count": 65
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "Stripe API"
+      ],
+      "budget_ceiling": 5918.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.66
+    }
+  },
+  {
+    "public": {
+      "id": "client_105",
+      "company": "Beacon Systems 105",
+      "industry": "Telecom",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 181833.0,
+      "hire_rate": 0.75,
+      "avg_rating": 4.6,
+      "jobs_posted": 59,
+      "review_count": 40
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "Docker",
+        "Kafka"
+      ],
+      "budget_ceiling": 4267.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.67
+    }
+  },
+  {
+    "public": {
+      "id": "client_106",
+      "company": "Solas Systems 106",
+      "industry": "Hospitality",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 20506.0,
+      "hire_rate": 0.92,
+      "avg_rating": 4.6,
+      "jobs_posted": 119,
+      "review_count": 79
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "PyTorch"
+      ],
+      "budget_ceiling": 16917.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.62
+    }
+  },
+  {
+    "public": {
+      "id": "client_107",
+      "company": "Kinetics Systems 107",
+      "industry": "PropTech",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 5663.0,
+      "hire_rate": 0.61,
+      "avg_rating": 5.0,
+      "jobs_posted": 93,
+      "review_count": 51
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "Kafka"
+      ],
+      "budget_ceiling": 4254.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.67
+    }
+  },
+  {
+    "public": {
+      "id": "client_108",
+      "company": "Zenith Systems 108",
+      "industry": "Media",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 15192.0,
+      "hire_rate": 0.68,
+      "avg_rating": 4.6,
+      "jobs_posted": 116,
+      "review_count": 57
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "SQL",
+        "FastAPI",
+        "Docker"
+      ],
+      "budget_ceiling": 6720.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.58
+    }
+  },
+  {
+    "public": {
+      "id": "client_109",
+      "company": "Omni Systems 109",
+      "industry": "Media",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 7676.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.6,
+      "jobs_posted": 8,
+      "review_count": 6
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "FastAPI",
+        "dbt",
+        "Power BI"
+      ],
+      "budget_ceiling": 5941.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.73
+    }
+  },
+  {
+    "public": {
+      "id": "client_110",
+      "company": "Element Systems 110",
+      "industry": "Hospitality",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 61412.0,
+      "hire_rate": 0.74,
+      "avg_rating": 4.7,
+      "jobs_posted": 12,
+      "review_count": 7
+    },
+    "hidden": {
+      "must_have_skills": [
+        "ClickHouse",
+        "Pandas",
+        "Node.js",
+        "pgvector"
+      ],
+      "budget_ceiling": 3106.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_111",
+      "company": "Apex Analytics 111",
+      "industry": "HealthTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 21474.0,
+      "hire_rate": 0.94,
+      "avg_rating": 4.7,
+      "jobs_posted": 54,
+      "review_count": 46
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "Transformers"
+      ],
+      "budget_ceiling": 3033.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.51
+    }
+  },
+  {
+    "public": {
+      "id": "client_112",
+      "company": "Nexus Analytics 112",
+      "industry": "HealthTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 36098.0,
+      "hire_rate": 0.69,
+      "avg_rating": 4.9,
+      "jobs_posted": 56,
+      "review_count": 30
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "Redis"
+      ],
+      "budget_ceiling": 16125.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.62
+    }
+  },
+  {
+    "public": {
+      "id": "client_113",
+      "company": "Veritas Analytics 113",
+      "industry": "PropTech",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 32219.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.7,
+      "jobs_posted": 140,
+      "review_count": 90
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "Next.js"
+      ],
+      "budget_ceiling": 3353.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.71
+    }
+  },
+  {
+    "public": {
+      "id": "client_114",
+      "company": "Quantum Analytics 114",
+      "industry": "DevTools",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 29375.0,
+      "hire_rate": 0.81,
+      "avg_rating": 4.7,
+      "jobs_posted": 121,
+      "review_count": 77
+    },
+    "hidden": {
+      "must_have_skills": [
+        "React",
+        "AWS",
+        "PyTorch"
+      ],
+      "budget_ceiling": 2693.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_115",
+      "company": "Stratum Analytics 115",
+      "industry": "LegalTech",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 246581.0,
+      "hire_rate": 0.66,
+      "avg_rating": 4.5,
+      "jobs_posted": 120,
+      "review_count": 56
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "BigQuery",
+        "pgvector",
+        "Stripe API"
+      ],
+      "budget_ceiling": 3101.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_116",
+      "company": "Vanguard Analytics 116",
+      "industry": "Telecom",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 8751.0,
+      "hire_rate": 0.79,
+      "avg_rating": 4.7,
+      "jobs_posted": 79,
+      "review_count": 48
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Docker",
+        "React",
+        "Pandas",
+        "Kafka"
+      ],
+      "budget_ceiling": 3858.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.68
+    }
+  },
+  {
+    "public": {
+      "id": "client_117",
+      "company": "Pinnacle Analytics 117",
+      "industry": "Telecom",
+      "country": "Germany",
+      "payment_verified": false,
+      "total_spent": 4839.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.5,
+      "jobs_posted": 52,
+      "review_count": 31
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "Tailwind CSS",
+        "Kafka"
+      ],
+      "budget_ceiling": 9292.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.84
+    }
+  },
+  {
+    "public": {
+      "id": "client_118",
+      "company": "Helios Analytics 118",
+      "industry": "LegalTech",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 91289.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.9,
+      "jobs_posted": 52,
+      "review_count": 40
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Snowflake",
+        "Python"
+      ],
+      "budget_ceiling": 10335.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_119",
+      "company": "Aura Analytics 119",
+      "industry": "CleanTech",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 84018.0,
+      "hire_rate": 0.91,
+      "avg_rating": 4.5,
+      "jobs_posted": 109,
+      "review_count": 94
+    },
+    "hidden": {
+      "must_have_skills": [
+        "FastAPI",
+        "pgvector",
+        "Node.js",
+        "AWS"
+      ],
+      "budget_ceiling": 13777.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.64
+    }
+  },
+  {
+    "public": {
+      "id": "client_120",
+      "company": "Nova Analytics 120",
+      "industry": "LegalTech",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 83642.0,
+      "hire_rate": 0.82,
+      "avg_rating": 4.6,
+      "jobs_posted": 41,
+      "review_count": 27
+    },
+    "hidden": {
+      "must_have_skills": [
+        "LangChain",
+        "Node.js",
+        "Kafka"
+      ],
+      "budget_ceiling": 16921.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.68
+    }
+  },
+  {
+    "public": {
+      "id": "client_121",
+      "company": "Cipher Analytics 121",
+      "industry": "CyberSec",
+      "country": "Netherlands",
+      "payment_verified": false,
+      "total_spent": 28615.0,
+      "hire_rate": 0.67,
+      "avg_rating": 5.0,
+      "jobs_posted": 78,
+      "review_count": 38
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "pgvector",
+        "LangChain",
+        "Stripe API"
+      ],
+      "budget_ceiling": 6961.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_122",
+      "company": "Synapse Analytics 122",
+      "industry": "DevTools",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 9576.0,
+      "hire_rate": 0.93,
+      "avg_rating": 4.9,
+      "jobs_posted": 75,
+      "review_count": 60
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "Next.js",
+        "AWS",
+        "Snowflake"
+      ],
+      "budget_ceiling": 14565.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.51
+    }
+  },
+  {
+    "public": {
+      "id": "client_123",
+      "company": "Pulse Analytics 123",
+      "industry": "CyberSec",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 6215.0,
+      "hire_rate": 0.66,
+      "avg_rating": 4.7,
+      "jobs_posted": 126,
+      "review_count": 62
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PostgreSQL",
+        "pgvector",
+        "Pandas"
+      ],
+      "budget_ceiling": 11939.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.61
+    }
+  },
+  {
+    "public": {
+      "id": "client_124",
+      "company": "Orion Analytics 124",
+      "industry": "CleanTech",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 5114.0,
+      "hire_rate": 0.69,
+      "avg_rating": 4.6,
+      "jobs_posted": 32,
+      "review_count": 16
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "Tableau"
+      ],
+      "budget_ceiling": 17489.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.59
+    }
+  },
+  {
+    "public": {
+      "id": "client_125",
+      "company": "Cortex Analytics 125",
+      "industry": "DevTools",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 43733.0,
+      "hire_rate": 0.91,
+      "avg_rating": 4.7,
+      "jobs_posted": 31,
+      "review_count": 26
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "Next.js"
+      ],
+      "budget_ceiling": 10281.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.7
+    }
+  },
+  {
+    "public": {
+      "id": "client_126",
+      "company": "Starlight Analytics 126",
+      "industry": "Media",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 124907.0,
+      "hire_rate": 0.6,
+      "avg_rating": 4.6,
+      "jobs_posted": 42,
+      "review_count": 23
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "Power BI"
+      ],
+      "budget_ceiling": 13919.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.52
+    }
+  },
+  {
+    "public": {
+      "id": "client_127",
+      "company": "Beacon Analytics 127",
+      "industry": "EdTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 35319.0,
+      "hire_rate": 0.87,
+      "avg_rating": 4.6,
+      "jobs_posted": 38,
+      "review_count": 24
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "pgvector",
+        "Transformers"
+      ],
+      "budget_ceiling": 3584.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.62
+    }
+  },
+  {
+    "public": {
+      "id": "client_128",
+      "company": "Solas Analytics 128",
+      "industry": "Hospitality",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 85923.0,
+      "hire_rate": 0.72,
+      "avg_rating": 4.7,
+      "jobs_posted": 124,
+      "review_count": 66
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PostgreSQL",
+        "BigQuery"
+      ],
+      "budget_ceiling": 16633.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.71
+    }
+  },
+  {
+    "public": {
+      "id": "client_129",
+      "company": "Kinetics Analytics 129",
+      "industry": "Retail",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 43404.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.6,
+      "jobs_posted": 12,
+      "review_count": 8
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "AWS",
+        "Python",
+        "BigQuery"
+      ],
+      "budget_ceiling": 13039.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.61
+    }
+  },
+  {
+    "public": {
+      "id": "client_130",
+      "company": "Zenith Analytics 130",
+      "industry": "Media",
+      "country": "Australia",
+      "payment_verified": false,
+      "total_spent": 8913.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.8,
+      "jobs_posted": 51,
+      "review_count": 36
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "PyTorch",
+        "Tableau",
+        "Kafka"
+      ],
+      "budget_ceiling": 13815.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.55
+    }
+  },
+  {
+    "public": {
+      "id": "client_131",
+      "company": "Omni Analytics 131",
+      "industry": "SaaS",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 37445.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.7,
+      "jobs_posted": 128,
+      "review_count": 99
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "Stripe API",
+        "Snowflake",
+        "dbt"
+      ],
+      "budget_ceiling": 14055.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.68
+    }
+  },
+  {
+    "public": {
+      "id": "client_132",
+      "company": "Element Analytics 132",
+      "industry": "PropTech",
+      "country": "Netherlands",
+      "payment_verified": false,
+      "total_spent": 139738.0,
+      "hire_rate": 0.72,
+      "avg_rating": 4.9,
+      "jobs_posted": 75,
+      "review_count": 46
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "Next.js",
+        "Kafka"
+      ],
+      "budget_ceiling": 5150.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.6
+    }
+  },
+  {
+    "public": {
+      "id": "client_133",
+      "company": "Apex Digital 133",
+      "industry": "EdTech",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 46732.0,
+      "hire_rate": 0.7,
+      "avg_rating": 4.8,
+      "jobs_posted": 105,
+      "review_count": 68
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "Next.js",
+        "Kafka"
+      ],
+      "budget_ceiling": 8464.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_134",
+      "company": "Nexus Digital 134",
+      "industry": "LegalTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 26806.0,
+      "hire_rate": 0.67,
+      "avg_rating": 4.9,
+      "jobs_posted": 77,
+      "review_count": 48
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "PyTorch"
+      ],
+      "budget_ceiling": 13406.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.76
+    }
+  },
+  {
+    "public": {
+      "id": "client_135",
+      "company": "Veritas Digital 135",
+      "industry": "Hospitality",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 16566.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.6,
+      "jobs_posted": 43,
+      "review_count": 26
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Snowflake",
+        "AWS",
+        "Transformers"
+      ],
+      "budget_ceiling": 11016.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.73
+    }
+  },
+  {
+    "public": {
+      "id": "client_136",
+      "company": "Quantum Digital 136",
+      "industry": "Retail",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 220996.0,
+      "hire_rate": 0.68,
+      "avg_rating": 4.9,
+      "jobs_posted": 17,
+      "review_count": 11
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PostgreSQL",
+        "Snowflake"
+      ],
+      "budget_ceiling": 4868.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.83
+    }
+  },
+  {
+    "public": {
+      "id": "client_137",
+      "company": "Stratum Digital 137",
+      "industry": "Logistics",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 198887.0,
+      "hire_rate": 0.64,
+      "avg_rating": 5.0,
+      "jobs_posted": 80,
+      "review_count": 42
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "React",
+        "Transformers",
+        "Docker"
+      ],
+      "budget_ceiling": 12507.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.83
+    }
+  },
+  {
+    "public": {
+      "id": "client_138",
+      "company": "Vanguard Digital 138",
+      "industry": "DevTools",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 7810.0,
+      "hire_rate": 0.6,
+      "avg_rating": 4.7,
+      "jobs_posted": 83,
+      "review_count": 42
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "dbt",
+        "Node.js"
+      ],
+      "budget_ceiling": 14407.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_139",
+      "company": "Pinnacle Digital 139",
+      "industry": "LegalTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 19215.0,
+      "hire_rate": 0.93,
+      "avg_rating": 4.5,
+      "jobs_posted": 106,
+      "review_count": 75
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Python",
+        "React",
+        "AWS",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 14349.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.7
+    }
+  },
+  {
+    "public": {
+      "id": "client_140",
+      "company": "Helios Digital 140",
+      "industry": "CyberSec",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 30106.0,
+      "hire_rate": 0.84,
+      "avg_rating": 5.0,
+      "jobs_posted": 87,
+      "review_count": 64
+    },
+    "hidden": {
+      "must_have_skills": [
+        "pgvector",
+        "Snowflake"
+      ],
+      "budget_ceiling": 12464.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_141",
+      "company": "Aura Digital 141",
+      "industry": "E-Commerce",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 159011.0,
+      "hire_rate": 0.79,
+      "avg_rating": 4.7,
+      "jobs_posted": 63,
+      "review_count": 44
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "Kafka",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 13146.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.53
+    }
+  },
+  {
+    "public": {
+      "id": "client_142",
+      "company": "Nova Digital 142",
+      "industry": "LegalTech",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 9289.0,
+      "hire_rate": 0.8,
+      "avg_rating": 4.6,
+      "jobs_posted": 91,
+      "review_count": 67
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "SQL"
+      ],
+      "budget_ceiling": 9239.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.7
+    }
+  },
+  {
+    "public": {
+      "id": "client_143",
+      "company": "Cipher Digital 143",
+      "industry": "HealthTech",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 5903.0,
+      "hire_rate": 0.8,
+      "avg_rating": 4.8,
+      "jobs_posted": 86,
+      "review_count": 61
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "Redis"
+      ],
+      "budget_ceiling": 8487.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.58
+    }
+  },
+  {
+    "public": {
+      "id": "client_144",
+      "company": "Synapse Digital 144",
+      "industry": "CleanTech",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 2993.0,
+      "hire_rate": 0.7,
+      "avg_rating": 4.6,
+      "jobs_posted": 42,
+      "review_count": 26
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "PostgreSQL",
+        "FastAPI"
+      ],
+      "budget_ceiling": 13948.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.85
+    }
+  },
+  {
+    "public": {
+      "id": "client_145",
+      "company": "Pulse Digital 145",
+      "industry": "BioTech",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 96785.0,
+      "hire_rate": 0.74,
+      "avg_rating": 4.6,
+      "jobs_posted": 65,
+      "review_count": 44
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "Power BI",
+        "PostgreSQL",
+        "TypeScript"
+      ],
+      "budget_ceiling": 14389.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.74
+    }
+  },
+  {
+    "public": {
+      "id": "client_146",
+      "company": "Orion Digital 146",
+      "industry": "CyberSec",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 4758.0,
+      "hire_rate": 0.61,
+      "avg_rating": 4.8,
+      "jobs_posted": 12,
+      "review_count": 6
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "TypeScript",
+        "ClickHouse",
+        "PostgreSQL"
+      ],
+      "budget_ceiling": 3102.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.71
+    }
+  },
+  {
+    "public": {
+      "id": "client_147",
+      "company": "Cortex Digital 147",
+      "industry": "Telecom",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 86735.0,
+      "hire_rate": 0.95,
+      "avg_rating": 4.6,
+      "jobs_posted": 89,
+      "review_count": 71
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "dbt"
+      ],
+      "budget_ceiling": 14657.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.61
+    }
+  },
+  {
+    "public": {
+      "id": "client_148",
+      "company": "Starlight Digital 148",
+      "industry": "CyberSec",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 205101.0,
+      "hire_rate": 0.92,
+      "avg_rating": 4.8,
+      "jobs_posted": 117,
+      "review_count": 90
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "Kafka",
+        "Redis",
+        "pgvector"
+      ],
+      "budget_ceiling": 2768.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.73
+    }
+  },
+  {
+    "public": {
+      "id": "client_149",
+      "company": "Beacon Digital 149",
+      "industry": "Retail",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 6906.0,
+      "hire_rate": 0.71,
+      "avg_rating": 4.9,
+      "jobs_posted": 126,
+      "review_count": 83
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "React",
+        "Transformers"
+      ],
+      "budget_ceiling": 11214.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.69
+    }
+  },
+  {
+    "public": {
+      "id": "client_150",
+      "company": "Solas Digital 150",
+      "industry": "DevTools",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 74238.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.6,
+      "jobs_posted": 76,
+      "review_count": 51
+    },
+    "hidden": {
+      "must_have_skills": [
+        "ClickHouse",
+        "Stripe API",
+        "Power BI",
+        "Transformers"
+      ],
+      "budget_ceiling": 11911.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.57
+    }
+  },
+  {
+    "public": {
+      "id": "client_151",
+      "company": "Kinetics Digital 151",
+      "industry": "Media",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 5227.0,
+      "hire_rate": 0.93,
+      "avg_rating": 5.0,
+      "jobs_posted": 38,
+      "review_count": 31
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PostgreSQL",
+        "TypeScript"
+      ],
+      "budget_ceiling": 14358.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.71
+    }
+  },
+  {
+    "public": {
+      "id": "client_152",
+      "company": "Zenith Digital 152",
+      "industry": "BioTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 189893.0,
+      "hire_rate": 0.73,
+      "avg_rating": 4.6,
+      "jobs_posted": 139,
+      "review_count": 93
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "Tailwind CSS",
+        "Node.js"
+      ],
+      "budget_ceiling": 9635.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.66
+    }
+  },
+  {
+    "public": {
+      "id": "client_153",
+      "company": "Omni Digital 153",
+      "industry": "Gaming",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 19563.0,
+      "hire_rate": 0.79,
+      "avg_rating": 4.8,
+      "jobs_posted": 114,
+      "review_count": 70
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "AWS",
+        "Stripe API"
+      ],
+      "budget_ceiling": 5214.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.79
+    }
+  },
+  {
+    "public": {
+      "id": "client_154",
+      "company": "Element Digital 154",
+      "industry": "DevTools",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 6502.0,
+      "hire_rate": 0.86,
+      "avg_rating": 4.7,
+      "jobs_posted": 43,
+      "review_count": 33
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "PyTorch"
+      ],
+      "budget_ceiling": 10000.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.85
+    }
+  },
+  {
+    "public": {
+      "id": "client_155",
+      "company": "Apex Capital 155",
+      "industry": "LegalTech",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 86042.0,
+      "hire_rate": 0.68,
+      "avg_rating": 4.9,
+      "jobs_posted": 10,
+      "review_count": 5
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Snowflake",
+        "Stripe API",
+        "Python",
+        "Power BI"
+      ],
+      "budget_ceiling": 9471.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.73
+    }
+  },
+  {
+    "public": {
+      "id": "client_156",
+      "company": "Nexus Capital 156",
+      "industry": "BioTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 28005.0,
+      "hire_rate": 0.61,
+      "avg_rating": 4.9,
+      "jobs_posted": 118,
+      "review_count": 65
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "BigQuery"
+      ],
+      "budget_ceiling": 16905.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.68
+    }
+  },
+  {
+    "public": {
+      "id": "client_157",
+      "company": "Veritas Capital 157",
+      "industry": "Hospitality",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 36011.0,
+      "hire_rate": 0.94,
+      "avg_rating": 4.7,
+      "jobs_posted": 70,
+      "review_count": 62
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "PyTorch",
+        "FastAPI",
+        "PostgreSQL"
+      ],
+      "budget_ceiling": 5700.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.53
+    }
+  },
+  {
+    "public": {
+      "id": "client_158",
+      "company": "Quantum Capital 158",
+      "industry": "PropTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 2959.0,
+      "hire_rate": 0.63,
+      "avg_rating": 4.9,
+      "jobs_posted": 92,
+      "review_count": 49
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "Kafka"
+      ],
+      "budget_ceiling": 16056.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.82
+    }
+  },
+  {
+    "public": {
+      "id": "client_159",
+      "company": "Stratum Capital 159",
+      "industry": "Media",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 192352.0,
+      "hire_rate": 0.83,
+      "avg_rating": 4.6,
+      "jobs_posted": 88,
+      "review_count": 51
+    },
+    "hidden": {
+      "must_have_skills": [
+        "FastAPI",
+        "Next.js",
+        "LangChain"
+      ],
+      "budget_ceiling": 5394.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.75
+    }
+  },
+  {
+    "public": {
+      "id": "client_160",
+      "company": "Vanguard Capital 160",
+      "industry": "CyberSec",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 45426.0,
+      "hire_rate": 0.86,
+      "avg_rating": 4.6,
+      "jobs_posted": 28,
+      "review_count": 20
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "BigQuery"
+      ],
+      "budget_ceiling": 17963.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.58
+    }
+  },
+  {
+    "public": {
+      "id": "client_161",
+      "company": "Pinnacle Capital 161",
+      "industry": "PropTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 4739.0,
+      "hire_rate": 0.72,
+      "avg_rating": 5.0,
+      "jobs_posted": 118,
+      "review_count": 63
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "FastAPI"
+      ],
+      "budget_ceiling": 11598.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_162",
+      "company": "Helios Capital 162",
+      "industry": "LegalTech",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 20110.0,
+      "hire_rate": 0.71,
+      "avg_rating": 4.6,
+      "jobs_posted": 9,
+      "review_count": 6
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "SQL"
+      ],
+      "budget_ceiling": 9286.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.55
+    }
+  },
+  {
+    "public": {
+      "id": "client_163",
+      "company": "Aura Capital 163",
+      "industry": "BioTech",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 11721.0,
+      "hire_rate": 0.79,
+      "avg_rating": 4.8,
+      "jobs_posted": 91,
+      "review_count": 66
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "Tableau",
+        "dbt",
+        "LangChain"
+      ],
+      "budget_ceiling": 2202.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.53
+    }
+  },
+  {
+    "public": {
+      "id": "client_164",
+      "company": "Nova Capital 164",
+      "industry": "PropTech",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 4966.0,
+      "hire_rate": 0.62,
+      "avg_rating": 4.7,
+      "jobs_posted": 115,
+      "review_count": 55
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Snowflake",
+        "BigQuery",
+        "Transformers",
+        "SQL"
+      ],
+      "budget_ceiling": 14823.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.59
+    }
+  },
+  {
+    "public": {
+      "id": "client_165",
+      "company": "Cipher Capital 165",
+      "industry": "SaaS",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 31772.0,
+      "hire_rate": 0.88,
+      "avg_rating": 4.7,
+      "jobs_posted": 93,
+      "review_count": 66
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "Kafka",
+        "Transformers"
+      ],
+      "budget_ceiling": 15492.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.55
+    }
+  },
+  {
+    "public": {
+      "id": "client_166",
+      "company": "Synapse Capital 166",
+      "industry": "Media",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 126401.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.7,
+      "jobs_posted": 70,
+      "review_count": 46
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "Tableau",
+        "Power BI",
+        "LangChain"
+      ],
+      "budget_ceiling": 6592.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.54
+    }
+  },
+  {
+    "public": {
+      "id": "client_167",
+      "company": "Pulse Capital 167",
+      "industry": "BioTech",
+      "country": "United States",
+      "payment_verified": false,
+      "total_spent": 23739.0,
+      "hire_rate": 0.89,
+      "avg_rating": 4.5,
+      "jobs_posted": 112,
+      "review_count": 87
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "PostgreSQL",
+        "FastAPI",
+        "SQL"
+      ],
+      "budget_ceiling": 4280.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.73
+    }
+  },
+  {
+    "public": {
+      "id": "client_168",
+      "company": "Orion Capital 168",
+      "industry": "Media",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 6650.0,
+      "hire_rate": 0.88,
+      "avg_rating": 4.7,
+      "jobs_posted": 29,
+      "review_count": 19
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "AWS"
+      ],
+      "budget_ceiling": 6067.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.73
+    }
+  },
+  {
+    "public": {
+      "id": "client_169",
+      "company": "Cortex Capital 169",
+      "industry": "PropTech",
+      "country": "Netherlands",
+      "payment_verified": false,
+      "total_spent": 6026.0,
+      "hire_rate": 0.69,
+      "avg_rating": 4.8,
+      "jobs_posted": 140,
+      "review_count": 81
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "Kafka",
+        "dbt",
+        "pgvector"
+      ],
+      "budget_ceiling": 13266.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.64
+    }
+  },
+  {
+    "public": {
+      "id": "client_170",
+      "company": "Starlight Capital 170",
+      "industry": "CleanTech",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 4920.0,
+      "hire_rate": 0.89,
+      "avg_rating": 4.9,
+      "jobs_posted": 97,
+      "review_count": 67
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "ClickHouse"
+      ],
+      "budget_ceiling": 9460.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.62
+    }
+  },
+  {
+    "public": {
+      "id": "client_171",
+      "company": "Beacon Capital 171",
+      "industry": "Telecom",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 17542.0,
+      "hire_rate": 0.83,
+      "avg_rating": 4.8,
+      "jobs_posted": 50,
+      "review_count": 39
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "SQL",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "budget_ceiling": 14132.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.56
+    }
+  },
+  {
+    "public": {
+      "id": "client_172",
+      "company": "Solas Capital 172",
+      "industry": "Logistics",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 57652.0,
+      "hire_rate": 0.81,
+      "avg_rating": 4.6,
+      "jobs_posted": 117,
+      "review_count": 76
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "Docker"
+      ],
+      "budget_ceiling": 13546.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.75
+    }
+  },
+  {
+    "public": {
+      "id": "client_173",
+      "company": "Kinetics Capital 173",
+      "industry": "BioTech",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 39986.0,
+      "hire_rate": 0.83,
+      "avg_rating": 4.7,
+      "jobs_posted": 88,
+      "review_count": 62
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "LangChain",
+        "Stripe API"
+      ],
+      "budget_ceiling": 12015.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.62
+    }
+  },
+  {
+    "public": {
+      "id": "client_174",
+      "company": "Zenith Capital 174",
+      "industry": "Retail",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 8005.0,
+      "hire_rate": 0.68,
+      "avg_rating": 4.6,
+      "jobs_posted": 103,
+      "review_count": 61
+    },
+    "hidden": {
+      "must_have_skills": [
+        "LangChain",
+        "Snowflake",
+        "AWS"
+      ],
+      "budget_ceiling": 10369.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.7
+    }
+  },
+  {
+    "public": {
+      "id": "client_175",
+      "company": "Omni Capital 175",
+      "industry": "BioTech",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 46366.0,
+      "hire_rate": 0.7,
+      "avg_rating": 4.6,
+      "jobs_posted": 123,
+      "review_count": 74
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "dbt",
+        "AWS"
+      ],
+      "budget_ceiling": 16180.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.55
+    }
+  },
+  {
+    "public": {
+      "id": "client_176",
+      "company": "Element Capital 176",
+      "industry": "Media",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 5904.0,
+      "hire_rate": 0.63,
+      "avg_rating": 4.5,
+      "jobs_posted": 64,
+      "review_count": 31
+    },
+    "hidden": {
+      "must_have_skills": [
+        "ClickHouse",
+        "Pandas",
+        "Snowflake",
+        "Power BI"
+      ],
+      "budget_ceiling": 6503.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.77
+    }
+  },
+  {
+    "public": {
+      "id": "client_177",
+      "company": "Apex Health 177",
+      "industry": "Hospitality",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 146170.0,
+      "hire_rate": 0.89,
+      "avg_rating": 4.5,
+      "jobs_posted": 120,
+      "review_count": 89
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "SQL",
+        "React"
+      ],
+      "budget_ceiling": 8965.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.76
+    }
+  },
+  {
+    "public": {
+      "id": "client_178",
+      "company": "Nexus Health 178",
+      "industry": "CleanTech",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 105018.0,
+      "hire_rate": 0.81,
+      "avg_rating": 4.7,
+      "jobs_posted": 117,
+      "review_count": 70
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "Power BI",
+        "React",
+        "BigQuery"
+      ],
+      "budget_ceiling": 4281.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_179",
+      "company": "Veritas Health 179",
+      "industry": "BioTech",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 125846.0,
+      "hire_rate": 0.69,
+      "avg_rating": 4.9,
+      "jobs_posted": 32,
+      "review_count": 16
+    },
+    "hidden": {
+      "must_have_skills": [
+        "pgvector",
+        "Kafka",
+        "TypeScript",
+        "Node.js"
+      ],
+      "budget_ceiling": 14289.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.85
+    }
+  },
+  {
+    "public": {
+      "id": "client_180",
+      "company": "Quantum Health 180",
+      "industry": "CyberSec",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 47842.0,
+      "hire_rate": 0.82,
+      "avg_rating": 4.7,
+      "jobs_posted": 27,
+      "review_count": 19
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "SQL",
+        "Snowflake",
+        "Node.js"
+      ],
+      "budget_ceiling": 16419.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.76
+    }
+  },
+  {
+    "public": {
+      "id": "client_181",
+      "company": "Stratum Health 181",
+      "industry": "FinTech",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 66601.0,
+      "hire_rate": 0.74,
+      "avg_rating": 5.0,
+      "jobs_posted": 62,
+      "review_count": 38
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Snowflake",
+        "Node.js",
+        "Stripe API",
+        "Pandas"
+      ],
+      "budget_ceiling": 7289.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.7
+    }
+  },
+  {
+    "public": {
+      "id": "client_182",
+      "company": "Vanguard Health 182",
+      "industry": "HealthTech",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 8921.0,
+      "hire_rate": 0.93,
+      "avg_rating": 4.6,
+      "jobs_posted": 124,
+      "review_count": 81
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Next.js",
+        "LangChain",
+        "React",
+        "FastAPI"
+      ],
+      "budget_ceiling": 17696.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.82
+    }
+  },
+  {
+    "public": {
+      "id": "client_183",
+      "company": "Pinnacle Health 183",
+      "industry": "CleanTech",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 20847.0,
+      "hire_rate": 0.82,
+      "avg_rating": 4.9,
+      "jobs_posted": 67,
+      "review_count": 44
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "TypeScript"
+      ],
+      "budget_ceiling": 3494.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.67
+    }
+  },
+  {
+    "public": {
+      "id": "client_184",
+      "company": "Helios Health 184",
+      "industry": "Hospitality",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 32516.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.7,
+      "jobs_posted": 66,
+      "review_count": 44
+    },
+    "hidden": {
+      "must_have_skills": [
+        "pgvector",
+        "PostgreSQL",
+        "Pandas"
+      ],
+      "budget_ceiling": 13972.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_185",
+      "company": "Aura Health 185",
+      "industry": "E-Commerce",
+      "country": "Ireland",
+      "payment_verified": false,
+      "total_spent": 189069.0,
+      "hire_rate": 0.6,
+      "avg_rating": 4.8,
+      "jobs_posted": 120,
+      "review_count": 57
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "Transformers",
+        "FastAPI",
+        "Docker"
+      ],
+      "budget_ceiling": 5490.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.64
+    }
+  },
+  {
+    "public": {
+      "id": "client_186",
+      "company": "Nova Health 186",
+      "industry": "E-Commerce",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 33038.0,
+      "hire_rate": 0.88,
+      "avg_rating": 4.6,
+      "jobs_posted": 29,
+      "review_count": 19
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Python",
+        "Stripe API",
+        "Next.js",
+        "Transformers"
+      ],
+      "budget_ceiling": 11846.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.77
+    }
+  },
+  {
+    "public": {
+      "id": "client_187",
+      "company": "Cipher Health 187",
+      "industry": "Hospitality",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 127474.0,
+      "hire_rate": 0.62,
+      "avg_rating": 4.9,
+      "jobs_posted": 69,
+      "review_count": 35
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "Node.js"
+      ],
+      "budget_ceiling": 3847.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.52
+    }
+  },
+  {
+    "public": {
+      "id": "client_188",
+      "company": "Synapse Health 188",
+      "industry": "E-Commerce",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 145790.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.9,
+      "jobs_posted": 26,
+      "review_count": 15
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "Next.js",
+        "AWS"
+      ],
+      "budget_ceiling": 3106.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.82
+    }
+  },
+  {
+    "public": {
+      "id": "client_189",
+      "company": "Pulse Health 189",
+      "industry": "Hospitality",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 217913.0,
+      "hire_rate": 0.79,
+      "avg_rating": 4.6,
+      "jobs_posted": 29,
+      "review_count": 18
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PostgreSQL",
+        "Tableau",
+        "AWS"
+      ],
+      "budget_ceiling": 10377.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.55
+    }
+  },
+  {
+    "public": {
+      "id": "client_190",
+      "company": "Orion Health 190",
+      "industry": "LegalTech",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 8479.0,
+      "hire_rate": 0.63,
+      "avg_rating": 4.7,
+      "jobs_posted": 124,
+      "review_count": 67
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Python",
+        "Kafka"
+      ],
+      "budget_ceiling": 2901.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.76
+    }
+  },
+  {
+    "public": {
+      "id": "client_191",
+      "company": "Cortex Health 191",
+      "industry": "E-Commerce",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 185586.0,
+      "hire_rate": 0.69,
+      "avg_rating": 4.7,
+      "jobs_posted": 76,
+      "review_count": 46
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "FastAPI",
+        "React"
+      ],
+      "budget_ceiling": 3934.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_192",
+      "company": "Starlight Health 192",
+      "industry": "LegalTech",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 180969.0,
+      "hire_rate": 0.66,
+      "avg_rating": 4.6,
+      "jobs_posted": 34,
+      "review_count": 21
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Python",
+        "TypeScript"
+      ],
+      "budget_ceiling": 13044.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.68
+    }
+  },
+  {
+    "public": {
+      "id": "client_193",
+      "company": "Beacon Health 193",
+      "industry": "HealthTech",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 59270.0,
+      "hire_rate": 0.88,
+      "avg_rating": 4.9,
+      "jobs_posted": 115,
+      "review_count": 77
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 6067.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.59
+    }
+  },
+  {
+    "public": {
+      "id": "client_194",
+      "company": "Solas Health 194",
+      "industry": "SaaS",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 108506.0,
+      "hire_rate": 0.94,
+      "avg_rating": 5.0,
+      "jobs_posted": 25,
+      "review_count": 22
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "Python",
+        "Tailwind CSS",
+        "Transformers"
+      ],
+      "budget_ceiling": 16189.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.61
+    }
+  },
+  {
+    "public": {
+      "id": "client_195",
+      "company": "Kinetics Health 195",
+      "industry": "Retail",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 25897.0,
+      "hire_rate": 0.81,
+      "avg_rating": 4.7,
+      "jobs_posted": 58,
+      "review_count": 41
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Python",
+        "TypeScript",
+        "Power BI"
+      ],
+      "budget_ceiling": 10954.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.5
+    }
+  },
+  {
+    "public": {
+      "id": "client_196",
+      "company": "Zenith Health 196",
+      "industry": "CleanTech",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 9686.0,
+      "hire_rate": 0.87,
+      "avg_rating": 4.7,
+      "jobs_posted": 86,
+      "review_count": 54
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "React"
+      ],
+      "budget_ceiling": 10680.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.84
+    }
+  },
+  {
+    "public": {
+      "id": "client_197",
+      "company": "Omni Health 197",
+      "industry": "LegalTech",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 158280.0,
+      "hire_rate": 0.91,
+      "avg_rating": 4.7,
+      "jobs_posted": 29,
+      "review_count": 22
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "Redis",
+        "Stripe API",
+        "pgvector"
+      ],
+      "budget_ceiling": 10280.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.53
+    }
+  },
+  {
+    "public": {
+      "id": "client_198",
+      "company": "Element Health 198",
+      "industry": "CyberSec",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 233691.0,
+      "hire_rate": 0.71,
+      "avg_rating": 4.7,
+      "jobs_posted": 67,
+      "review_count": 34
+    },
+    "hidden": {
+      "must_have_skills": [
+        "LangChain",
+        "SQL"
+      ],
+      "budget_ceiling": 5321.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.54
+    }
+  },
+  {
+    "public": {
+      "id": "client_199",
+      "company": "Apex Interactive 199",
+      "industry": "Telecom",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 33480.0,
+      "hire_rate": 0.71,
+      "avg_rating": 4.6,
+      "jobs_posted": 38,
+      "review_count": 19
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "Node.js"
+      ],
+      "budget_ceiling": 15231.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.74
+    }
+  },
+  {
+    "public": {
+      "id": "client_200",
+      "company": "Nexus Interactive 200",
+      "industry": "E-Commerce",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 5414.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.6,
+      "jobs_posted": 52,
+      "review_count": 31
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "Docker"
+      ],
+      "budget_ceiling": 8625.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.69
+    }
+  },
+  {
+    "public": {
+      "id": "client_201",
+      "company": "Veritas Interactive 201",
+      "industry": "E-Commerce",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 9302.0,
+      "hire_rate": 0.89,
+      "avg_rating": 4.7,
+      "jobs_posted": 29,
+      "review_count": 22
+    },
+    "hidden": {
+      "must_have_skills": [
+        "AWS",
+        "SQL"
+      ],
+      "budget_ceiling": 6240.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.85
+    }
+  },
+  {
+    "public": {
+      "id": "client_202",
+      "company": "Quantum Interactive 202",
+      "industry": "E-Commerce",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 9294.0,
+      "hire_rate": 0.93,
+      "avg_rating": 4.5,
+      "jobs_posted": 118,
+      "review_count": 99
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "LangChain",
+        "React"
+      ],
+      "budget_ceiling": 8471.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.65
+    }
+  },
+  {
+    "public": {
+      "id": "client_203",
+      "company": "Stratum Interactive 203",
+      "industry": "Manufacturing",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 26107.0,
+      "hire_rate": 0.77,
+      "avg_rating": 4.9,
+      "jobs_posted": 130,
+      "review_count": 72
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "AWS",
+        "Power BI",
+        "Python"
+      ],
+      "budget_ceiling": 6583.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_204",
+      "company": "Vanguard Interactive 204",
+      "industry": "PropTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 140186.0,
+      "hire_rate": 0.78,
+      "avg_rating": 4.7,
+      "jobs_posted": 54,
+      "review_count": 30
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Snowflake",
+        "dbt"
+      ],
+      "budget_ceiling": 11783.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.77
+    }
+  },
+  {
+    "public": {
+      "id": "client_205",
+      "company": "Pinnacle Interactive 205",
+      "industry": "CleanTech",
+      "country": "Sweden",
+      "payment_verified": false,
+      "total_spent": 114974.0,
+      "hire_rate": 0.68,
+      "avg_rating": 4.8,
+      "jobs_posted": 22,
+      "review_count": 13
+    },
+    "hidden": {
+      "must_have_skills": [
+        "LangChain",
+        "TypeScript",
+        "Tableau"
+      ],
+      "budget_ceiling": 17528.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_206",
+      "company": "Helios Interactive 206",
+      "industry": "DevTools",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 198806.0,
+      "hire_rate": 0.65,
+      "avg_rating": 5.0,
+      "jobs_posted": 134,
+      "review_count": 73
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Python",
+        "dbt"
+      ],
+      "budget_ceiling": 4876.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.58
+    }
+  },
+  {
+    "public": {
+      "id": "client_207",
+      "company": "Aura Interactive 207",
+      "industry": "Media",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 23203.0,
+      "hire_rate": 0.85,
+      "avg_rating": 5.0,
+      "jobs_posted": 90,
+      "review_count": 55
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "FastAPI",
+        "Kafka",
+        "Stripe API"
+      ],
+      "budget_ceiling": 4420.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.77
+    }
+  },
+  {
+    "public": {
+      "id": "client_208",
+      "company": "Nova Interactive 208",
+      "industry": "PropTech",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 4972.0,
+      "hire_rate": 0.86,
+      "avg_rating": 4.7,
+      "jobs_posted": 132,
+      "review_count": 98
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "TypeScript",
+        "Stripe API",
+        "Tableau"
+      ],
+      "budget_ceiling": 4854.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.81
+    }
+  },
+  {
+    "public": {
+      "id": "client_209",
+      "company": "Cipher Interactive 209",
+      "industry": "Logistics",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 8140.0,
+      "hire_rate": 0.86,
+      "avg_rating": 5.0,
+      "jobs_posted": 108,
+      "review_count": 85
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "AWS",
+        "Tableau",
+        "Docker"
+      ],
+      "budget_ceiling": 14629.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.71
+    }
+  },
+  {
+    "public": {
+      "id": "client_210",
+      "company": "Synapse Interactive 210",
+      "industry": "Media",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 25597.0,
+      "hire_rate": 0.66,
+      "avg_rating": 4.9,
+      "jobs_posted": 30,
+      "review_count": 18
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "TypeScript",
+        "Kafka"
+      ],
+      "budget_ceiling": 12977.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.66
+    }
+  },
+  {
+    "public": {
+      "id": "client_211",
+      "company": "Pulse Interactive 211",
+      "industry": "LegalTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 10083.0,
+      "hire_rate": 0.75,
+      "avg_rating": 4.7,
+      "jobs_posted": 50,
+      "review_count": 35
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "AWS",
+        "Pandas"
+      ],
+      "budget_ceiling": 10078.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_212",
+      "company": "Orion Interactive 212",
+      "industry": "CyberSec",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 9047.0,
+      "hire_rate": 0.71,
+      "avg_rating": 5.0,
+      "jobs_posted": 26,
+      "review_count": 14
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "BigQuery"
+      ],
+      "budget_ceiling": 16547.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.69
+    }
+  },
+  {
+    "public": {
+      "id": "client_213",
+      "company": "Cortex Interactive 213",
+      "industry": "Media",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 20813.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.6,
+      "jobs_posted": 60,
+      "review_count": 37
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "Next.js",
+        "TypeScript"
+      ],
+      "budget_ceiling": 8705.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.76
+    }
+  },
+  {
+    "public": {
+      "id": "client_214",
+      "company": "Starlight Interactive 214",
+      "industry": "SaaS",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 7002.0,
+      "hire_rate": 0.73,
+      "avg_rating": 4.7,
+      "jobs_posted": 83,
+      "review_count": 55
+    },
+    "hidden": {
+      "must_have_skills": [
+        "AWS",
+        "Next.js"
+      ],
+      "budget_ceiling": 12241.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.51
+    }
+  },
+  {
+    "public": {
+      "id": "client_215",
+      "company": "Beacon Interactive 215",
+      "industry": "LegalTech",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 36048.0,
+      "hire_rate": 0.91,
+      "avg_rating": 4.6,
+      "jobs_posted": 107,
+      "review_count": 73
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "React",
+        "TypeScript"
+      ],
+      "budget_ceiling": 16507.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.52
+    }
+  },
+  {
+    "public": {
+      "id": "client_216",
+      "company": "Solas Interactive 216",
+      "industry": "Manufacturing",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 72467.0,
+      "hire_rate": 0.72,
+      "avg_rating": 4.8,
+      "jobs_posted": 66,
+      "review_count": 40
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Snowflake",
+        "Tableau",
+        "TypeScript",
+        "Next.js"
+      ],
+      "budget_ceiling": 15775.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.84
+    }
+  },
+  {
+    "public": {
+      "id": "client_217",
+      "company": "Kinetics Interactive 217",
+      "industry": "LegalTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 181622.0,
+      "hire_rate": 0.92,
+      "avg_rating": 4.9,
+      "jobs_posted": 45,
+      "review_count": 30
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "pgvector"
+      ],
+      "budget_ceiling": 14405.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.56
+    }
+  },
+  {
+    "public": {
+      "id": "client_218",
+      "company": "Zenith Interactive 218",
+      "industry": "HealthTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 102931.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.8,
+      "jobs_posted": 89,
+      "review_count": 54
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "React",
+        "dbt",
+        "SQL"
+      ],
+      "budget_ceiling": 16977.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.69
+    }
+  },
+  {
+    "public": {
+      "id": "client_219",
+      "company": "Omni Interactive 219",
+      "industry": "FinTech",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 37498.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.8,
+      "jobs_posted": 33,
+      "review_count": 20
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "React",
+        "PostgreSQL"
+      ],
+      "budget_ceiling": 11219.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.8
+    }
+  },
+  {
+    "public": {
+      "id": "client_220",
+      "company": "Element Interactive 220",
+      "industry": "Media",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 21285.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.8,
+      "jobs_posted": 110,
+      "review_count": 51
+    },
+    "hidden": {
+      "must_have_skills": [
+        "React",
+        "Tailwind CSS",
+        "Python"
+      ],
+      "budget_ceiling": 16574.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.52
+    }
+  },
+  {
+    "public": {
+      "id": "client_221",
+      "company": "Apex Software 221",
+      "industry": "DevTools",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 232500.0,
+      "hire_rate": 0.63,
+      "avg_rating": 4.9,
+      "jobs_posted": 42,
+      "review_count": 21
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "AWS",
+        "FastAPI"
+      ],
+      "budget_ceiling": 14185.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.59
+    }
+  },
+  {
+    "public": {
+      "id": "client_222",
+      "company": "Nexus Software 222",
+      "industry": "EdTech",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 36684.0,
+      "hire_rate": 0.87,
+      "avg_rating": 4.9,
+      "jobs_posted": 22,
+      "review_count": 16
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "Python",
+        "LangChain",
+        "Transformers"
+      ],
+      "budget_ceiling": 4604.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.64
+    }
+  },
+  {
+    "public": {
+      "id": "client_223",
+      "company": "Veritas Software 223",
+      "industry": "EdTech",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 144470.0,
+      "hire_rate": 0.67,
+      "avg_rating": 4.7,
+      "jobs_posted": 126,
+      "review_count": 70
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "SQL",
+        "LangChain"
+      ],
+      "budget_ceiling": 12410.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.58
+    }
+  },
+  {
+    "public": {
+      "id": "client_224",
+      "company": "Quantum Software 224",
+      "industry": "Media",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 117806.0,
+      "hire_rate": 0.89,
+      "avg_rating": 4.5,
+      "jobs_posted": 15,
+      "review_count": 11
+    },
+    "hidden": {
+      "must_have_skills": [
+        "AWS",
+        "TypeScript"
+      ],
+      "budget_ceiling": 4669.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.58
+    }
+  },
+  {
+    "public": {
+      "id": "client_225",
+      "company": "Stratum Software 225",
+      "industry": "EdTech",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 6704.0,
+      "hire_rate": 0.77,
+      "avg_rating": 4.6,
+      "jobs_posted": 52,
+      "review_count": 34
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "AWS",
+        "React",
+        "Redis"
+      ],
+      "budget_ceiling": 2138.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.83
+    }
+  },
+  {
+    "public": {
+      "id": "client_226",
+      "company": "Vanguard Software 226",
+      "industry": "PropTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 129205.0,
+      "hire_rate": 0.78,
+      "avg_rating": 4.8,
+      "jobs_posted": 34,
+      "review_count": 19
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "Next.js",
+        "Stripe API",
+        "Docker"
+      ],
+      "budget_ceiling": 12852.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": false,
+      "min_specificity": 0.7
+    }
+  },
+  {
+    "public": {
+      "id": "client_227",
+      "company": "Pinnacle Software 227",
+      "industry": "Media",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 31308.0,
+      "hire_rate": 0.83,
+      "avg_rating": 5.0,
+      "jobs_posted": 84,
+      "review_count": 52
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PostgreSQL",
+        "Stripe API",
+        "Node.js",
+        "pgvector"
+      ],
+      "budget_ceiling": 10475.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_228",
+      "company": "Helios Software 228",
+      "industry": "FinTech",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 27001.0,
+      "hire_rate": 0.74,
+      "avg_rating": 4.5,
+      "jobs_posted": 56,
+      "review_count": 33
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "dbt",
+        "Next.js",
+        "LangChain"
+      ],
+      "budget_ceiling": 13687.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.77
+    }
+  },
+  {
+    "public": {
+      "id": "client_229",
+      "company": "Aura Software 229",
+      "industry": "BioTech",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 18384.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.8,
+      "jobs_posted": 54,
+      "review_count": 43
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Next.js",
+        "Redis",
+        "Node.js",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 16738.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.62
+    }
+  },
+  {
+    "public": {
+      "id": "client_230",
+      "company": "Nova Software 230",
+      "industry": "Manufacturing",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 9473.0,
+      "hire_rate": 0.9,
+      "avg_rating": 4.8,
+      "jobs_posted": 26,
+      "review_count": 19
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "PyTorch",
+        "pgvector"
+      ],
+      "budget_ceiling": 5187.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_231",
+      "company": "Cipher Software 231",
+      "industry": "E-Commerce",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 39987.0,
+      "hire_rate": 0.9,
+      "avg_rating": 4.6,
+      "jobs_posted": 28,
+      "review_count": 21
+    },
+    "hidden": {
+      "must_have_skills": [
+        "React",
+        "Transformers",
+        "Pandas"
+      ],
+      "budget_ceiling": 12338.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.52
+    }
+  },
+  {
+    "public": {
+      "id": "client_232",
+      "company": "Synapse Software 232",
+      "industry": "Logistics",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 83922.0,
+      "hire_rate": 0.75,
+      "avg_rating": 4.7,
+      "jobs_posted": 117,
+      "review_count": 83
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "Pandas"
+      ],
+      "budget_ceiling": 8280.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.76
+    }
+  },
+  {
+    "public": {
+      "id": "client_233",
+      "company": "Pulse Software 233",
+      "industry": "Hospitality",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 109314.0,
+      "hire_rate": 0.91,
+      "avg_rating": 4.7,
+      "jobs_posted": 34,
+      "review_count": 25
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "ClickHouse",
+        "dbt"
+      ],
+      "budget_ceiling": 11644.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.52
+    }
+  },
+  {
+    "public": {
+      "id": "client_234",
+      "company": "Orion Software 234",
+      "industry": "Hospitality",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 18768.0,
+      "hire_rate": 0.73,
+      "avg_rating": 4.6,
+      "jobs_posted": 111,
+      "review_count": 57
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "LangChain",
+        "Docker",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 5675.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.76
+    }
+  },
+  {
+    "public": {
+      "id": "client_235",
+      "company": "Cortex Software 235",
+      "industry": "HealthTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 4595.0,
+      "hire_rate": 0.81,
+      "avg_rating": 4.5,
+      "jobs_posted": 35,
+      "review_count": 24
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "React"
+      ],
+      "budget_ceiling": 2323.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.66
+    }
+  },
+  {
+    "public": {
+      "id": "client_236",
+      "company": "Starlight Software 236",
+      "industry": "Media",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 10609.0,
+      "hire_rate": 0.83,
+      "avg_rating": 4.8,
+      "jobs_posted": 77,
+      "review_count": 55
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "Docker",
+        "Next.js",
+        "Snowflake"
+      ],
+      "budget_ceiling": 13480.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.54
+    }
+  },
+  {
+    "public": {
+      "id": "client_237",
+      "company": "Beacon Software 237",
+      "industry": "EdTech",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 44284.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.6,
+      "jobs_posted": 18,
+      "review_count": 13
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Python",
+        "Stripe API"
+      ],
+      "budget_ceiling": 16915.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.62
+    }
+  },
+  {
+    "public": {
+      "id": "client_238",
+      "company": "Solas Software 238",
+      "industry": "LegalTech",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 7980.0,
+      "hire_rate": 0.87,
+      "avg_rating": 4.5,
+      "jobs_posted": 33,
+      "review_count": 27
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "Docker",
+        "LangChain"
+      ],
+      "budget_ceiling": 12556.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.6
+    }
+  },
+  {
+    "public": {
+      "id": "client_239",
+      "company": "Kinetics Software 239",
+      "industry": "HealthTech",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 161672.0,
+      "hire_rate": 0.64,
+      "avg_rating": 4.9,
+      "jobs_posted": 19,
+      "review_count": 9
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "React",
+        "ClickHouse"
+      ],
+      "budget_ceiling": 4267.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_240",
+      "company": "Zenith Software 240",
+      "industry": "LegalTech",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 17460.0,
+      "hire_rate": 0.94,
+      "avg_rating": 4.6,
+      "jobs_posted": 106,
+      "review_count": 87
+    },
+    "hidden": {
+      "must_have_skills": [
+        "pgvector",
+        "Kafka"
+      ],
+      "budget_ceiling": 9835.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_241",
+      "company": "Omni Software 241",
+      "industry": "HealthTech",
+      "country": "Canada",
+      "payment_verified": true,
+      "total_spent": 176530.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.6,
+      "jobs_posted": 105,
+      "review_count": 79
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Snowflake",
+        "Docker"
+      ],
+      "budget_ceiling": 12016.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.79
+    }
+  },
+  {
+    "public": {
+      "id": "client_242",
+      "company": "Element Software 242",
+      "industry": "Gaming",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 53240.0,
+      "hire_rate": 0.9,
+      "avg_rating": 4.8,
+      "jobs_posted": 65,
+      "review_count": 55
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Docker",
+        "Redis",
+        "Stripe API",
+        "ClickHouse"
+      ],
+      "budget_ceiling": 12974.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.74
+    }
+  },
+  {
+    "public": {
+      "id": "client_243",
+      "company": "Apex Networks 243",
+      "industry": "CyberSec",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 88968.0,
+      "hire_rate": 0.91,
+      "avg_rating": 4.8,
+      "jobs_posted": 10,
+      "review_count": 8
+    },
+    "hidden": {
+      "must_have_skills": [
+        "FastAPI",
+        "Pandas"
+      ],
+      "budget_ceiling": 4571.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.67
+    }
+  },
+  {
+    "public": {
+      "id": "client_244",
+      "company": "Nexus Networks 244",
+      "industry": "Media",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 4778.0,
+      "hire_rate": 0.79,
+      "avg_rating": 4.7,
+      "jobs_posted": 68,
+      "review_count": 39
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "Docker",
+        "Snowflake"
+      ],
+      "budget_ceiling": 9277.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.8
+    }
+  },
+  {
+    "public": {
+      "id": "client_245",
+      "company": "Veritas Networks 245",
+      "industry": "FinTech",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 2793.0,
+      "hire_rate": 0.89,
+      "avg_rating": 4.9,
+      "jobs_posted": 85,
+      "review_count": 70
+    },
+    "hidden": {
+      "must_have_skills": [
+        "PyTorch",
+        "TypeScript",
+        "SQL"
+      ],
+      "budget_ceiling": 11213.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.83
+    }
+  },
+  {
+    "public": {
+      "id": "client_246",
+      "company": "Quantum Networks 246",
+      "industry": "DevTools",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 237867.0,
+      "hire_rate": 0.73,
+      "avg_rating": 4.7,
+      "jobs_posted": 32,
+      "review_count": 21
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "dbt",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 5633.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.72
+    }
+  },
+  {
+    "public": {
+      "id": "client_247",
+      "company": "Stratum Networks 247",
+      "industry": "SaaS",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 237919.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.6,
+      "jobs_posted": 58,
+      "review_count": 37
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "Node.js"
+      ],
+      "budget_ceiling": 17240.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.79
+    }
+  },
+  {
+    "public": {
+      "id": "client_248",
+      "company": "Vanguard Networks 248",
+      "industry": "SaaS",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 48588.0,
+      "hire_rate": 0.76,
+      "avg_rating": 4.8,
+      "jobs_posted": 137,
+      "review_count": 76
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "Snowflake",
+        "dbt"
+      ],
+      "budget_ceiling": 10172.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.69
+    }
+  },
+  {
+    "public": {
+      "id": "client_249",
+      "company": "Pinnacle Networks 249",
+      "industry": "Logistics",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 18413.0,
+      "hire_rate": 0.83,
+      "avg_rating": 4.8,
+      "jobs_posted": 90,
+      "review_count": 62
+    },
+    "hidden": {
+      "must_have_skills": [
+        "React",
+        "PostgreSQL"
+      ],
+      "budget_ceiling": 8302.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.74
+    }
+  },
+  {
+    "public": {
+      "id": "client_250",
+      "company": "Helios Networks 250",
+      "industry": "DevTools",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 158198.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.9,
+      "jobs_posted": 84,
+      "review_count": 65
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "BigQuery",
+        "Kafka",
+        "Next.js"
+      ],
+      "budget_ceiling": 10975.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.83
+    }
+  },
+  {
+    "public": {
+      "id": "client_251",
+      "company": "Aura Networks 251",
+      "industry": "CleanTech",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 182092.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.7,
+      "jobs_posted": 37,
+      "review_count": 28
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "ClickHouse",
+        "Power BI"
+      ],
+      "budget_ceiling": 11212.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.73
+    }
+  },
+  {
+    "public": {
+      "id": "client_252",
+      "company": "Nova Networks 252",
+      "industry": "Retail",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 16977.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.8,
+      "jobs_posted": 59,
+      "review_count": 29
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "Next.js"
+      ],
+      "budget_ceiling": 14870.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.59
+    }
+  },
+  {
+    "public": {
+      "id": "client_253",
+      "company": "Cipher Networks 253",
+      "industry": "EdTech",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 76864.0,
+      "hire_rate": 0.9,
+      "avg_rating": 4.9,
+      "jobs_posted": 65,
+      "review_count": 52
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Next.js",
+        "Kafka",
+        "Stripe API",
+        "PyTorch"
+      ],
+      "budget_ceiling": 11195.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_254",
+      "company": "Synapse Networks 254",
+      "industry": "PropTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 8956.0,
+      "hire_rate": 0.6,
+      "avg_rating": 4.6,
+      "jobs_posted": 121,
+      "review_count": 66
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "ClickHouse",
+        "BigQuery",
+        "Transformers"
+      ],
+      "budget_ceiling": 16933.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_255",
+      "company": "Pulse Networks 255",
+      "industry": "EdTech",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 8092.0,
+      "hire_rate": 0.86,
+      "avg_rating": 4.6,
+      "jobs_posted": 18,
+      "review_count": 12
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Node.js",
+        "SQL"
+      ],
+      "budget_ceiling": 11119.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.8
+    }
+  },
+  {
+    "public": {
+      "id": "client_256",
+      "company": "Orion Networks 256",
+      "industry": "E-Commerce",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 63331.0,
+      "hire_rate": 0.82,
+      "avg_rating": 4.8,
+      "jobs_posted": 133,
+      "review_count": 98
+    },
+    "hidden": {
+      "must_have_skills": [
+        "LangChain",
+        "dbt"
+      ],
+      "budget_ceiling": 11013.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.61
+    }
+  },
+  {
+    "public": {
+      "id": "client_257",
+      "company": "Cortex Networks 257",
+      "industry": "LegalTech",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 6948.0,
+      "hire_rate": 0.72,
+      "avg_rating": 4.9,
+      "jobs_posted": 92,
+      "review_count": 52
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "AWS",
+        "Python",
+        "Docker"
+      ],
+      "budget_ceiling": 6809.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.69
+    }
+  },
+  {
+    "public": {
+      "id": "client_258",
+      "company": "Starlight Networks 258",
+      "industry": "CleanTech",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 60453.0,
+      "hire_rate": 0.91,
+      "avg_rating": 4.7,
+      "jobs_posted": 37,
+      "review_count": 27
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "SQL",
+        "Snowflake"
+      ],
+      "budget_ceiling": 10851.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.68
+    }
+  },
+  {
+    "public": {
+      "id": "client_259",
+      "company": "Beacon Networks 259",
+      "industry": "HealthTech",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 4077.0,
+      "hire_rate": 0.93,
+      "avg_rating": 4.6,
+      "jobs_posted": 9,
+      "review_count": 7
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Docker",
+        "Transformers",
+        "Power BI"
+      ],
+      "budget_ceiling": 5453.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.8
+    }
+  },
+  {
+    "public": {
+      "id": "client_260",
+      "company": "Solas Networks 260",
+      "industry": "Gaming",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 20076.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.5,
+      "jobs_posted": 26,
+      "review_count": 16
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "PostgreSQL",
+        "SQL"
+      ],
+      "budget_ceiling": 15012.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.79
+    }
+  },
+  {
+    "public": {
+      "id": "client_261",
+      "company": "Kinetics Networks 261",
+      "industry": "PropTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 5690.0,
+      "hire_rate": 0.82,
+      "avg_rating": 4.8,
+      "jobs_posted": 19,
+      "review_count": 14
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Next.js",
+        "BigQuery",
+        "FastAPI",
+        "Pandas"
+      ],
+      "budget_ceiling": 3189.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.6
+    }
+  },
+  {
+    "public": {
+      "id": "client_262",
+      "company": "Zenith Networks 262",
+      "industry": "Telecom",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 7912.0,
+      "hire_rate": 0.79,
+      "avg_rating": 4.6,
+      "jobs_posted": 108,
+      "review_count": 77
+    },
+    "hidden": {
+      "must_have_skills": [
+        "ClickHouse",
+        "AWS",
+        "Tailwind CSS",
+        "Python"
+      ],
+      "budget_ceiling": 15917.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.55
+    }
+  },
+  {
+    "public": {
+      "id": "client_263",
+      "company": "Omni Networks 263",
+      "industry": "BioTech",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 200134.0,
+      "hire_rate": 0.74,
+      "avg_rating": 4.8,
+      "jobs_posted": 29,
+      "review_count": 17
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "pgvector",
+        "LangChain",
+        "TypeScript"
+      ],
+      "budget_ceiling": 14260.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.57
+    }
+  },
+  {
+    "public": {
+      "id": "client_264",
+      "company": "Element Networks 264",
+      "industry": "Manufacturing",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 64257.0,
+      "hire_rate": 0.76,
+      "avg_rating": 4.8,
+      "jobs_posted": 82,
+      "review_count": 54
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "pgvector",
+        "Stripe API"
+      ],
+      "budget_ceiling": 6107.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.67
+    }
+  },
+  {
+    "public": {
+      "id": "client_265",
+      "company": "Apex Logistics 265",
+      "industry": "CyberSec",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 22681.0,
+      "hire_rate": 0.76,
+      "avg_rating": 4.8,
+      "jobs_posted": 86,
+      "review_count": 57
+    },
+    "hidden": {
+      "must_have_skills": [
+        "LangChain",
+        "Python",
+        "Node.js"
+      ],
+      "budget_ceiling": 4496.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.61
+    }
+  },
+  {
+    "public": {
+      "id": "client_266",
+      "company": "Nexus Logistics 266",
+      "industry": "CyberSec",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 38581.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.9,
+      "jobs_posted": 130,
+      "review_count": 69
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "FastAPI",
+        "React",
+        "pgvector"
+      ],
+      "budget_ceiling": 7877.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.54
+    }
+  },
+  {
+    "public": {
+      "id": "client_267",
+      "company": "Veritas Logistics 267",
+      "industry": "BioTech",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 9760.0,
+      "hire_rate": 0.91,
+      "avg_rating": 4.9,
+      "jobs_posted": 15,
+      "review_count": 12
+    },
+    "hidden": {
+      "must_have_skills": [
+        "React",
+        "Power BI",
+        "Snowflake",
+        "AWS"
+      ],
+      "budget_ceiling": 11484.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.82
+    }
+  },
+  {
+    "public": {
+      "id": "client_268",
+      "company": "Quantum Logistics 268",
+      "industry": "E-Commerce",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 48640.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.8,
+      "jobs_posted": 31,
+      "review_count": 16
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "LangChain",
+        "Pandas",
+        "dbt"
+      ],
+      "budget_ceiling": 10227.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.84
+    }
+  },
+  {
+    "public": {
+      "id": "client_269",
+      "company": "Stratum Logistics 269",
+      "industry": "E-Commerce",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 7139.0,
+      "hire_rate": 0.86,
+      "avg_rating": 4.7,
+      "jobs_posted": 99,
+      "review_count": 60
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "Transformers"
+      ],
+      "budget_ceiling": 14475.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_270",
+      "company": "Vanguard Logistics 270",
+      "industry": "Hospitality",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 60460.0,
+      "hire_rate": 0.71,
+      "avg_rating": 4.9,
+      "jobs_posted": 78,
+      "review_count": 50
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "Tableau",
+        "AWS"
+      ],
+      "budget_ceiling": 6314.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_271",
+      "company": "Pinnacle Logistics 271",
+      "industry": "LegalTech",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 24607.0,
+      "hire_rate": 0.72,
+      "avg_rating": 4.9,
+      "jobs_posted": 132,
+      "review_count": 85
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "FastAPI"
+      ],
+      "budget_ceiling": 16535.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.55
+    }
+  },
+  {
+    "public": {
+      "id": "client_272",
+      "company": "Helios Logistics 272",
+      "industry": "Hospitality",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 22249.0,
+      "hire_rate": 0.81,
+      "avg_rating": 4.9,
+      "jobs_posted": 66,
+      "review_count": 43
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tableau",
+        "LangChain"
+      ],
+      "budget_ceiling": 7410.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.67
+    }
+  },
+  {
+    "public": {
+      "id": "client_273",
+      "company": "Aura Logistics 273",
+      "industry": "Gaming",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 3547.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.8,
+      "jobs_posted": 45,
+      "review_count": 21
+    },
+    "hidden": {
+      "must_have_skills": [
+        "AWS",
+        "Python",
+        "ClickHouse",
+        "Stripe API"
+      ],
+      "budget_ceiling": 6231.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.64
+    }
+  },
+  {
+    "public": {
+      "id": "client_274",
+      "company": "Nova Logistics 274",
+      "industry": "Retail",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 7468.0,
+      "hire_rate": 0.68,
+      "avg_rating": 4.7,
+      "jobs_posted": 44,
+      "review_count": 27
+    },
+    "hidden": {
+      "must_have_skills": [
+        "ClickHouse",
+        "Stripe API"
+      ],
+      "budget_ceiling": 15442.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.68
+    }
+  },
+  {
+    "public": {
+      "id": "client_275",
+      "company": "Cipher Logistics 275",
+      "industry": "DevTools",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 25061.0,
+      "hire_rate": 0.65,
+      "avg_rating": 4.5,
+      "jobs_posted": 137,
+      "review_count": 78
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "PyTorch",
+        "Power BI",
+        "dbt"
+      ],
+      "budget_ceiling": 15541.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.67
+    }
+  },
+  {
+    "public": {
+      "id": "client_276",
+      "company": "Synapse Logistics 276",
+      "industry": "SaaS",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 3567.0,
+      "hire_rate": 0.91,
+      "avg_rating": 4.9,
+      "jobs_posted": 118,
+      "review_count": 89
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 8068.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.65
+    }
+  },
+  {
+    "public": {
+      "id": "client_277",
+      "company": "Pulse Logistics 277",
+      "industry": "SaaS",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 25237.0,
+      "hire_rate": 0.81,
+      "avg_rating": 4.8,
+      "jobs_posted": 73,
+      "review_count": 44
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Python",
+        "PostgreSQL",
+        "AWS",
+        "Transformers"
+      ],
+      "budget_ceiling": 13618.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.68
+    }
+  },
+  {
+    "public": {
+      "id": "client_278",
+      "company": "Orion Logistics 278",
+      "industry": "DevTools",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 220806.0,
+      "hire_rate": 0.69,
+      "avg_rating": 4.9,
+      "jobs_posted": 116,
+      "review_count": 67
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Power BI",
+        "Snowflake",
+        "LangChain"
+      ],
+      "budget_ceiling": 12025.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.76
+    }
+  },
+  {
+    "public": {
+      "id": "client_279",
+      "company": "Cortex Logistics 279",
+      "industry": "CleanTech",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 30096.0,
+      "hire_rate": 0.87,
+      "avg_rating": 4.7,
+      "jobs_posted": 43,
+      "review_count": 34
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Docker",
+        "Transformers"
+      ],
+      "budget_ceiling": 12801.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.77
+    }
+  },
+  {
+    "public": {
+      "id": "client_280",
+      "company": "Starlight Logistics 280",
+      "industry": "Hospitality",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 210963.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.5,
+      "jobs_posted": 107,
+      "review_count": 85
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "FastAPI",
+        "React",
+        "TypeScript"
+      ],
+      "budget_ceiling": 2086.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.67
+    }
+  },
+  {
+    "public": {
+      "id": "client_281",
+      "company": "Beacon Logistics 281",
+      "industry": "CleanTech",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 155026.0,
+      "hire_rate": 0.83,
+      "avg_rating": 4.6,
+      "jobs_posted": 22,
+      "review_count": 17
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "Next.js",
+        "Transformers",
+        "PyTorch"
+      ],
+      "budget_ceiling": 15438.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.5
+    }
+  },
+  {
+    "public": {
+      "id": "client_282",
+      "company": "Solas Logistics 282",
+      "industry": "Hospitality",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 7539.0,
+      "hire_rate": 0.73,
+      "avg_rating": 4.8,
+      "jobs_posted": 48,
+      "review_count": 25
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Transformers",
+        "dbt",
+        "Python",
+        "ClickHouse"
+      ],
+      "budget_ceiling": 6520.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.64
+    }
+  },
+  {
+    "public": {
+      "id": "client_283",
+      "company": "Kinetics Logistics 283",
+      "industry": "LegalTech",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 46642.0,
+      "hire_rate": 0.72,
+      "avg_rating": 4.9,
+      "jobs_posted": 65,
+      "review_count": 40
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Redis",
+        "dbt"
+      ],
+      "budget_ceiling": 5187.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.5
+    }
+  },
+  {
+    "public": {
+      "id": "client_284",
+      "company": "Zenith Logistics 284",
+      "industry": "SaaS",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 80673.0,
+      "hire_rate": 0.93,
+      "avg_rating": 4.9,
+      "jobs_posted": 72,
+      "review_count": 58
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Pandas",
+        "SQL",
+        "Stripe API"
+      ],
+      "budget_ceiling": 17827.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.59
+    }
+  },
+  {
+    "public": {
+      "id": "client_285",
+      "company": "Omni Logistics 285",
+      "industry": "Telecom",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 6448.0,
+      "hire_rate": 0.73,
+      "avg_rating": 4.9,
+      "jobs_posted": 64,
+      "review_count": 41
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Python",
+        "Kafka",
+        "React",
+        "TypeScript"
+      ],
+      "budget_ceiling": 5767.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.62
+    }
+  },
+  {
+    "public": {
+      "id": "client_286",
+      "company": "Element Logistics 286",
+      "industry": "Retail",
+      "country": "United Kingdom",
+      "payment_verified": true,
+      "total_spent": 69930.0,
+      "hire_rate": 0.93,
+      "avg_rating": 4.7,
+      "jobs_posted": 98,
+      "review_count": 69
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Snowflake",
+        "ClickHouse"
+      ],
+      "budget_ceiling": 11399.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": false,
+      "min_specificity": 0.74
+    }
+  },
+  {
+    "public": {
+      "id": "client_287",
+      "company": "Apex Cloud 287",
+      "industry": "EdTech",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 9649.0,
+      "hire_rate": 0.67,
+      "avg_rating": 4.6,
+      "jobs_posted": 99,
+      "review_count": 49
+    },
+    "hidden": {
+      "must_have_skills": [
+        "BigQuery",
+        "Python",
+        "Pandas"
+      ],
+      "budget_ceiling": 3747.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.83
+    }
+  },
+  {
+    "public": {
+      "id": "client_288",
+      "company": "Nexus Cloud 288",
+      "industry": "BioTech",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 179064.0,
+      "hire_rate": 0.9,
+      "avg_rating": 4.7,
+      "jobs_posted": 138,
+      "review_count": 96
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Snowflake",
+        "Power BI",
+        "PyTorch"
+      ],
+      "budget_ceiling": 5638.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.68
+    }
+  },
+  {
+    "public": {
+      "id": "client_289",
+      "company": "Veritas Cloud 289",
+      "industry": "Hospitality",
+      "country": "Netherlands",
+      "payment_verified": true,
+      "total_spent": 8122.0,
+      "hire_rate": 0.84,
+      "avg_rating": 4.7,
+      "jobs_posted": 10,
+      "review_count": 6
+    },
+    "hidden": {
+      "must_have_skills": [
+        "LangChain",
+        "Power BI",
+        "React"
+      ],
+      "budget_ceiling": 5452.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_290",
+      "company": "Quantum Cloud 290",
+      "industry": "CyberSec",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 7522.0,
+      "hire_rate": 0.77,
+      "avg_rating": 4.6,
+      "jobs_posted": 103,
+      "review_count": 63
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Stripe API",
+        "TypeScript",
+        "Docker",
+        "ClickHouse"
+      ],
+      "budget_ceiling": 8563.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.55
+    }
+  },
+  {
+    "public": {
+      "id": "client_291",
+      "company": "Stratum Cloud 291",
+      "industry": "Manufacturing",
+      "country": "Germany",
+      "payment_verified": true,
+      "total_spent": 9514.0,
+      "hire_rate": 0.88,
+      "avg_rating": 4.9,
+      "jobs_posted": 129,
+      "review_count": 102
+    },
+    "hidden": {
+      "must_have_skills": [
+        "dbt",
+        "Power BI",
+        "ClickHouse",
+        "Node.js"
+      ],
+      "budget_ceiling": 4893.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.81
+    }
+  },
+  {
+    "public": {
+      "id": "client_292",
+      "company": "Vanguard Cloud 292",
+      "industry": "Media",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 47213.0,
+      "hire_rate": 0.63,
+      "avg_rating": 4.6,
+      "jobs_posted": 63,
+      "review_count": 36
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Tailwind CSS",
+        "Power BI",
+        "React"
+      ],
+      "budget_ceiling": 9807.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.76
+    }
+  },
+  {
+    "public": {
+      "id": "client_293",
+      "company": "Pinnacle Cloud 293",
+      "industry": "CleanTech",
+      "country": "United States",
+      "payment_verified": true,
+      "total_spent": 102155.0,
+      "hire_rate": 0.8,
+      "avg_rating": 4.8,
+      "jobs_posted": 52,
+      "review_count": 39
+    },
+    "hidden": {
+      "must_have_skills": [
+        "SQL",
+        "FastAPI",
+        "PostgreSQL",
+        "BigQuery"
+      ],
+      "budget_ceiling": 6663.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.67
+    }
+  },
+  {
+    "public": {
+      "id": "client_294",
+      "company": "Helios Cloud 294",
+      "industry": "Retail",
+      "country": "France",
+      "payment_verified": true,
+      "total_spent": 20982.0,
+      "hire_rate": 0.75,
+      "avg_rating": 4.8,
+      "jobs_posted": 111,
+      "review_count": 76
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Next.js",
+        "Kafka",
+        "React",
+        "BigQuery"
+      ],
+      "budget_ceiling": 3168.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.61
+    }
+  },
+  {
+    "public": {
+      "id": "client_295",
+      "company": "Aura Cloud 295",
+      "industry": "PropTech",
+      "country": "Australia",
+      "payment_verified": true,
+      "total_spent": 246056.0,
+      "hire_rate": 0.78,
+      "avg_rating": 4.7,
+      "jobs_posted": 50,
+      "review_count": 29
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "ClickHouse",
+        "FastAPI",
+        "Transformers"
+      ],
+      "budget_ceiling": 2378.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.59
+    }
+  },
+  {
+    "public": {
+      "id": "client_296",
+      "company": "Nova Cloud 296",
+      "industry": "Logistics",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 3022.0,
+      "hire_rate": 0.61,
+      "avg_rating": 4.7,
+      "jobs_posted": 29,
+      "review_count": 13
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "ClickHouse",
+        "Next.js"
+      ],
+      "budget_ceiling": 12126.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.81
+    }
+  },
+  {
+    "public": {
+      "id": "client_297",
+      "company": "Cipher Cloud 297",
+      "industry": "Telecom",
+      "country": "Ireland",
+      "payment_verified": true,
+      "total_spent": 6815.0,
+      "hire_rate": 0.83,
+      "avg_rating": 4.9,
+      "jobs_posted": 91,
+      "review_count": 69
+    },
+    "hidden": {
+      "must_have_skills": [
+        "pgvector",
+        "Kafka",
+        "Power BI"
+      ],
+      "budget_ceiling": 9654.0,
+      "dislikes_generic_openers": false,
+      "likes_metrics": true,
+      "min_specificity": 0.6
+    }
+  },
+  {
+    "public": {
+      "id": "client_298",
+      "company": "Synapse Cloud 298",
+      "industry": "Logistics",
+      "country": "Sweden",
+      "payment_verified": true,
+      "total_spent": 164026.0,
+      "hire_rate": 0.82,
+      "avg_rating": 4.8,
+      "jobs_posted": 96,
+      "review_count": 65
+    },
+    "hidden": {
+      "must_have_skills": [
+        "pgvector",
+        "Next.js",
+        "Python"
+      ],
+      "budget_ceiling": 5721.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.63
+    }
+  },
+  {
+    "public": {
+      "id": "client_299",
+      "company": "Pulse Cloud 299",
+      "industry": "FinTech",
+      "country": "Switzerland",
+      "payment_verified": true,
+      "total_spent": 18932.0,
+      "hire_rate": 0.76,
+      "avg_rating": 4.5,
+      "jobs_posted": 133,
+      "review_count": 95
+    },
+    "hidden": {
+      "must_have_skills": [
+        "TypeScript",
+        "Python",
+        "Power BI",
+        "Tailwind CSS"
+      ],
+      "budget_ceiling": 9816.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.78
+    }
+  },
+  {
+    "public": {
+      "id": "client_300",
+      "company": "Orion Cloud 300",
+      "industry": "EdTech",
+      "country": "Singapore",
+      "payment_verified": true,
+      "total_spent": 6080.0,
+      "hire_rate": 0.85,
+      "avg_rating": 4.8,
+      "jobs_posted": 104,
+      "review_count": 67
+    },
+    "hidden": {
+      "must_have_skills": [
+        "Kafka",
+        "Stripe API",
+        "React",
+        "Next.js"
+      ],
+      "budget_ceiling": 3297.0,
+      "dislikes_generic_openers": true,
+      "likes_metrics": true,
+      "min_specificity": 0.77
+    }
+  }
+]

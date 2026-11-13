@@ -26,6 +26,7 @@ evals/datasets/*test_set*
 # local model + db volumes
 .ollama/
 pgdata/
+gigsim/state/
 # editor / OS
 .DS_Store
 .idea/
