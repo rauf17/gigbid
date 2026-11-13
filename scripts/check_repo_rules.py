@@ -10,7 +10,7 @@ import hashlib
 import re
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parent.parent
 fails: list[str] = []
@@ -43,7 +43,10 @@ for f in files:
 lock = ROOT / "gigsim" / ".lock.sha256"
 def gigsim_hash() -> str:
     h = hashlib.sha256()
-    for p in sorted((ROOT / "gigsim").rglob("*")):
+    for p in sorted(
+        (ROOT / "gigsim").rglob("*"),
+        key=lambda p: PurePosixPath(p.relative_to(ROOT).as_posix()),
+    ):
         if (
             p.is_file()
             and p.name not in {".lock.sha256", ".gitkeep"}

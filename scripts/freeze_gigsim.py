@@ -6,7 +6,7 @@ DO NOT RUN AUTOMATICALLY during development - run only after manual review of Ph
 from __future__ import annotations
 
 import hashlib
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -14,7 +14,10 @@ ROOT = Path(__file__).resolve().parent.parent
 def gigsim_hash() -> str:
     """Computes SHA-256 over all non-ignored files under gigsim/."""
     h = hashlib.sha256()
-    for p in sorted((ROOT / "gigsim").rglob("*")):
+    for p in sorted(
+        (ROOT / "gigsim").rglob("*"),
+        key=lambda p: PurePosixPath(p.relative_to(ROOT).as_posix()),
+    ):
         if (
             p.is_file()
             and p.name not in {".lock.sha256", ".gitkeep"}
