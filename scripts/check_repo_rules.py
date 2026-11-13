@@ -44,7 +44,12 @@ lock = ROOT / "gigsim" / ".lock.sha256"
 def gigsim_hash() -> str:
     h = hashlib.sha256()
     for p in sorted((ROOT / "gigsim").rglob("*")):
-        if p.is_file() and p.name not in {".lock.sha256", ".gitkeep"} and "__pycache__" not in p.parts:
+        if (
+            p.is_file()
+            and p.name not in {".lock.sha256", ".gitkeep"}
+            and "__pycache__" not in p.parts
+            and "state" not in p.parts
+        ):
             h.update(p.relative_to(ROOT).as_posix().encode()); h.update(p.read_bytes())
     return h.hexdigest()
 if lock.exists():
