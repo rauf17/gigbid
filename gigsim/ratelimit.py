@@ -83,24 +83,29 @@ class GigSimMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         # 3. Rate Limiting (Sliding Window: 60 seconds)
-        client_key = request.headers.get("Authorization", request.client.host if request.client else "default")
-        now = time.time()
-        window_start = now - 60.0
+        enforce_rate_limit = (
+            os.environ.get("GIGSIM_TESTING") != "1"
+            or os.environ.get("GIGSIM_TEST_RATE_LIMIT") == "1"
+        )
+        if enforce_rate_limit:
+            client_key = request.headers.get("Authorization", request.client.host if request.client else "default")
+            now = time.time()
+            window_start = now - 60.0
 
-        timestamps = self.request_timestamps.setdefault(client_key, [])
-        # Prune old timestamps
-        self.request_timestamps[client_key] = [t for t in timestamps if t > window_start]
+            timestamps = self.request_timestamps.setdefault(client_key, [])
+            # Prune old timestamps
+            self.request_timestamps[client_key] = [t for t in timestamps if t > window_start]
 
-        if len(self.request_timestamps[client_key]) >= self.rate_limit_per_minute:
-            oldest = self.request_timestamps[client_key][0]
-            retry_after = max(1, int(oldest + 60.0 - now))
-            return JSONResponse(
-                status_code=429,
-                content={"detail": f"Rate limit exceeded ({self.rate_limit_per_minute} req/min). Try again later."},
-                headers={"Retry-After": str(retry_after)},
-            )
+            if len(self.request_timestamps[client_key]) >= self.rate_limit_per_minute:
+                oldest = self.request_timestamps[client_key][0]
+                retry_after = max(1, int(oldest + 60.0 - now))
+                return JSONResponse(
+                    status_code=429,
+                    content={"detail": f"Rate limit exceeded ({self.rate_limit_per_minute} req/min). Try again later."},
+                    headers={"Retry-After": str(retry_after)},
+                )
 
-        self.request_timestamps[client_key].append(now)
+            self.request_timestamps[client_key].append(now)
 
         # 4. Simulated Transient Fault Injection (Default 3% 500 error, disabled in test mode)
         fault_rate = self.fault_injection_rate
