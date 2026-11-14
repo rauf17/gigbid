@@ -190,6 +190,15 @@ budgets:
 thresholds:
   minimum_fit_score: 0.60
   maximum_risk_score: 0.70
+  worth_connects_min_ev_ratio: 2.0
+  connects_cost_usd: 0.15
+
+pricing:
+  connects_value_usd: 0.15
+  min_ev_ratio: 2.0
+  target_margin: 0.15
+  hourly_band_spread: 0.15
+  fixed_band_spread: 0.10
 
 policy:                   # rules in config, not code (change-request readiness)
   version: 1
