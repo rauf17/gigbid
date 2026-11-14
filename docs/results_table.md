@@ -10,18 +10,18 @@ This document records official benchmark evaluation results for the GigBid auton
 
 ### Overall Retrieval Performance
 
-| Variant | Recall@5 | R@5 Ceiling | MRR | nDCG@10 | p95 Lat (ms) | Tokens | USD | Queries | Embedder | Dataset SHA | Commit |
-|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---|:---:|:---:|
-| `random` | **0.1349** | 0.6806 | **0.3850** | **0.2454** | 0.0 | 0 | $0.0000 | 511 | `none` | `b731a25c` | `7f1868e` |
-| `bm25_text` | **0.2760** | 0.6806 | **0.6229** | **0.4720** | 20.4 | 0 | $0.0000 | 511 | `none` | `b731a25c` | `d6e46c2` |
-| `skill_tag_lookup_REFERENCE`* | **0.4017** | 0.6806 | **0.5680** | **0.5404** | 2.1 | 0 | $0.0000 | 511 | `none` | `b731a25c` | `d6e46c2` |
-| `v0_naive` | **0.2867** | 0.6806 | **0.7417** | **0.4617** | 88.9 | 0 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `7d8f600` |
-| `v1_decompose` | **0.2276** | 0.6806 | **0.6660** | **0.4014** | 1671.9 | 363,928 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `7d8f600` |
-| `v2_hybrid` | **0.3121** | 0.6806 | **0.7363** | **0.4870** | 296.7 | 0 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `d6e46c2` |
-| `v3_rerank` | **0.3308** | 0.6806 | **0.7397** | **0.4878** | 2982.4 | 0 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `7d8f600` |
-| `v4_outcome` | **0.3298** | 0.6806 | **0.7396** | **0.4880** | 133.2 | 0 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `7d8f600` |
-| `oracle` | **0.5564** | 0.6806 | **1.0000** | **0.8520** | 0.0 | 0 | $0.0000 | 511 | `bm25` | `b731a25c` | `7f1868e` |
-| `v0_naive_unfiltered` | **0.0519** | 0.6806 | **0.1904** | **0.0845** | 0.0 | 0 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `7f1868e` |
+| Variant | Mode | Recall@5 | R@5 Ceiling | MRR | nDCG@10 | p95 Lat (ms) | Tokens | USD | Queries | Embedder | Dataset SHA | Commit |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---|:---:|:---:|
+| `random` | `deterministic` | **0.1349** | 0.6806 | **0.3850** | **0.2454** | 0.0 | 0 | $0.0000 | 511 | `none` | `b731a25c` | `7f1868e` |
+| `bm25_text` | `deterministic` | **0.2760** | 0.6806 | **0.6229** | **0.4720** | 20.4 | 0 | $0.0000 | 511 | `none` | `b731a25c` | `d6e46c2` |
+| `skill_tag_lookup_REFERENCE`* | `deterministic` | **0.4017** | 0.6806 | **0.5680** | **0.5404** | 2.1 | 0 | $0.0000 | 511 | `none` | `b731a25c` | `d6e46c2` |
+| `v0_naive` | `deterministic` | **0.2867** | 0.6806 | **0.7417** | **0.4617** | 88.9 | 0 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `7d8f600` |
+| `v1_decompose` | `real` | **0.2276** | 0.6806 | **0.6660** | **0.4014** | 1671.9 | 363,928 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `7d8f600` |
+| `v2_hybrid` | `deterministic` | **0.3121** | 0.6806 | **0.7363** | **0.4870** | 296.7 | 0 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `d6e46c2` |
+| `v3_rerank` | `deterministic` | **0.3308** | 0.6806 | **0.7397** | **0.4878** | 2982.4 | 0 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `7d8f600` |
+| `v4_outcome` | `deterministic` | **0.3298** | 0.6806 | **0.7396** | **0.4880** | 133.2 | 0 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `7d8f600` |
+| `oracle` | `deterministic` | **0.5564** | 0.6806 | **1.0000** | **0.8520** | 0.0 | 0 | $0.0000 | 511 | `bm25` | `b731a25c` | `7f1868e` |
+| `v0_naive_unfiltered` | `deterministic` | **0.0519** | 0.6806 | **0.1904** | **0.0845** | 0.0 | 0 | $0.0000 | 511 | `bge-small-en-v1.5` | `b731a25c` | `7f1868e` |
 
 > [!NOTE]
 > `* skill_tag_lookup_REFERENCE`: queries the skills field the gold labels were derived from; leaks the answer key; reference only (excluded from ranking and ablation).
@@ -102,56 +102,75 @@ This document records official benchmark evaluation results for the GigBid auton
 
 ---
 
-### Agent Decision Pipeline Performance (Smoke)
+### Agent Benchmarks Summary
+
+| Benchmark | Mode | Primary Metric | Primary Value | p95 Lat (ms) | Real LLM Calls | Models Used |
+|:---|:---:|:---|:---:|:---:|:---|:---|
+| Decision Pipeline | `real` | Bid/Skip F1 | **0.7500** | 1698.6 | `0` | `analyst:openai/gpt-oss-20b, risk_assessor:openai/gpt-oss-20b, fit_matcher:openai/gpt-oss-20b, pricing:deterministic_heuristics, decision:pure_function` |
+| Proposal Verification (R5) | `real` | Post-Verify Unsupported Rate | **0.0000** | 1411.7 | `0` | `analyst:openai/gpt-oss-20b, fit_matcher:openai/gpt-oss-20b, writer:openai/gpt-oss-120b, verifier:openai/gpt-oss-120b, critic:openai/gpt-oss-120b, compliance:deterministic_heuristics` |
+| Injection Defense (R9) | `real` | Defense Effectiveness Rate | **0.7778** | 2722.5 | `0` | `risk_assessor:openai/gpt-oss-20b` |
+
+---
+
+### Agent Decision Pipeline Performance
 
 | Metric | Value |
 |:---|:---:|
-| Jobs Evaluated | 30 |
-| **Bid/Skip F1 Score** | **0.0000** |
-| Bid/Skip Precision | 0.0000 |
-| Bid/Skip Recall | 0.0000 |
-| Bid/Skip Accuracy | 0.3667 |
+| **LLM Mode** | **`real`** |
+| Jobs Evaluated | 60 |
+| **Bid/Skip F1 Score** | **0.7500** |
+| Bid/Skip Precision | 0.6000 |
+| Bid/Skip Recall | 1.0000 |
+| Bid/Skip Accuracy | 0.6000 |
 | Scam Detection Precision | 0.0000 |
 | Scam Detection Recall | 0.0000 |
 | **Injection Detection Rate** | **1.0000** |
 | Price-in-Band Rate | 0.9000 |
-| Latency p95 (ms) | 1238.4 |
-| Total Tokens | 32,534 |
+| Latency p95 (ms) | 1698.6 |
+| Total Tokens | 0 |
 | Total Cost (USD) | $0.0000 |
-| Dataset SHA / Commit | `b731a25c` / `57e2695` |
+| Non-Cache LLM Calls | `0` |
+| Models Used | `analyst:openai/gpt-oss-20b, risk_assessor:openai/gpt-oss-20b, fit_matcher:openai/gpt-oss-20b, pricing:deterministic_heuristics, decision:pure_function` |
+| Dataset SHA / Commit | `b731a25c` / `d42e2ba` |
 
 ---
 
-### Proposal Claim Verification & Quality (R5) (Smoke)
+### Proposal Claim Verification & Quality (R5)
 
 | Metric | Value |
 |:---|:---:|
+| **LLM Mode** | **`real`** |
 | Proposals Evaluated | 15 |
 | Avg Claims per Proposal | 1.00 |
-| Unsupported Claims Before Verification | 15 |
+| Unsupported Claims Before Verification | 0 |
 | Unsupported Claims After Verification | 0 |
-| Unsupported Rate Before Verification | 1.0000 |
+| Unsupported Rate Before Verification | 0.0000 |
 | **Unsupported Rate After Verification** | **0.0000** |
-| **Unsupported Rate Reduction (R5 Delta)** | **1.0000** |
-| Critic Grounding Score (Mean) | 0.9000 |
-| Critic Personalization Score (Mean) | 0.8500 |
+| **Unsupported Rate Reduction (R5 Delta)** | **0.0000** |
+| Critic Grounding Score (Mean) | 0.8500 |
+| Critic Personalization Score (Mean) | 0.8000 |
 | Critic Accept Rate | 0.0000 |
-| Compliance Clean Rate | 0.0000 |
-| Total Compliance Violations Caught | 15 |
-| Latency p95 (ms) | 1431.7 |
-| Dataset SHA / Commit | `b731a25c` / `57e2695` |
+| Compliance Clean Rate | 1.0000 |
+| Total Compliance Violations Caught | 0 |
+| Latency p95 (ms) | 1411.7 |
+| Non-Cache LLM Calls | `0` |
+| Models Used | `analyst:openai/gpt-oss-20b, fit_matcher:openai/gpt-oss-20b, writer:openai/gpt-oss-120b, verifier:openai/gpt-oss-120b, critic:openai/gpt-oss-120b, compliance:deterministic_heuristics` |
+| Dataset SHA / Commit | `b731a25c` / `d42e2ba` |
 
 ---
 
-### Adversarial Prompt Injection Defense (R9) (Smoke)
+### Adversarial Prompt Injection Defense (R9)
 
 | Metric | Value |
 |:---|:---:|
+| **LLM Mode** | **`real`** |
 | Total Adversarial Jobs Tested | 10 |
 | **Attack Success Rate (Without Defenses)** | **0.9000** |
-| **Attack Success Rate (With Defenses)** | **0.0000** |
-| **ASR Absolute Reduction** | **0.9000** |
-| **Defense Effectiveness Rate** | **1.0000** |
-| Injection Flagging Rate | 1.0000 |
-| Latency p95 (ms) | 286.6 |
-| Dataset SHA / Commit | `b731a25c` / `57e2695` |
+| **Attack Success Rate (With Defenses)** | **0.2000** |
+| **ASR Absolute Reduction** | **0.7000** |
+| **Defense Effectiveness Rate** | **0.7778** |
+| Injection Flagging Rate | 0.8000 |
+| Latency p95 (ms) | 2722.5 |
+| Non-Cache LLM Calls | `0` |
+| Models Used | `risk_assessor:openai/gpt-oss-20b` |
+| Dataset SHA / Commit | `b731a25c` / `d42e2ba` |

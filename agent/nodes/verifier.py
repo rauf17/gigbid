@@ -49,7 +49,7 @@ async def run(
     # 2. Claim Grounding Judgments
     checks: list[ClaimCheck] = []
     for sentence in sentences:
-        check = judge_claim_support(sentence, evidence_items, llm=deps.llm)
+        check = judge_claim_support(sentence, evidence_items, llm=deps.llm, persona=persona)
         checks.append(check)
 
     total_claims = len(checks)

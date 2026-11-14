@@ -188,8 +188,9 @@ async def evaluate_proposal_pipeline(
             if gold.get("bid_or_skip") == "bid" and not gold.get("is_scam", False):
                 eligible_jobs.append((row["job"], gold))
 
-        if limit and limit > 0:
-            eligible_jobs = eligible_jobs[:limit]
+        per_persona_limit = max(1, limit // len(personas)) if (limit and len(personas) > 0) else limit
+        if per_persona_limit and per_persona_limit > 0:
+            eligible_jobs = eligible_jobs[:per_persona_limit]
 
         print(f"[proposal_eval] Evaluating {len(eligible_jobs)} bid jobs for persona '{persona}' (smoke={smoke})...")
 
@@ -352,15 +353,45 @@ def compute_proposal_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
     return {"overall": overall, "by_persona": by_persona}
 
 
+def get_run_llm_accounting(
+    start_ts: str,
+    call_log_path: Path = DEFAULT_CALL_LOG_PATH,
+) -> tuple[dict[str, str], dict[str, int]]:
+    """Extracts actual models used and real (non-cache) LLM call counts per node since start_ts."""
+    actual_models: dict[str, str] = {}
+    real_calls: dict[str, int] = {}
+    if not call_log_path.exists():
+        return actual_models, real_calls
+
+    try:
+        with call_log_path.open("r", encoding="utf-8", errors="ignore") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                try:
+                    rec = json.loads(line)
+                    if rec.get("ts", "") >= start_ts:
+                        node = rec.get("node", "unknown")
+                        actual_models[node] = rec.get("model", "unknown")
+                        if not rec.get("cache_hit", False):
+                            real_calls[node] = real_calls.get(node, 0) + 1
+                except (json.JSONDecodeError, KeyError, ValueError):
+                    continue
+    except OSError:
+        pass
+    return actual_models, real_calls
+
+
 def run_proposal_eval(
-    limit: int | None = 20,
+    limit: int | None = 15,
     personas: list[str] | None = None,
     data_dir: Path = DEFAULT_DATA_DIR,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     smoke: bool = False,
 ) -> dict[str, Any]:
     target_personas = personas or DEFAULT_PERSONAS
-    effective_limit = 5 if smoke and (limit is None or limit > 5) else limit
+    effective_limit = 15 if (limit is None) else limit
+    run_start_ts = datetime.now(UTC).isoformat()
 
     results, evaluated_paths = asyncio.run(
         evaluate_proposal_pipeline(
@@ -377,22 +408,38 @@ def run_proposal_eval(
 
     cfg = load_config()
     profile = cfg.get("profiles", {}).get(cfg.get("active_profile", "open"), {})
-    active_models = profile.get("models", {})
+    nodes_cfg = profile.get("nodes", {})
+    actual_models, real_calls = get_run_llm_accounting(run_start_ts)
+
+    llm_mode = "fake" if smoke else "real"
+    if smoke:
+        models_used = {
+            "analyst": "FakeProposalChatModel",
+            "fit_matcher": "FakeProposalChatModel",
+            "writer": "FakeProposalChatModel",
+            "verifier": "FakeProposalChatModel",
+            "critic": "FakeProposalChatModel",
+            "compliance": "deterministic_heuristics",
+        }
+    else:
+        models_used = {
+            "analyst": actual_models.get("analyst") or nodes_cfg.get("analyst", {}).get("model", "unknown"),
+            "fit_matcher": actual_models.get("fit_matcher") or nodes_cfg.get("fit_matcher", {}).get("model", "unknown"),
+            "writer": actual_models.get("writer") or nodes_cfg.get("writer", {}).get("model", "unknown"),
+            "verifier": actual_models.get("verifier") or nodes_cfg.get("verifier", {}).get("model", "unknown"),
+            "critic": actual_models.get("critic") or nodes_cfg.get("critic", {}).get("model", "unknown"),
+            "compliance": "deterministic_heuristics",
+        }
 
     output_payload = {
         "benchmark": "proposal_eval",
         "timestamp": datetime.now(UTC).isoformat(),
         "git_commit": commit_sha,
         "dataset_hash": ds_hash,
+        "llm_mode": llm_mode,
         "smoke": smoke,
-        "models_used": {
-            "analyst": active_models.get("analyst", "configured_model"),
-            "fit_matcher": active_models.get("fit_matcher", "configured_model"),
-            "writer": active_models.get("writer", "configured_model"),
-            "verifier": active_models.get("verifier", "configured_model"),
-            "critic": active_models.get("critic", "configured_model"),
-            "compliance": "deterministic_heuristics",
-        },
+        "models_used": models_used,
+        "real_llm_calls_count": real_calls,
         **results,
     }
 
@@ -401,9 +448,14 @@ def run_proposal_eval(
     latest_file = output_dir / "proposal_eval_latest.json"
 
     ts_file.write_text(json.dumps(output_payload, indent=2), encoding="utf-8")
-    latest_file.write_text(json.dumps(output_payload, indent=2), encoding="utf-8")
+    if llm_mode == "fake" and not smoke:
+        print(f"\n[proposal_eval] Refusing to update {latest_file} in fake mode without --smoke.")
+    else:
+        latest_file.write_text(json.dumps(output_payload, indent=2), encoding="utf-8")
 
-    print(f"\n[proposal_eval] Results written to:\n  {ts_file}\n  {latest_file}")
+    print(f"\n[proposal_eval] Results written to:\n  {ts_file}")
+    if llm_mode != "fake" or smoke:
+        print(f"  {latest_file}")
     o = results.get("overall", {})
     print(
         f"\nSummary Proposal Verification Metrics:\n"
@@ -420,7 +472,7 @@ def run_proposal_eval(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate proposal generation and claim verification pipeline.")
-    parser.add_argument("--limit", type=int, default=20, help="Max bid jobs per persona (default: 20).")
+    parser.add_argument("--limit", type=int, default=15, help="Total bid jobs across personas (default: 15).")
     parser.add_argument("--personas", nargs="+", default=DEFAULT_PERSONAS, help="Personas to evaluate.")
     parser.add_argument("--smoke", action="store_true", help="Fast offline smoke mode (< 5s).")
     args = parser.parse_args()

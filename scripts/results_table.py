@@ -43,12 +43,17 @@ def format_decision_table(data: dict[str, Any] | None) -> str:
     commit = str(data.get("git_commit", "unknown"))[:7]
     d_hash = str(data.get("dataset_hash", "unknown"))[:8]
     smoke_tag = " (Smoke)" if data.get("smoke") else ""
+    mode = data.get("llm_mode", "fake" if data.get("smoke") else "real")
+    models = ", ".join(f"{k}:{v}" for k, v in data.get("models_used", {}).items())
+    real_calls = data.get("real_llm_calls_count", {})
+    calls_str = ", ".join(f"{k}:{v}" for k, v in real_calls.items()) if real_calls else "0"
 
     lines = [
         f"### Agent Decision Pipeline Performance{smoke_tag}",
         "",
         "| Metric | Value |",
         "|:---|:---:|",
+        f"| **LLM Mode** | **`{mode}`** |",
         f"| Jobs Evaluated | {ov.get('count', 0)} |",
         f"| **Bid/Skip F1 Score** | **{ov.get('bid_or_skip_f1', 0.0):.4f}** |",
         f"| Bid/Skip Precision | {ov.get('bid_or_skip_precision', 0.0):.4f} |",
@@ -61,6 +66,8 @@ def format_decision_table(data: dict[str, Any] | None) -> str:
         f"| Latency p95 (ms) | {ov.get('latency_p95_ms', 0.0):.1f} |",
         f"| Total Tokens | {int(ov.get('total_tokens', 0)):,} |",
         f"| Total Cost (USD) | ${float(ov.get('total_cost_usd', 0.0)):.4f} |",
+        f"| Non-Cache LLM Calls | `{calls_str}` |",
+        f"| Models Used | `{models}` |",
         f"| Dataset SHA / Commit | `{d_hash}` / `{commit}` |",
         "",
     ]
@@ -75,12 +82,17 @@ def format_proposal_table(data: dict[str, Any] | None) -> str:
     commit = str(data.get("git_commit", "unknown"))[:7]
     d_hash = str(data.get("dataset_hash", "unknown"))[:8]
     smoke_tag = " (Smoke)" if data.get("smoke") else ""
+    mode = data.get("llm_mode", "fake" if data.get("smoke") else "real")
+    models = ", ".join(f"{k}:{v}" for k, v in data.get("models_used", {}).items())
+    real_calls = data.get("real_llm_calls_count", {})
+    calls_str = ", ".join(f"{k}:{v}" for k, v in real_calls.items()) if real_calls else "0"
 
     lines = [
         f"### Proposal Claim Verification & Quality (R5){smoke_tag}",
         "",
         "| Metric | Value |",
         "|:---|:---:|",
+        f"| **LLM Mode** | **`{mode}`** |",
         f"| Proposals Evaluated | {ov.get('proposals_evaluated', 0)} |",
         f"| Avg Claims per Proposal | {ov.get('avg_claims_per_proposal', 0.0):.2f} |",
         f"| Unsupported Claims Before Verification | {ov.get('unsupported_claims_before', 0)} |",
@@ -94,6 +106,8 @@ def format_proposal_table(data: dict[str, Any] | None) -> str:
         f"| Compliance Clean Rate | {ov.get('compliance_clean_rate', 0.0):.4f} |",
         f"| Total Compliance Violations Caught | {ov.get('compliance_total_violations', 0)} |",
         f"| Latency p95 (ms) | {ov.get('latency_p95_ms', 0.0):.1f} |",
+        f"| Non-Cache LLM Calls | `{calls_str}` |",
+        f"| Models Used | `{models}` |",
         f"| Dataset SHA / Commit | `{d_hash}` / `{commit}` |",
         "",
     ]
@@ -108,12 +122,17 @@ def format_injection_table(data: dict[str, Any] | None) -> str:
     commit = str(data.get("git_commit", "unknown"))[:7]
     d_hash = str(data.get("dataset_hash", "unknown"))[:8]
     smoke_tag = " (Smoke)" if data.get("smoke") else ""
+    mode = data.get("llm_mode", "fake" if data.get("smoke") else "real")
+    models = ", ".join(f"{k}:{v}" for k, v in data.get("models_used", {}).items())
+    real_calls = data.get("real_llm_calls_count", {})
+    calls_str = ", ".join(f"{k}:{v}" for k, v in real_calls.items()) if real_calls else "0"
 
     lines = [
         f"### Adversarial Prompt Injection Defense (R9){smoke_tag}",
         "",
         "| Metric | Value |",
         "|:---|:---:|",
+        f"| **LLM Mode** | **`{mode}`** |",
         f"| Total Adversarial Jobs Tested | {ov.get('total_adversarial_jobs', 0)} |",
         f"| **Attack Success Rate (Without Defenses)** | **{ov.get('asr_without_defenses', 0.0):.4f}** |",
         f"| **Attack Success Rate (With Defenses)** | **{ov.get('asr_with_defenses', 0.0):.4f}** |",
@@ -121,6 +140,8 @@ def format_injection_table(data: dict[str, Any] | None) -> str:
         f"| **Defense Effectiveness Rate** | **{ov.get('defense_effectiveness_rate', 0.0):.4f}** |",
         f"| Injection Flagging Rate | {ov.get('injection_detection_rate', 0.0):.4f} |",
         f"| Latency p95 (ms) | {ov.get('latency_p95_ms', 0.0):.1f} |",
+        f"| Non-Cache LLM Calls | `{calls_str}` |",
+        f"| Models Used | `{models}` |",
         f"| Dataset SHA / Commit | `{d_hash}` / `{commit}` |",
         "",
     ]
@@ -156,8 +177,8 @@ def format_overall_table(results: list[dict[str, Any]]) -> str:
     lines = [
         "### Overall Retrieval Performance",
         "",
-        "| Variant | Recall@5 | R@5 Ceiling | MRR | nDCG@10 | p95 Lat (ms) | Tokens | USD | Queries | Embedder | Dataset SHA | Commit |",
-        "|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---|:---:|:---:|",
+        "| Variant | Mode | Recall@5 | R@5 Ceiling | MRR | nDCG@10 | p95 Lat (ms) | Tokens | USD | Queries | Embedder | Dataset SHA | Commit |",
+        "|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---|:---:|:---:|",
     ]
     has_ref = False
     for r in results:
@@ -176,6 +197,7 @@ def format_overall_table(results: list[dict[str, Any]]) -> str:
             emb = emb.split("/")[-1]
         d_hash = str(r.get("dataset_hash", "unknown"))[:8]
         commit = str(r.get("git_commit", "unknown"))[:7]
+        mode = r.get("llm_mode", "fake" if r.get("smoke") else ("real" if var == "v1_decompose" else "deterministic"))
 
         is_ref = r.get("is_reference_only") or var in {"skill_tag_lookup_REFERENCE", "bm25_skills"}
         if is_ref:
@@ -185,7 +207,7 @@ def format_overall_table(results: list[dict[str, Any]]) -> str:
             label = f"`{var}`"
 
         lines.append(
-            f"| {label} | **{r5}** | {r5_ceil} | **{mrr}** | **{ndcg}** | "
+            f"| {label} | `{mode}` | **{r5}** | {r5_ceil} | **{mrr}** | **{ndcg}** | "
             f"{p95_lat} | {tokens} | {cost} | {count} | `{emb}` | `{d_hash}` | `{commit}` |"
         )
     lines.append("")
@@ -253,6 +275,46 @@ def format_n_req_table(results: list[dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
+def format_agent_benchmarks_summary(
+    decision_data: dict[str, Any] | None,
+    proposal_data: dict[str, Any] | None,
+    injection_data: dict[str, Any] | None,
+) -> str:
+    """Renders high-level summary of agent node benchmarks with Mode column."""
+    lines = [
+        "### Agent Benchmarks Summary",
+        "",
+        "| Benchmark | Mode | Primary Metric | Primary Value | p95 Lat (ms) | Real LLM Calls | Models Used |",
+        "|:---|:---:|:---|:---:|:---:|:---|:---|",
+    ]
+    if decision_data and "overall" in decision_data:
+        ov = decision_data["overall"]
+        mode = decision_data.get("llm_mode", "fake" if decision_data.get("smoke") else "real")
+        models = ", ".join(f"{k}:{v}" for k, v in decision_data.get("models_used", {}).items())
+        calls = decision_data.get("real_llm_calls_count", {})
+        calls_str = ", ".join(f"{k}:{v}" for k, v in calls.items()) if calls else "0"
+        lines.append(f"| Decision Pipeline | `{mode}` | Bid/Skip F1 | **{ov.get('bid_or_skip_f1', 0.0):.4f}** | {ov.get('latency_p95_ms', 0.0):.1f} | `{calls_str}` | `{models}` |")
+
+    if proposal_data and "overall" in proposal_data:
+        ov = proposal_data["overall"]
+        mode = proposal_data.get("llm_mode", "fake" if proposal_data.get("smoke") else "real")
+        models = ", ".join(f"{k}:{v}" for k, v in proposal_data.get("models_used", {}).items())
+        calls = proposal_data.get("real_llm_calls_count", {})
+        calls_str = ", ".join(f"{k}:{v}" for k, v in calls.items()) if calls else "0"
+        lines.append(f"| Proposal Verification (R5) | `{mode}` | Post-Verify Unsupported Rate | **{ov.get('unsupported_rate_after', 0.0):.4f}** | {ov.get('latency_p95_ms', 0.0):.1f} | `{calls_str}` | `{models}` |")
+
+    if injection_data and "overall" in injection_data:
+        ov = injection_data["overall"]
+        mode = injection_data.get("llm_mode", "fake" if injection_data.get("smoke") else "real")
+        models = ", ".join(f"{k}:{v}" for k, v in injection_data.get("models_used", {}).items())
+        calls = injection_data.get("real_llm_calls_count", {})
+        calls_str = ", ".join(f"{k}:{v}" for k, v in calls.items()) if calls else "0"
+        lines.append(f"| Injection Defense (R9) | `{mode}` | Defense Effectiveness Rate | **{ov.get('defense_effectiveness_rate', 0.0):.4f}** | {ov.get('latency_p95_ms', 0.0):.1f} | `{calls_str}` | `{models}` |")
+
+    lines.append("")
+    return "\n".join(lines)
+
+
 def generate_results_markdown(
     results: list[dict[str, Any]],
     decision_data: dict[str, Any] | None = None,
@@ -288,6 +350,11 @@ def generate_results_markdown(
         doc_lines.append("---")
         doc_lines.append("")
         doc_lines.append(format_n_req_table(results))
+
+    if decision_data or proposal_data or injection_data:
+        doc_lines.append("---")
+        doc_lines.append("")
+        doc_lines.append(format_agent_benchmarks_summary(decision_data, proposal_data, injection_data))
 
     if decision_data:
         doc_lines.append("---")

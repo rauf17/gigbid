@@ -317,6 +317,41 @@ async def test_verifier_removes_unsupported_claim(deps: NodeDeps) -> None:
     assert "NASA" in report.removed[0]
 
 
+@pytest.mark.asyncio
+async def test_verifier_deterministic_metric_mismatch() -> None:
+    from rag.verify import judge_claim_support
+
+    ev = [
+        EvidenceItem(
+            id="ai_ml_cs_cs_aiml_001",
+            type="case_study",
+            source="cs_aiml_001.md",
+            text="Sub-second retrieval latency on 4.5M pages with 91% factual accuracy",
+            score=0.9,
+        )
+    ]
+    check = judge_claim_support(
+        "I engineered a model with 98% accuracy [E:cs_aiml_001].",
+        ev,
+        persona="ai_ml",
+    )
+    assert check.status == "unsupported"
+    assert "98%" in check.rationale
+
+
+@pytest.mark.asyncio
+async def test_verifier_deterministic_nonexistent_id() -> None:
+    from rag.verify import judge_claim_support
+
+    check = judge_claim_support(
+        "I built a quantum system for NASA [E:cs_nonexistent_999].",
+        [],
+        persona="ai_ml",
+    )
+    assert check.status == "unsupported"
+    assert "does not exist" in check.rationale
+
+
 # -----------------------------------------------------------------------------
 # 8. Critic Node Tests
 # -----------------------------------------------------------------------------

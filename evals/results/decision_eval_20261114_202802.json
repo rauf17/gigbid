@@ -1,0 +1,82 @@
+{
+  "benchmark": "decision_eval",
+  "timestamp": "2026-11-14T20:28:02.571301+00:00",
+  "git_commit": "d42e2ba",
+  "dataset_hash": "b731a25c",
+  "llm_mode": "real",
+  "smoke": false,
+  "models_used": {
+    "analyst": "openai/gpt-oss-20b",
+    "risk_assessor": "openai/gpt-oss-20b",
+    "fit_matcher": "openai/gpt-oss-20b",
+    "pricing": "deterministic_heuristics",
+    "decision": "pure_function"
+  },
+  "real_llm_calls_count": {},
+  "overall": {
+    "count": 60,
+    "bid_or_skip_f1": 0.75,
+    "bid_or_skip_precision": 0.6,
+    "bid_or_skip_recall": 1.0,
+    "bid_or_skip_accuracy": 0.6,
+    "scam_precision": 0.0,
+    "scam_recall": 0.0,
+    "scam_f1": 0.0,
+    "injection_detection_rate": 1.0,
+    "price_in_band_rate": 0.9,
+    "latency_p50_ms": 549.15,
+    "latency_p95_ms": 1698.59,
+    "total_tokens": 0,
+    "total_cost_usd": 0.0
+  },
+  "by_persona": {
+    "ai_ml": {
+      "count": 20,
+      "bid_or_skip_f1": 0.6207,
+      "bid_or_skip_precision": 0.45,
+      "bid_or_skip_recall": 1.0,
+      "bid_or_skip_accuracy": 0.45,
+      "scam_precision": 0.0,
+      "scam_recall": 0.0,
+      "scam_f1": 0.0,
+      "injection_detection_rate": 1.0,
+      "price_in_band_rate": 1.0,
+      "latency_p50_ms": 461.1,
+      "latency_p95_ms": 955.08,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    },
+    "fullstack": {
+      "count": 20,
+      "bid_or_skip_f1": 0.7879,
+      "bid_or_skip_precision": 0.65,
+      "bid_or_skip_recall": 1.0,
+      "bid_or_skip_accuracy": 0.65,
+      "scam_precision": 0.0,
+      "scam_recall": 0.0,
+      "scam_f1": 0.0,
+      "injection_detection_rate": 1.0,
+      "price_in_band_rate": 1.0,
+      "latency_p50_ms": 467.61,
+      "latency_p95_ms": 1654.26,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    },
+    "data_analyst": {
+      "count": 20,
+      "bid_or_skip_f1": 0.8235,
+      "bid_or_skip_precision": 0.7,
+      "bid_or_skip_recall": 1.0,
+      "bid_or_skip_accuracy": 0.7,
+      "scam_precision": 0.0,
+      "scam_recall": 0.0,
+      "scam_f1": 0.0,
+      "injection_detection_rate": 1.0,
+      "price_in_band_rate": 0.7,
+      "latency_p50_ms": 825.51,
+      "latency_p95_ms": 2526.55,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    }
+  }
+}

@@ -339,6 +339,35 @@ def compute_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
     return {"overall": overall, "by_persona": by_persona}
 
 
+def get_run_llm_accounting(
+    start_ts: str,
+    call_log_path: Path = DEFAULT_CALL_LOG_PATH,
+) -> tuple[dict[str, str], dict[str, int]]:
+    """Extracts actual models used and real (non-cache) LLM call counts per node since start_ts."""
+    actual_models: dict[str, str] = {}
+    real_calls: dict[str, int] = {}
+    if not call_log_path.exists():
+        return actual_models, real_calls
+
+    try:
+        with call_log_path.open("r", encoding="utf-8", errors="ignore") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                try:
+                    rec = json.loads(line)
+                    if rec.get("ts", "") >= start_ts:
+                        node = rec.get("node", "unknown")
+                        actual_models[node] = rec.get("model", "unknown")
+                        if not rec.get("cache_hit", False):
+                            real_calls[node] = real_calls.get(node, 0) + 1
+                except (json.JSONDecodeError, KeyError, ValueError):
+                    continue
+    except OSError:
+        pass
+    return actual_models, real_calls
+
+
 def run_decision_eval(
     limit: int | None = 60,
     personas: list[str] | None = None,
@@ -348,6 +377,7 @@ def run_decision_eval(
 ) -> dict[str, Any]:
     target_personas = personas or DEFAULT_PERSONAS
     effective_limit = 10 if smoke and (limit is None or limit > 10) else limit
+    run_start_ts = datetime.now(UTC).isoformat()
 
     results, evaluated_paths = asyncio.run(
         evaluate_decision_nodes(
@@ -364,21 +394,36 @@ def run_decision_eval(
 
     cfg = load_config()
     profile = cfg.get("profiles", {}).get(cfg.get("active_profile", "open"), {})
-    active_models = profile.get("models", {})
+    nodes_cfg = profile.get("nodes", {})
+    actual_models, real_calls = get_run_llm_accounting(run_start_ts)
+
+    llm_mode = "fake" if smoke else "real"
+    if smoke:
+        models_used = {
+            "analyst": "FakeNodeChatModel",
+            "risk_assessor": "FakeNodeChatModel",
+            "fit_matcher": "FakeNodeChatModel",
+            "pricing": "deterministic_heuristics",
+            "decision": "pure_function",
+        }
+    else:
+        models_used = {
+            "analyst": actual_models.get("analyst") or nodes_cfg.get("analyst", {}).get("model", "unknown"),
+            "risk_assessor": actual_models.get("risk_assessor") or nodes_cfg.get("risk_assessor", {}).get("model", "unknown"),
+            "fit_matcher": actual_models.get("fit_matcher") or nodes_cfg.get("fit_matcher", {}).get("model", "unknown"),
+            "pricing": "deterministic_heuristics",
+            "decision": "pure_function",
+        }
 
     output_payload = {
         "benchmark": "decision_eval",
         "timestamp": datetime.now(UTC).isoformat(),
         "git_commit": commit_sha,
         "dataset_hash": ds_hash,
+        "llm_mode": llm_mode,
         "smoke": smoke,
-        "models_used": {
-            "analyst": active_models.get("analyst", "configured_model"),
-            "risk_assessor": active_models.get("risk_assessor", "configured_model"),
-            "fit_matcher": active_models.get("fit_matcher", "configured_model"),
-            "pricing": "deterministic_heuristics",
-            "decision": "pure_function",
-        },
+        "models_used": models_used,
+        "real_llm_calls_count": real_calls,
         **results,
     }
 
@@ -387,9 +432,14 @@ def run_decision_eval(
     latest_file = output_dir / "decision_eval_latest.json"
 
     ts_file.write_text(json.dumps(output_payload, indent=2), encoding="utf-8")
-    latest_file.write_text(json.dumps(output_payload, indent=2), encoding="utf-8")
+    if llm_mode == "fake" and not smoke:
+        print(f"\n[decision_eval] Refusing to update {latest_file} in fake mode without --smoke.")
+    else:
+        latest_file.write_text(json.dumps(output_payload, indent=2), encoding="utf-8")
 
-    print(f"\n[decision_eval] Results written to:\n  {ts_file}\n  {latest_file}")
+    print(f"\n[decision_eval] Results written to:\n  {ts_file}")
+    if llm_mode != "fake" or smoke:
+        print(f"  {latest_file}")
     o = results.get("overall", {})
     print(
         f"\nSummary Metrics:\n"

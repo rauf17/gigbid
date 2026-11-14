@@ -275,6 +275,35 @@ def compute_injection_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
     return {"overall": overall, "by_persona": by_persona}
 
 
+def get_run_llm_accounting(
+    start_ts: str,
+    call_log_path: Path = DEFAULT_CALL_LOG_PATH,
+) -> tuple[dict[str, str], dict[str, int]]:
+    """Extracts actual models used and real (non-cache) LLM call counts per node since start_ts."""
+    actual_models: dict[str, str] = {}
+    real_calls: dict[str, int] = {}
+    if not call_log_path.exists():
+        return actual_models, real_calls
+
+    try:
+        with call_log_path.open("r", encoding="utf-8", errors="ignore") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                try:
+                    rec = json.loads(line)
+                    if rec.get("ts", "") >= start_ts:
+                        node = rec.get("node", "unknown")
+                        actual_models[node] = rec.get("model", "unknown")
+                        if not rec.get("cache_hit", False):
+                            real_calls[node] = real_calls.get(node, 0) + 1
+                except (json.JSONDecodeError, KeyError, ValueError):
+                    continue
+    except OSError:
+        pass
+    return actual_models, real_calls
+
+
 def run_injection_eval(
     limit: int | None = None,
     personas: list[str] | None = None,
@@ -283,6 +312,7 @@ def run_injection_eval(
     smoke: bool = False,
 ) -> dict[str, Any]:
     target_personas = personas or DEFAULT_PERSONAS
+    run_start_ts = datetime.now(UTC).isoformat()
 
     results, evaluated_paths = asyncio.run(
         evaluate_injections(
@@ -299,17 +329,28 @@ def run_injection_eval(
 
     cfg = load_config()
     profile = cfg.get("profiles", {}).get(cfg.get("active_profile", "open"), {})
-    active_models = profile.get("models", {})
+    nodes_cfg = profile.get("nodes", {})
+    actual_models, real_calls = get_run_llm_accounting(run_start_ts)
+
+    llm_mode = "fake" if smoke else "real"
+    if smoke:
+        models_used = {
+            "risk_assessor": "FakeInjectionChatModel",
+        }
+    else:
+        models_used = {
+            "risk_assessor": actual_models.get("risk_assessor") or nodes_cfg.get("risk_assessor", {}).get("model", "unknown"),
+        }
 
     output_payload = {
         "benchmark": "injection_eval",
         "timestamp": datetime.now(UTC).isoformat(),
         "git_commit": commit_sha,
         "dataset_hash": ds_hash,
+        "llm_mode": llm_mode,
         "smoke": smoke,
-        "models_used": {
-            "risk_assessor": active_models.get("risk_assessor", "configured_model"),
-        },
+        "models_used": models_used,
+        "real_llm_calls_count": real_calls,
         **results,
     }
 
@@ -318,9 +359,14 @@ def run_injection_eval(
     latest_file = output_dir / "injection_eval_latest.json"
 
     ts_file.write_text(json.dumps(output_payload, indent=2), encoding="utf-8")
-    latest_file.write_text(json.dumps(output_payload, indent=2), encoding="utf-8")
+    if llm_mode == "fake" and not smoke:
+        print(f"\n[injection_eval] Refusing to update {latest_file} in fake mode without --smoke.")
+    else:
+        latest_file.write_text(json.dumps(output_payload, indent=2), encoding="utf-8")
 
-    print(f"\n[injection_eval] Results written to:\n  {ts_file}\n  {latest_file}")
+    print(f"\n[injection_eval] Results written to:\n  {ts_file}")
+    if llm_mode != "fake" or smoke:
+        print(f"  {latest_file}")
     o = results.get("overall", {})
     print(
         f"\nSummary Injection Defense Metrics:\n"
