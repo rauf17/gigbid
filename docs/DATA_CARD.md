@@ -189,6 +189,28 @@ Schema per record:
 >
 > Because the ground truth was generated from skill overlap, retrieval algorithms that align closely with explicit skill keyword matching inherently achieve higher recall and nDCG scores on this dev set. This benchmark does not penalize models that fail to capture nuanced latent domain knowledge not expressed in the explicit skill taxonomy.
 
+### 3.6 Outcome Boost Signals & 24 Job Archetypes
+
+#### 24 Synchronized Job Archetypes
+In `data/scripts/prepare_jobs.py`, synthetic job postings are generated via 24 synchronized domain archetypes (8 per persona category: AI/ML, Full-Stack Web, Data Analysis). Unlike naive generation where job titles, descriptions, and skill lists were sampled independently—causing keyword mismatches (e.g. LightGBM titles paired with unrelated skills)—each archetype explicitly defines:
+1. **Canonical Job Title**.
+2. **Rich Job Description Template** mentioning 3–6 required technical tools directly in natural prose.
+3. **Synchronized Skill List** strictly matching the entities described in prose.
+
+This guarantees that both lexical retrievers (BM25 over text) and semantic retrievers (dense embeddings) encounter genuine keyword co-occurrences without synthetic label drift.
+
+#### Outcome Boost Signals (RAG Stage V4)
+Historical proposal outcome labels (`won`, `replied`, `ignored`) in `data/personas/<persona_id>/past_proposals.jsonl` reflect empirical bidding track records:
+- **Won proposals** explicitly cite concrete project names and quantitative metrics from the persona's case studies.
+- **Replied proposals** mention relevant technical skills and architectural approaches but omit quantitative metrics.
+- **Ignored proposals** use generic openers without specific project evidence.
+
+In Stage V4 (`OutcomeBoostStage`), historical proposal logs are indexed to compute an empirical win rate per evidence item:
+$$\text{win\_rate} = \frac{n_{\text{won}} + 1.0}{n_{\text{total}} + 2.0}$$
+where Laplace smoothing ($+1 / +2$) anchors unseen evidence items to a neutral prior of 0.50. The candidate's retrieval score is then boosted via:
+$$\text{score}_{\text{final}} = \text{score}_{\text{raw}} \times (1 + \alpha \cdot \text{win\_rate})$$
+with default smoothing parameter $\alpha = 0.20$.
+
 ---
 
 ## 4. Ethical Considerations & Data Provenance
