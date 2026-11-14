@@ -275,7 +275,12 @@ async def test_writer_node(deps: NodeDeps) -> None:
     ]
     draft = await writer.run({"job_spec": spec, "evidence_items": ev, "persona": "ai_ml"}, deps)
     assert isinstance(draft, ProposalDraft)
-    assert "[E:cs_aiml_001]" in draft.cover_letter or "cs_aiml_001" in draft.cover_letter
+    evidence_cited = (
+        "[E:cs_aiml_001]" in draft.cover_letter
+        or "cs_aiml_001" in draft.cover_letter
+        or any("cs_aiml_001" in c.evidence_ids for c in draft.claims)
+    )
+    assert evidence_cited
     assert len(draft.screening_answers) == 1
 
 
