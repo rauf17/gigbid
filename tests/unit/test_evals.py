@@ -301,7 +301,11 @@ async def test_rag_eval_runner_offline_hashembedder(tmp_path: Path) -> None:
     from rag.index.vector_store import VectorStore
     from rag.schema import Chunk
 
-    # Verify that querying without matching index raises ValueError
+    # Verify that querying with mismatched index raises ValueError
+    mismatch_embedder = HashEmbedder(dimension=384)
+    mismatch_embedder.name = "DifferentEmbedder"
+    mismatch_store = VectorStore(storage_path=tmp_path / "mismatch_qdrant", embedder=mismatch_embedder)
+    mismatch_store.save_manifest(mismatch_embedder)
     with pytest.raises(ValueError, match="Embedding model mismatch"):
         await evaluate_dev_set(
             variant="v0_naive",
@@ -309,7 +313,9 @@ async def test_rag_eval_runner_offline_hashembedder(tmp_path: Path) -> None:
             data_dir=DATASETS_DIR,
             limit=2,
             use_hash_embedder=True,
+            vector_store=mismatch_store,
         )
+    mismatch_store.close()
 
     # With isolated store matching HashEmbedder
     embedder = HashEmbedder(dimension=384)
