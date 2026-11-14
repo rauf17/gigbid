@@ -9,9 +9,9 @@ from agent.nodes.base import NodeDeps
 
 async def run(state_slice: dict[str, Any], deps: NodeDeps) -> BidDecision:
     """Evaluates risk, fit, and pricing reports to decide bid action."""
-    raw_fit = state_slice.get("fit_report") or {}
-    raw_risk = state_slice.get("risk_report") or {}
-    raw_quote = state_slice.get("price_quote")
+    raw_fit = state_slice.get("fit_report") or state_slice.get("fit") or {}
+    raw_risk = state_slice.get("risk_report") or state_slice.get("risk") or {}
+    raw_quote = state_slice.get("price_quote") or state_slice.get("quote")
 
     if isinstance(raw_fit, dict):
         fit_score = float(raw_fit.get("fit_score", 0.0))

@@ -30,7 +30,7 @@ def _extract_claims_from_text(text: str) -> list[ClaimAnnotation]:
 
 async def run(state_slice: dict[str, Any], deps: NodeDeps) -> ProposalDraft:
     """Drafts an evidence-grounded proposal with inline citations."""
-    raw_spec = state_slice.get("job_spec") or {}
+    raw_spec = state_slice.get("job_spec") or state_slice.get("spec") or {}
     title = raw_spec.get("title", "") if isinstance(raw_spec, dict) else getattr(raw_spec, "title", "")
     summary = raw_spec.get("summary", "") if isinstance(raw_spec, dict) else getattr(raw_spec, "summary", "")
     screening_questions = (
@@ -40,9 +40,9 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> ProposalDraft:
     )
 
     persona = state_slice.get("persona") or "freelancer"
-    raw_evidence = state_slice.get("evidence_items") or []
-    style_notes = state_slice.get("style_notes") or ""
-    revision_feedback = state_slice.get("revision_feedback") or ""
+    raw_evidence = state_slice.get("evidence_items") or state_slice.get("evidence") or []
+    style_notes = state_slice.get("style_notes") or state_slice.get("style_rules") or ""
+    revision_feedback = state_slice.get("revision_feedback") or state_slice.get("revision_notes") or ""
 
     # Format evidence items into compact string
     evidence_lines: list[str] = []

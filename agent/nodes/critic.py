@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 async def run(state_slice: dict[str, Any], deps: NodeDeps) -> Critique:
     """Evaluates proposal draft quality, evidence grounding, and policy adherence."""
-    raw_draft = state_slice.get("proposal_draft") or {}
+    raw_draft = state_slice.get("proposal_draft") or state_slice.get("draft") or {}
     if isinstance(raw_draft, dict):
         cover_letter = raw_draft.get("cover_letter", "")
     elif isinstance(raw_draft, ProposalDraft):
@@ -21,7 +21,7 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> Critique:
     else:
         cover_letter = str(raw_draft)
 
-    raw_spec = state_slice.get("job_spec") or {}
+    raw_spec = state_slice.get("job_spec") or state_slice.get("spec") or {}
     title = raw_spec.get("title", "") if isinstance(raw_spec, dict) else getattr(raw_spec, "title", "")
     summary = raw_spec.get("summary", "") if isinstance(raw_spec, dict) else getattr(raw_spec, "summary", "")
 

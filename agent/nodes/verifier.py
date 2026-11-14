@@ -17,7 +17,7 @@ async def run(
     deps: NodeDeps,
 ) -> tuple[ProposalDraft, VerificationReport]:
     """Audits proposal draft claims against retrieved evidence, pruning unsupported assertions."""
-    raw_draft = state_slice.get("proposal_draft") or {}
+    raw_draft = state_slice.get("proposal_draft") or state_slice.get("draft") or {}
     if isinstance(raw_draft, dict):
         draft = ProposalDraft.model_validate(raw_draft)
     elif isinstance(raw_draft, ProposalDraft):
@@ -26,7 +26,7 @@ async def run(
         draft = ProposalDraft(cover_letter=str(raw_draft), screening_answers=[], claims=[])
 
     persona = state_slice.get("persona") or "ai_ml"
-    evidence_items = list(state_slice.get("evidence_items") or [])
+    evidence_items = list(state_slice.get("evidence_items") or state_slice.get("evidence") or [])
 
     # If no evidence passed, retrieve top portfolio evidence
     if not evidence_items:

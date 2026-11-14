@@ -187,6 +187,10 @@ budgets:
   declared_p95_latency_s: {job_analysed: 12.0, proposal: 25.0}
   declared_cost_usd: {job_analysed: 0.01, proposal: 0.03}
 
+autonomy:
+  auto_skip_low_fit: true
+  auto_send: false         # STRICT ENFORCEMENT: Never auto-send proposals
+
 thresholds:
   minimum_fit_score: 0.60
   maximum_risk_score: 0.70

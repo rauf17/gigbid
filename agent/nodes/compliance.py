@@ -10,7 +10,7 @@ from agent.nodes.base import NodeDeps
 
 async def run(state_slice: dict[str, Any], deps: NodeDeps) -> ComplianceVerdict:
     """Enforces marketplace terms and redacts prohibited spans."""
-    raw_draft = state_slice.get("proposal_draft") or {}
+    raw_draft = state_slice.get("proposal_draft") or state_slice.get("draft") or {}
     if isinstance(raw_draft, dict):
         text = str(raw_draft.get("cover_letter", ""))
     elif isinstance(raw_draft, ProposalDraft):

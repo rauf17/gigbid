@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from agent.handoffs import FitMatrixRow, FitReport, JobSpec
+from agent.handoffs import FitMatrixRow, FitReport, JobRequirement, JobSpec
 from agent.nodes.base import NodeDeps
 from rag.retriever import get_retriever
 
@@ -19,12 +19,17 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> FitReport:
     elif isinstance(raw_spec, JobSpec):
         spec = raw_spec
     else:
-        # Fallback empty spec
+        # Prompt 9: fit_matcher runs in parallel and extracts requirements from job skills
+        job_skills = state_slice.get("job", {}).get("skills", [])
+        requirements = [
+            JobRequirement(id=f"req_skill_{i}", text=s, kind="must_have")
+            for i, s in enumerate(job_skills)
+        ]
         spec = JobSpec(
-            title="Unknown",
-            summary="",
-            requirements=[],
-            skills=state_slice.get("job", {}).get("skills", []),
+            title=state_slice.get("job", {}).get("title", "Unknown"),
+            summary=state_slice.get("job", {}).get("description", "")[:200],
+            requirements=requirements,
+            skills=job_skills,
         )
 
     persona = state_slice.get("persona") or "ai_ml"
