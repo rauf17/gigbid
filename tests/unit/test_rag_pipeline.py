@@ -20,6 +20,18 @@ from rag.stages.decompose import DecomposeStage
 from rag.stages.outcome_boost import OutcomeBoostStage
 from rag.stages.rerank import RerankStage
 
+
+@pytest.fixture(scope="session", autouse=True)
+def ensure_indexed_personas() -> None:
+    """Ensures persona indexes exist for hermetic testing in fresh checkouts."""
+    index_manifest = (
+        Path(__file__).resolve().parent.parent.parent / "data" / "processed" / "index" / "manifest.json"
+    )
+    if not index_manifest.is_file():
+        from rag.ingest.pipeline import ingest_all_personas
+
+        ingest_all_personas(use_hash_embedder=True)
+
 # -----------------------------------------------------------------------------
 # 1. Hand-computed Reciprocal Rank Fusion (RRF) test
 # -----------------------------------------------------------------------------
