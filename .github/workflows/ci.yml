@@ -8,7 +8,7 @@ jobs:
         image: postgres:17
         env:
           POSTGRES_USER: gigbid
-          POSTGRES_PASSWORD: gigbid_dev_password
+          POSTGRES_PASSWORD: gigbid
           POSTGRES_DB: gigbid
         ports:
           - 5433:5432
@@ -17,6 +17,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+    env:
+      DATABASE_URL: postgresql://gigbid:gigbid@localhost:5433/gigbid
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5

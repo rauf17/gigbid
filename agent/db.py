@@ -95,7 +95,7 @@ def init_db(conn_string: str | None = None) -> bool:
         logger.info("[db] Successfully initialized database tables and LangGraph Postgres schemas.")
         return True
     except Exception as exc:  # noqa: BLE001
-        logger.debug("[db] Postgres unreachable or setup failed, using memory fallback: %s", exc)
+        logger.warning("[db] Postgres unreachable or setup failed, using memory fallback: %s", exc)
         return False
 
 
