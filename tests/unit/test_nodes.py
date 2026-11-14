@@ -343,3 +343,28 @@ async def test_compliance_redacts_email_and_flags_telegram(deps: NodeDeps) -> No
     rule_ids = {v.rule_id for v in verdict.violations}
     assert "POL-001-OFF-PLATFORM-CONTACT" in rule_ids
     assert "POL-003-CONTACT-DETAILS-PROPOSAL" in rule_ids
+
+
+@pytest.mark.asyncio
+async def test_compliance_redacts_phone_numbers(deps: NodeDeps) -> None:
+    draft = "Call my direct office mobile number at +1-555-867-5309 for scheduling."
+    verdict = await compliance.run({"proposal_draft": draft}, deps)
+    assert "+1-555-867-5309" not in verdict.redacted_text
+    assert "[REDACTED PHONE]" in verdict.redacted_text
+
+
+@pytest.mark.asyncio
+async def test_decision_custom_thresholds() -> None:
+    # Custom tight thresholds: minimum_fit = 0.90
+    custom_deps = NodeDeps(
+        config={"thresholds": {"minimum_fit_score": 0.90, "maximum_risk_score": 0.50}},
+    )
+    res = await decision.run(
+        {
+            "fit_report": FitReport(fit_score=0.80),
+            "risk_report": RiskReport(risk_score=0.20, recommendation="ok", rationale="Clean"),
+        },
+        custom_deps,
+    )
+    assert res.action == "skip"
+    assert "below minimum required threshold (0.90)" in res.reasons[0]
