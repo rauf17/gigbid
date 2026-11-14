@@ -1,12 +1,14 @@
 """Retrieval Evaluation Runner (AI-4016 Assignment B4).
 
 CLI:
-    uv run python -m evals.runners.rag_eval --variant v0_naive [--persona X] [--limit N]
+    uv run python -m evals.runners.rag_eval --variant v0_naive [--persona X] [--limit N] [--smoke]
 
 Metrics:
     - Recall@5: Fraction of relevant gold evidence chunks retrieved in top 5.
     - MRR (Mean Reciprocal Rank): 1 / rank of first relevant item in top 10.
     - nDCG@10: Normalized Discounted Cumulative Gain at rank 10 with binary relevance.
+    - Latency (p50, p95): Elapsed retrieval time in milliseconds.
+    - Resources: LLM token count and estimated cost in USD.
 
 Slices:
     - Overall: Across all evaluated jobs.
@@ -34,9 +36,17 @@ from typing import Any
 
 import numpy as np
 
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    pass
+
 DEFAULT_DATA_DIR = Path(__file__).resolve().parent.parent / "datasets"
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent.parent / "results"
 DEFAULT_PERSONAS = ["ai_ml", "fullstack", "data_analyst"]
+DEFAULT_CALL_LOG_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "processed" / "llm_calls.jsonl"
 
 ALL_KNOWN_REPOS = {
     "llm-guardrails",
@@ -46,6 +56,58 @@ ALL_KNOWN_REPOS = {
     "dbt-analytics-warehouse",
     "kpi-executive-dashboard",
 }
+
+
+class FakeDecomposeChatModel:
+    """Hermetic deterministic fake chat model for smoke testing without network/API calls."""
+
+    model_name: str = "fake-decompose-model"
+
+    def invoke(self, messages: Any, **kwargs: Any) -> Any:
+        from langchain_core.messages import AIMessage
+
+        content = json.dumps(
+            {
+                "requirements": [
+                    "FastAPI REST endpoints and pydantic schema validation",
+                    "PostgreSQL database design and query optimization",
+                    "Docker containerized microservices and deployment",
+                ]
+            }
+        )
+        return AIMessage(content=content)
+
+
+class StubCrossEncoder:
+    """Deterministic stub cross-encoder for fast offline smoke testing."""
+
+    def predict(self, pairs: list[tuple[str, str]], **kwargs: Any) -> list[float]:
+        return [float(len(pairs) - idx) for idx in range(len(pairs))]
+
+
+def read_new_llm_metrics(log_path: Path, start_offset: int) -> tuple[int, float, int]:
+    """Reads newly logged LLM calls since start_offset.
+
+    Returns:
+        (total_tokens, total_cost_usd, new_offset)
+    """
+    if not log_path.is_file():
+        return 0, 0.0, start_offset
+
+    new_tokens = 0
+    new_cost = 0.0
+    with open(log_path, "r", encoding="utf-8") as f:
+        f.seek(start_offset)
+        for line in f:
+            if line.strip():
+                try:
+                    entry = json.loads(line)
+                    new_tokens += int(entry.get("prompt_tokens", 0)) + int(entry.get("completion_tokens", 0))
+                    new_cost += float(entry.get("estimated_cost_usd", 0.0))
+                except (json.JSONDecodeError, ValueError):
+                    pass
+        new_offset = f.tell()
+    return new_tokens, new_cost, new_offset
 
 
 def roll_up_to_item_id(chunk_id: str) -> str:
@@ -134,7 +196,7 @@ def get_n_req_slice(n_req: int) -> str:
 
 
 def aggregate_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
-    """Computes mean metrics and count for a list of evaluation records."""
+    """Computes mean metrics, percentiles, and resource totals for evaluation records."""
     if not records:
         return {
             "count": 0,
@@ -142,18 +204,33 @@ def aggregate_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
             "recall_at_5_ceiling": 0.0,
             "mrr": 0.0,
             "ndcg_at_10": 0.0,
+            "latency_p50_ms": 0.0,
+            "latency_p95_ms": 0.0,
+            "total_tokens": 0,
+            "total_cost_usd": 0.0,
         }
     count = len(records)
     mean_r5 = float(np.mean([r["recall_at_5"] for r in records]))
     mean_r5_ceiling = float(np.mean([r.get("recall_at_5_ceiling", 0.0) for r in records]))
     mean_mrr = float(np.mean([r["mrr"] for r in records]))
     mean_ndcg = float(np.mean([r["ndcg_at_10"] for r in records]))
+
+    latencies = [float(r.get("latency_ms", 0.0)) for r in records]
+    p50_lat = float(np.percentile(latencies, 50)) if latencies else 0.0
+    p95_lat = float(np.percentile(latencies, 95)) if latencies else 0.0
+    total_tokens = sum(int(r.get("tokens", 0)) for r in records)
+    total_cost = sum(float(r.get("cost_usd", 0.0)) for r in records)
+
     return {
         "count": count,
         "recall_at_5": round(mean_r5, 4),
         "recall_at_5_ceiling": round(mean_r5_ceiling, 4),
         "mrr": round(mean_mrr, 4),
         "ndcg_at_10": round(mean_ndcg, 4),
+        "latency_p50_ms": round(p50_lat, 2),
+        "latency_p95_ms": round(p95_lat, 2),
+        "total_tokens": int(total_tokens),
+        "total_cost_usd": round(total_cost, 6),
     }
 
 
@@ -182,6 +259,7 @@ async def evaluate_dev_set(
     limit: int | None = None,
     use_hash_embedder: bool = False,
     vector_store: Any | None = None,
+    smoke: bool = False,
 ) -> tuple[dict[str, Any], list[Path]]:
     """Runs evaluation on dev set jobs using specified retriever variant."""
     from rag.index.bm25 import BM25Index
@@ -190,14 +268,18 @@ async def evaluate_dev_set(
     all_records: list[dict[str, Any]] = []
     evaluated_paths: list[Path] = []
 
+    canonical_variant = variant
+    if variant in {"bm25_skills", "skill_tag_lookup_REFERENCE"}:
+        canonical_variant = "skill_tag_lookup_REFERENCE"
+
     # Shared index for lexical/oracle baselines
     bm25_index: BM25Index | None = None
-    if variant in {"bm25_skills", "oracle"}:
+    if canonical_variant in {"skill_tag_lookup_REFERENCE", "bm25_text", "oracle"}:
         bm25_index = BM25Index()
 
     # Preload item texts for oracle baseline
     item_texts_map: dict[str, list[str]] = {}
-    if variant == "oracle":
+    if canonical_variant == "oracle":
         for p in personas:
             chunks_file = data_dir.parent.parent / "data" / "processed" / "index" / f"{p}_chunks.jsonl"
             if chunks_file.is_file():
@@ -208,6 +290,9 @@ async def evaluate_dev_set(
                         if iid not in item_texts_map:
                             item_texts_map[iid] = []
                         item_texts_map[iid].append(c["text"])
+
+    call_log_path = DEFAULT_CALL_LOG_PATH
+    log_offset = call_log_path.stat().st_size if call_log_path.is_file() else 0
 
     for persona in personas:
         dev_file = data_dir / f"dev_{persona}.jsonl"
@@ -223,7 +308,7 @@ async def evaluate_dev_set(
         # Candidate items for random baseline (35 experience items: case studies, repos, reviews, cv)
         candidate_items: list[str] = []
         rng = random.Random(42 + sum(ord(c) for c in persona))
-        if variant == "random":
+        if canonical_variant == "random":
             chunks_file = data_dir.parent.parent / "data" / "processed" / "index" / f"{persona}_chunks.jsonl"
             if chunks_file.is_file():
                 raw_chunks = [
@@ -236,15 +321,22 @@ async def evaluate_dev_set(
                 )
 
         retriever = None
-        if variant in {"v0", "v0_naive", "v0_unfiltered", "v0_naive_unfiltered"}:
+        if canonical_variant not in {"random", "bm25_text", "skill_tag_lookup_REFERENCE", "oracle"}:
+            kwargs: dict[str, Any] = {
+                "persona": persona,
+                "use_hash_embedder": use_hash_embedder,
+                "vector_store": vector_store,
+            }
+            if smoke:
+                kwargs["model_override"] = FakeDecomposeChatModel()
+                kwargs["cross_encoder"] = StubCrossEncoder()
+
             retriever = get_retriever(
-                variant=variant,
-                persona=persona,
-                use_hash_embedder=use_hash_embedder,
-                vector_store=vector_store,
+                variant=canonical_variant,
+                **kwargs,
             )
 
-        print(f"[rag_eval] Evaluating {len(lines)} jobs for persona '{persona}' using variant '{variant}'...")
+        print(f"[rag_eval] Evaluating {len(lines)} jobs for persona '{persona}' using variant '{canonical_variant}'...")
         t_start = time.time()
 
         for idx, line in enumerate(lines):
@@ -259,9 +351,20 @@ async def evaluate_dev_set(
                 continue
             n_req = int(gold.get("n_requirements", 0))
 
-            if variant == "random":
+            t0 = time.perf_counter()
+
+            if canonical_variant == "random":
                 retrieved_ids = rng.sample(candidate_items, min(10, len(candidate_items)))
-            elif variant == "bm25_skills":
+            elif canonical_variant == "bm25_text":
+                assert bm25_index is not None
+                hits = bm25_index.search(
+                    query=query,
+                    k=35,
+                    persona=persona,
+                    chunk_type=["case_study", "repo_readme", "repo_code", "review", "cv"],
+                )
+                retrieved_ids = roll_up_retrieved_ids([c.id for c, _ in hits])[:10]
+            elif canonical_variant == "skill_tag_lookup_REFERENCE":
                 assert bm25_index is not None
                 skill_query = " ".join(job.get("skills", []))
                 hits = bm25_index.search(
@@ -271,7 +374,7 @@ async def evaluate_dev_set(
                     chunk_type=["case_study", "repo_readme", "repo_code", "review", "cv"],
                 )
                 retrieved_ids = roll_up_retrieved_ids([c.id for c, _ in hits])[:10]
-            elif variant == "oracle":
+            elif canonical_variant == "oracle":
                 assert bm25_index is not None
                 gold_item_ids = gold.get("relevant_evidence_ids", [])
                 raw_chunk_ids: list[str] = []
@@ -286,6 +389,9 @@ async def evaluate_dev_set(
                 assert retriever is not None
                 items = await retriever.retrieve(query=query, k=15, filters={"persona": persona})
                 retrieved_ids = roll_up_retrieved_ids([item.id for item in items])[:10]
+
+            latency_ms = (time.perf_counter() - t0) * 1000.0
+            query_tokens, query_cost, log_offset = read_new_llm_metrics(call_log_path, log_offset)
 
             r5 = compute_recall_at_k(retrieved_ids, gold_ids, k=5)
             r5_ceiling = float(min(5, len(gold_ids)) / len(gold_ids))
@@ -302,6 +408,9 @@ async def evaluate_dev_set(
                     "recall_at_5_ceiling": r5_ceiling,
                     "mrr": mrr,
                     "ndcg_at_10": ndcg,
+                    "latency_ms": round(latency_ms, 2),
+                    "tokens": int(query_tokens),
+                    "cost_usd": round(query_cost, 6),
                 }
             )
 
@@ -340,20 +449,29 @@ def run_rag_eval(
     data_dir: Path = DEFAULT_DATA_DIR,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     use_hash_embedder: bool = False,
+    smoke: bool = False,
 ) -> dict[str, Any]:
     """Executes evaluation and writes result JSON files."""
     output_dir.mkdir(parents=True, exist_ok=True)
     personas = [persona] if persona else DEFAULT_PERSONAS
 
-    is_hash = use_hash_embedder or os.getenv("USE_HASH_EMBEDDER") == "1"
+    is_hash = smoke or use_hash_embedder or os.getenv("USE_HASH_EMBEDDER") == "1"
+    effective_limit = limit
+    if smoke and effective_limit is None:
+        effective_limit = 10 if len(personas) > 1 else 30
+
+    canonical_variant = variant
+    if variant in {"bm25_skills", "skill_tag_lookup_REFERENCE"}:
+        canonical_variant = "skill_tag_lookup_REFERENCE"
 
     results, evaluated_paths = asyncio.run(
         evaluate_dev_set(
-            variant=variant,
+            variant=canonical_variant,
             personas=personas,
             data_dir=data_dir,
-            limit=limit,
+            limit=effective_limit,
             use_hash_embedder=is_hash,
+            smoke=smoke,
         )
     )
 
@@ -362,32 +480,42 @@ def run_rag_eval(
     timestamp = datetime.now(UTC).isoformat()
     timestamp_slug = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
 
-    output_payload = {
-        "variant": variant,
+    output_payload: dict[str, Any] = {
+        "variant": canonical_variant,
         "timestamp": timestamp,
         "git_commit": git_commit,
         "dataset_hash": dataset_hash,
         "config": {
-            "variant": variant,
+            "variant": canonical_variant,
             "k": 10,
             "embedder": "none"
-            if variant == "random"
-            else ("bm25" if variant in {"bm25_skills", "oracle"} else ("HashEmbedder" if is_hash else "BAAI/bge-small-en-v1.5")),
-            "dimension": 0 if variant in {"random", "bm25_skills", "oracle"} else (64 if is_hash else 384),
+            if canonical_variant in {"random", "bm25_text", "skill_tag_lookup_REFERENCE", "oracle"}
+            else ("HashEmbedder" if is_hash else "BAAI/bge-small-en-v1.5"),
+            "dimension": 0
+            if canonical_variant in {"random", "bm25_text", "skill_tag_lookup_REFERENCE", "oracle"}
+            else (64 if is_hash else 384),
             "personas": personas,
-            "limit": limit,
+            "limit": effective_limit,
+            "smoke": smoke,
         },
         "overall": results["overall"],
         "by_persona": results["by_persona"],
         "by_n_requirements": results["by_n_requirements"],
     }
 
+    if canonical_variant == "skill_tag_lookup_REFERENCE":
+        output_payload["is_reference_only"] = True
+        output_payload["note"] = (
+            "queries the skills field the gold labels were derived from; "
+            "leaks the answer key; reference only."
+        )
+
     # Write timestamped file
-    ts_file = output_dir / f"rag_{variant}_{timestamp_slug}.json"
+    ts_file = output_dir / f"rag_{canonical_variant}_{timestamp_slug}.json"
     ts_file.write_text(json.dumps(output_payload, indent=2), encoding="utf-8")
 
     # Update stable latest file
-    latest_file = output_dir / f"rag_{variant}_latest.json"
+    latest_file = output_dir / f"rag_{canonical_variant}_latest.json"
     latest_file.write_text(json.dumps(output_payload, indent=2), encoding="utf-8")
 
     print("\n[rag_eval] Results saved to:")
@@ -398,7 +526,10 @@ def run_rag_eval(
         f"  Overall: Count={results['overall']['count']}, "
         f"Recall@5={results['overall']['recall_at_5']:.4f} "
         f"(Ceiling={results['overall']['recall_at_5_ceiling']:.4f}), "
-        f"MRR={results['overall']['mrr']:.4f}, nDCG@10={results['overall']['ndcg_at_10']:.4f}"
+        f"MRR={results['overall']['mrr']:.4f}, nDCG@10={results['overall']['ndcg_at_10']:.4f}, "
+        f"p95_lat={results['overall']['latency_p95_ms']:.1f}ms, "
+        f"Tokens={results['overall']['total_tokens']}, "
+        f"USD=${results['overall']['total_cost_usd']:.4f}"
     )
 
     return output_payload
@@ -416,6 +547,11 @@ def main() -> None:
         action="store_true",
         help="Use deterministic HashEmbedder for fast offline testing",
     )
+    parser.add_argument(
+        "--smoke",
+        action="store_true",
+        help="Run 30 dev jobs with HashEmbedder and FakeLLM in <5s",
+    )
     args = parser.parse_args()
 
     run_rag_eval(
@@ -425,6 +561,7 @@ def main() -> None:
         data_dir=args.data_dir,
         output_dir=args.output_dir,
         use_hash_embedder=args.use_hash_embedder,
+        smoke=args.smoke,
     )
 
 

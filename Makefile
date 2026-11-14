@@ -1,4 +1,4 @@
-.PHONY: install dev api test eval seed data demo lint check lock mcp-marketplace mcp-portfolio ingest
+.PHONY: install dev api test eval eval-smoke eval-all seed data demo lint check lock mcp-marketplace mcp-portfolio ingest
 install:
 	uv sync --extra dev
 lock:
@@ -30,6 +30,18 @@ data:
 	uv run python gigsim/seed.py
 eval:
 	uv run python -m evals.runners.rag_eval --variant v0_naive
+	uv run python scripts/results_table.py
+eval-smoke:
+	uv run python -m evals.runners.rag_eval --smoke
+eval-all:
+	uv run python -m evals.runners.rag_eval --variant random
+	uv run python -m evals.runners.rag_eval --variant bm25_text
+	uv run python -m evals.runners.rag_eval --variant skill_tag_lookup_REFERENCE
+	uv run python -m evals.runners.rag_eval --variant v0_naive
+	uv run python -m evals.runners.rag_eval --variant v1_decompose
+	uv run python -m evals.runners.rag_eval --variant v2_hybrid
+	uv run python -m evals.runners.rag_eval --variant v3_rerank
+	uv run python -m evals.runners.rag_eval --variant v4_outcome
 	uv run python scripts/results_table.py
 demo:
 	@echo "TODO: run one job inbox -> approval -> reply against GigSim (Phase 4)"

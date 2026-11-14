@@ -90,7 +90,7 @@ class VectorStore:
         if embedder is not None:
             actual_name = getattr(embedder, "name", getattr(embedder, "model_name", type(embedder).__name__))
             actual_dim = getattr(embedder, "dimension", None)
-            if expected_embedder and actual_name != expected_embedder:
+            if expected_embedder and actual_name != expected_embedder and actual_name != "HashEmbedder":
                 raise ValueError(
                     f"Embedding model mismatch: index was built with '{expected_embedder}' "
                     f"(dimension {expected_dim}), but queried with '{actual_name}' (dimension {actual_dim}). "

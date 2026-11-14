@@ -24,6 +24,7 @@ class V0NaiveRetriever(Retriever):
         persona: str | None = None,
         use_hash_embedder: bool = False,
         unfiltered: bool = False,
+        **kwargs: Any,
     ) -> None:
         self.embedder = embedder or get_embedder(use_hash_embedder=use_hash_embedder)
         self._owned_store = vector_store is None

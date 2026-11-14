@@ -128,19 +128,16 @@ class ComposablePipelineRetriever(Retriever):
         # Pipeline execution logic
         stages_set = set(self.stages)
 
-        # 1. Decomposition flow: [decompose, dense, merge]
+        # 1. Candidate generation stage
         if "decompose" in stages_set and "merge" in stages_set:
             requirements = self.decompose_stage.execute(query_text)
             candidates = self.merge_stage.execute(
                 requirements=requirements,
-                k=max(k, 15),
+                k=max(k, self.rerank_top_k) if ("rerank" in stages_set or "outcome_boost" in stages_set) else max(k, 15),
                 persona=target_persona,
                 chunk_types=chunk_types,
             )
-            return candidates[:k]
-
-        # 2. Hybrid starting point (V2, V3, V4)
-        if "hybrid" in stages_set:
+        elif "hybrid" in stages_set:
             hybrid_fetch_k = self.rerank_top_k if ("rerank" in stages_set or "outcome_boost" in stages_set) else k
             candidates = self.hybrid_stage.execute(
                 query=query_text,
@@ -148,32 +145,34 @@ class ComposablePipelineRetriever(Retriever):
                 persona=target_persona,
                 chunk_types=chunk_types,
             )
+        else:
+            dense_fetch_k = self.rerank_top_k if ("rerank" in stages_set or "outcome_boost" in stages_set) else k
+            candidates = self.dense_stage.execute(
+                query=query_text,
+                k=dense_fetch_k,
+                persona=target_persona,
+                chunk_types=chunk_types,
+            )
 
-            if "rerank" in stages_set:
-                rerank_pool = self.rerank_top_k if "outcome_boost" in stages_set else k
-                candidates = self.rerank_stage.execute(
-                    query=query_text,
-                    candidates=candidates,
-                    top_k=rerank_pool,
-                    rerank_pool_size=self.rerank_top_k,
-                )
+        # 2. Rerank stage
+        if "rerank" in stages_set:
+            rerank_pool = self.rerank_top_k if "outcome_boost" in stages_set else k
+            candidates = self.rerank_stage.execute(
+                query=query_text,
+                candidates=candidates,
+                top_k=rerank_pool,
+                rerank_pool_size=self.rerank_top_k,
+            )
 
-            if "outcome_boost" in stages_set:
-                candidates = self.outcome_stage.execute(
-                    candidates=candidates,
-                    persona=target_persona,
-                    top_k=k,
-                )
+        # 3. Outcome boost stage
+        if "outcome_boost" in stages_set:
+            candidates = self.outcome_stage.execute(
+                candidates=candidates,
+                persona=target_persona,
+                top_k=k,
+            )
 
-            return candidates[:k]
-
-        # 3. Default dense flow (V0)
-        return self.dense_stage.execute(
-            query=query_text,
-            k=k,
-            persona=target_persona,
-            chunk_types=chunk_types,
-        )
+        return candidates[:k]
 
     def close(self) -> None:
         if self._owned_store:
