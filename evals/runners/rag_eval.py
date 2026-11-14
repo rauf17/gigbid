@@ -253,7 +253,7 @@ def get_git_commit() -> str:
 
 
 async def evaluate_dev_set(
-    variant: str,
+    variant: str | list[str],
     personas: list[str],
     data_dir: Path,
     limit: int | None = None,
@@ -268,9 +268,14 @@ async def evaluate_dev_set(
     all_records: list[dict[str, Any]] = []
     evaluated_paths: list[Path] = []
 
-    canonical_variant = variant
-    if variant in {"bm25_skills", "skill_tag_lookup_REFERENCE"}:
-        canonical_variant = "skill_tag_lookup_REFERENCE"
+    if isinstance(variant, list):
+        canonical_variant = "_".join(variant)
+        stages_arg: str | list[str] = variant
+    else:
+        canonical_variant = variant
+        stages_arg = variant
+        if variant in {"bm25_skills", "skill_tag_lookup_REFERENCE"}:
+            canonical_variant = "skill_tag_lookup_REFERENCE"
 
     # Shared index for lexical/oracle baselines
     bm25_index: BM25Index | None = None
@@ -332,7 +337,7 @@ async def evaluate_dev_set(
                 kwargs["cross_encoder"] = StubCrossEncoder()
 
             retriever = get_retriever(
-                variant=canonical_variant,
+                variant=stages_arg,
                 **kwargs,
             )
 

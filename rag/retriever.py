@@ -40,7 +40,7 @@ class Retriever(Protocol):
 
 
 def get_retriever(
-    variant: str | None = None,
+    variant: str | list[str] | None = None,
     config_path: Path | str | None = None,
     **kwargs: Any,
 ) -> Retriever:
@@ -48,6 +48,11 @@ def get_retriever(
 
     Default: v0_naive
     """
+    if isinstance(variant, list):
+        from rag.pipeline import ComposablePipelineRetriever
+
+        return ComposablePipelineRetriever(stages=variant, **kwargs)
+
     selected_variant = variant or os.getenv("RAG_VARIANT")
 
     if not selected_variant:
