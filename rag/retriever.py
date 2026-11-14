@@ -69,5 +69,24 @@ def get_retriever(
         from rag.variants.v0_naive import V0NaiveRetriever
 
         return V0NaiveRetriever(unfiltered=True, **kwargs)
+    elif selected_variant in {"v1", "v1_decompose"}:
+        from rag.variants.v1_decompose import V1DecomposeRetriever
+
+        return V1DecomposeRetriever(**kwargs)
+    elif selected_variant in {"v2", "v2_hybrid"}:
+        from rag.variants.v2_hybrid import V2HybridRetriever
+
+        return V2HybridRetriever(**kwargs)
+    elif selected_variant in {"v3", "v3_rerank"}:
+        from rag.variants.v3_rerank import V3RerankRetriever
+
+        return V3RerankRetriever(**kwargs)
+    elif selected_variant in {"v4", "v4_outcome"}:
+        from rag.variants.v4_outcome import V4OutcomeRetriever
+
+        return V4OutcomeRetriever(**kwargs)
     else:
-        raise ValueError(f"Unknown RAG retriever variant: '{selected_variant}'")
+        # Check if pipeline stages or preset are provided
+        from rag.pipeline import ComposablePipelineRetriever
+
+        return ComposablePipelineRetriever(stages=selected_variant, **kwargs)

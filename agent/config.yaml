@@ -168,6 +168,17 @@ active_profile: open
 
 rag:
   variant: v0_naive       # changed ONLY after measurement (R6)
+  pipeline: [dense]
+  reranker: cross-encoder/ms-marco-MiniLM-L-6-v2
+  outcome_alpha: 0.2
+  rrf_k: 60
+  rerank_top_k: 30
+  presets:
+    v0_naive: [dense]
+    v1_decompose: [decompose, dense, merge]
+    v2_hybrid: [hybrid]
+    v3_rerank: [hybrid, rerank]
+    v4_outcome: [hybrid, rerank, outcome_boost]
 
 budgets:
   max_graph_steps: 30
