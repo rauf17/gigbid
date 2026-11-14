@@ -20,7 +20,9 @@ from __future__ import annotations
 
 import operator
 from enum import StrEnum
-from typing import Annotated, Any, TypedDict
+from typing import Annotated, Any, Literal, TypedDict
+
+from pydantic import BaseModel, Field
 
 from agent.handoffs import (
     BidDecision,
@@ -46,6 +48,17 @@ class BidStatus(StrEnum):
     REJECTED = "rejected"
     NEEDS_ATTENTION = "needs_attention"
     DEAD_LETTER = "dead_letter"
+
+
+class ApprovalDecision(BaseModel):
+    """Human decision payload to resume an interrupted approval node."""
+
+    action: Literal["approve", "reject", "edit"] = Field(
+        default="approve",
+        description="Review decision ('approve', 'reject', or 'edit').",
+    )
+    reason: str | None = Field(default=None, description="Optional justification for decision.")
+    edited_text: str | None = Field(default=None, description="Updated cover letter if action is 'edit'.")
 
 
 def reduce_budget(left: dict[str, int] | None, right: dict[str, int] | None) -> dict[str, int]:

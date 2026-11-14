@@ -3,6 +3,20 @@ on: [push, pull_request]
 jobs:
   python:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: gigbid
+          POSTGRES_PASSWORD: gigbid_dev_password
+          POSTGRES_DB: gigbid
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
@@ -10,5 +24,6 @@ jobs:
       - run: uv run ruff check .
       - run: uv run python scripts/check_repo_rules.py
       - run: make data
+      - run: uv run python scripts/migrate_db.py
       - run: uv run pytest -q
   # TODO Phase 5: playwright job (apps/web) + integration job against GigSim
