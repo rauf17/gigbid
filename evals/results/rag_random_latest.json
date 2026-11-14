@@ -1,8 +1,8 @@
 {
   "variant": "random",
-  "timestamp": "2026-11-13T21:24:13.246229+00:00",
-  "git_commit": "f2ccb94df6eb7fdf59f8e0edcc5db3f2cb73ed46",
-  "dataset_hash": "ac7d46be72b918cb",
+  "timestamp": "2026-11-14T13:13:44.928812+00:00",
+  "git_commit": "7f1868e9ea738a0067a5fb26e024e6a1f856e4dd",
+  "dataset_hash": "b731a25c64f5a612",
   "config": {
     "variant": "random",
     "k": 10,
@@ -16,49 +16,56 @@
     "limit": null
   },
   "overall": {
-    "count": 600,
-    "recall_at_5": 0.1619,
-    "mrr": 0.3086,
-    "ndcg_at_10": 0.2243
+    "count": 511,
+    "recall_at_5": 0.1349,
+    "recall_at_5_ceiling": 0.6806,
+    "mrr": 0.385,
+    "ndcg_at_10": 0.2454
   },
   "by_persona": {
     "ai_ml": {
-      "count": 200,
-      "recall_at_5": 0.1831,
-      "mrr": 0.3109,
-      "ndcg_at_10": 0.2305
+      "count": 182,
+      "recall_at_5": 0.1335,
+      "recall_at_5_ceiling": 0.7404,
+      "mrr": 0.3675,
+      "ndcg_at_10": 0.2388
     },
     "fullstack": {
-      "count": 200,
-      "recall_at_5": 0.1648,
-      "mrr": 0.303,
-      "ndcg_at_10": 0.2277
+      "count": 172,
+      "recall_at_5": 0.1287,
+      "recall_at_5_ceiling": 0.668,
+      "mrr": 0.3617,
+      "ndcg_at_10": 0.2381
     },
     "data_analyst": {
-      "count": 200,
-      "recall_at_5": 0.1378,
-      "mrr": 0.3119,
-      "ndcg_at_10": 0.2148
+      "count": 157,
+      "recall_at_5": 0.1433,
+      "recall_at_5_ceiling": 0.625,
+      "mrr": 0.4307,
+      "ndcg_at_10": 0.2612
     }
   },
   "by_n_requirements": {
     "1-2": {
       "count": 0,
       "recall_at_5": 0.0,
+      "recall_at_5_ceiling": 0.0,
       "mrr": 0.0,
       "ndcg_at_10": 0.0
     },
     "3-4": {
-      "count": 408,
-      "recall_at_5": 0.1544,
-      "mrr": 0.2721,
-      "ndcg_at_10": 0.2118
+      "count": 0,
+      "recall_at_5": 0.0,
+      "recall_at_5_ceiling": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_10": 0.0
     },
     "5+": {
-      "count": 192,
-      "recall_at_5": 0.1778,
-      "mrr": 0.3864,
-      "ndcg_at_10": 0.2509
+      "count": 511,
+      "recall_at_5": 0.1349,
+      "recall_at_5_ceiling": 0.6806,
+      "mrr": 0.385,
+      "ndcg_at_10": 0.2454
     }
   }
 }

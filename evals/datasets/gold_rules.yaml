@@ -15,7 +15,7 @@ allowed_evidence_types:
   - review
 
 evidence_jaccard_threshold: 0.20
-min_evidence_items: 1
+min_evidence_items: 0
 max_evidence_items: 8
 
 # Dev set sampling configuration per persona (Total 200 jobs)

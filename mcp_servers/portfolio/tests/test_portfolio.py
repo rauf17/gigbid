@@ -13,12 +13,35 @@ from mcp_servers.portfolio.server import create_app, create_mcp_server
 
 
 @pytest.fixture
-def mcp_test_server() -> Any:
+def mcp_test_server(tmp_path: Path) -> Any:
     """Builds FastMCP server instance configured with HashEmbedder for offline tests."""
-    return create_mcp_server(
+    from rag.index.embeddings import HashEmbedder
+    from rag.index.vector_store import VectorStore
+    from rag.schema import Chunk
+
+    embedder = HashEmbedder(dimension=384)
+    store = VectorStore(storage_path=tmp_path / "qdrant_test", embedder=embedder)
+    store.upsert_chunks(
+        [
+            Chunk(
+                id="ai_ml_cs_cs_01",
+                persona="ai_ml",
+                type="case_study",
+                project="test",
+                skills=["Python", "Machine Learning"],
+                text="Built a machine learning pipeline and data modeling system.",
+                content_hash="h1",
+                source_path="case_studies/cs_01.md",
+            )
+        ]
+    )
+    server = create_mcp_server(
         default_persona="ai_ml",
         use_hash_embedder=True,
+        vector_store=store,
     )
+    yield server
+    store.close()
 
 
 @pytest.mark.asyncio

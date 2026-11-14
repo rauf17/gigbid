@@ -284,3 +284,37 @@ def test_incremental_ingestion_manifest(tmp_path: Path):
         assert stats2["unchanged"] == stats1["total_chunks"]
     finally:
         store.close()
+
+
+def test_index_embedder_mismatch_raises_value_error(tmp_path: Path, sample_chunk: Chunk):
+    index_dir = tmp_path / "index_safety"
+    qdrant_dir = index_dir / "qdrant"
+    embedder_a = HashEmbedder(dimension=384)
+    embedder_a.name = "Model-A"
+
+    store = VectorStore(storage_path=qdrant_dir, embedder=embedder_a)
+    try:
+        store.upsert_chunks([sample_chunk])
+        assert (index_dir / "index_manifest.json").exists()
+
+        # Query with different embedder model name
+        embedder_b = HashEmbedder(dimension=384)
+        embedder_b.name = "Model-B"
+        with pytest.raises(ValueError, match="Embedding model mismatch"):
+            store.validate_embedder(embedder_b)
+
+        # Query with different dimension
+        embedder_c = HashEmbedder(dimension=128)
+        embedder_c.name = "Model-A"
+        with pytest.raises(ValueError, match="dimension mismatch"):
+            store.validate_embedder(embedder_c)
+
+        # Query with vector of wrong dimension
+        with pytest.raises(ValueError, match="dimension mismatch"):
+            store.validate_embedder(query_vector=[0.1] * 128)
+
+        # VectorStore.search with wrong vector dimension
+        with pytest.raises(ValueError, match="dimension mismatch"):
+            store.search(query_vector=[0.1] * 128)
+    finally:
+        store.close()

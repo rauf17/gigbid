@@ -18,6 +18,7 @@ EMBEDDING_DIM = 384
 class BaseEmbedder(ABC):
     """Abstract embedding model interface."""
 
+    name: str = "BaseEmbedder"
     dimension: int = EMBEDDING_DIM
 
     @abstractmethod
@@ -35,6 +36,8 @@ class HashEmbedder(BaseEmbedder):
     Maps token hashes to a fixed 384-dimensional unit vector.
     Used by all tests and CI workflows to guarantee fast, offline reproducibility.
     """
+
+    name: str = "HashEmbedder"
 
     def __init__(self, dimension: int = EMBEDDING_DIM) -> None:
         self.dimension = dimension
@@ -69,6 +72,7 @@ class SentenceTransformerEmbedder(BaseEmbedder):
     def __init__(self, model_name: str = DEFAULT_OPEN_MODEL) -> None:
         from sentence_transformers import SentenceTransformer
 
+        self.name = model_name
         self.model_name = model_name
         self.model = SentenceTransformer(model_name)
         get_dim_fn = getattr(self.model, "get_embedding_dimension", getattr(self.model, "get_sentence_embedding_dimension", None))

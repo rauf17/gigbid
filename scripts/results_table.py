@@ -35,13 +35,14 @@ def format_overall_table(results: list[dict[str, Any]]) -> str:
     lines = [
         "### Overall Retrieval Performance",
         "",
-        "| Variant | Recall@5 | MRR | nDCG@10 | Queries | Embedder | Dataset SHA | Commit |",
-        "|:---|:---:|:---:|:---:|:---:|:---|:---:|:---:|",
+        "| Variant | Recall@5 | R@5 Ceiling | MRR | nDCG@10 | Queries | Embedder | Dataset SHA | Commit |",
+        "|:---|:---:|:---:|:---:|:---:|:---:|:---|:---:|:---:|",
     ]
     for r in results:
         var = r.get("variant", "unknown")
         ov = r.get("overall", {})
         r5 = f"{ov.get('recall_at_5', 0.0):.4f}"
+        r5_ceil = f"{ov.get('recall_at_5_ceiling', 0.0):.4f}"
         mrr = f"{ov.get('mrr', 0.0):.4f}"
         ndcg = f"{ov.get('ndcg_at_10', 0.0):.4f}"
         count = str(ov.get("count", 0))
@@ -51,7 +52,7 @@ def format_overall_table(results: list[dict[str, Any]]) -> str:
         d_hash = str(r.get("dataset_hash", "unknown"))[:8]
         commit = str(r.get("git_commit", "unknown"))[:7]
 
-        lines.append(f"| `{var}` | **{r5}** | **{mrr}** | **{ndcg}** | {count} | `{emb}` | `{d_hash}` | `{commit}` |")
+        lines.append(f"| `{var}` | **{r5}** | {r5_ceil} | **{mrr}** | **{ndcg}** | {count} | `{emb}` | `{d_hash}` | `{commit}` |")
     lines.append("")
     return "\n".join(lines)
 
@@ -61,8 +62,8 @@ def format_persona_table(results: list[dict[str, Any]]) -> str:
     lines = [
         "### Performance by Freelancer Persona",
         "",
-        "| Variant | Persona | Queries | Recall@5 | MRR | nDCG@10 |",
-        "|:---|:---|:---:|:---:|:---:|:---:|",
+        "| Variant | Persona | Queries | Recall@5 | R@5 Ceiling | MRR | nDCG@10 |",
+        "|:---|:---|:---:|:---:|:---:|:---:|:---:|",
     ]
     persona_labels = {
         "ai_ml": "AI/ML (Dr. Elena Rostova)",
@@ -76,10 +77,11 @@ def format_persona_table(results: list[dict[str, Any]]) -> str:
         for p_id, p_name in persona_labels.items():
             p_data = by_p.get(p_id, {})
             r5 = f"{p_data.get('recall_at_5', 0.0):.4f}"
+            r5_ceil = f"{p_data.get('recall_at_5_ceiling', 0.0):.4f}"
             mrr = f"{p_data.get('mrr', 0.0):.4f}"
             ndcg = f"{p_data.get('ndcg_at_10', 0.0):.4f}"
             count = str(p_data.get("count", 0))
-            lines.append(f"| `{var}` | {p_name} | {count} | {r5} | {mrr} | {ndcg} |")
+            lines.append(f"| `{var}` | {p_name} | {count} | {r5} | {r5_ceil} | {mrr} | {ndcg} |")
     lines.append("")
     return "\n".join(lines)
 
@@ -89,8 +91,8 @@ def format_n_req_table(results: list[dict[str, Any]]) -> str:
     lines = [
         "### Performance by Requirement Complexity (`n_requirements`)",
         "",
-        "| Variant | Requirements | Queries | Recall@5 | MRR | nDCG@10 |",
-        "|:---|:---:|:---:|:---:|:---:|:---:|",
+        "| Variant | Requirements | Queries | Recall@5 | R@5 Ceiling | MRR | nDCG@10 |",
+        "|:---|:---:|:---:|:---:|:---:|:---:|:---:|",
     ]
     slices = ["1-2", "3-4", "5+"]
 
@@ -100,10 +102,11 @@ def format_n_req_table(results: list[dict[str, Any]]) -> str:
         for s in slices:
             s_data = by_req.get(s, {})
             r5 = f"{s_data.get('recall_at_5', 0.0):.4f}"
+            r5_ceil = f"{s_data.get('recall_at_5_ceiling', 0.0):.4f}"
             mrr = f"{s_data.get('mrr', 0.0):.4f}"
             ndcg = f"{s_data.get('ndcg_at_10', 0.0):.4f}"
             count = str(s_data.get("count", 0))
-            lines.append(f"| `{var}` | {s} skills | {count} | {r5} | {mrr} | {ndcg} |")
+            lines.append(f"| `{var}` | {s} skills | {count} | {r5} | {r5_ceil} | {mrr} | {ndcg} |")
     lines.append("")
     return "\n".join(lines)
 

@@ -202,35 +202,33 @@ def compute_fair_price_band(
 
 def select_relevant_evidence_ids(
     job_skills: list[str],
-    evidence_chunks: list[dict[str, Any]],
+    evidence_items: list[dict[str, Any]],
     jaccard_threshold: float = 0.20,
-    min_items: int = 1,
+    min_items: int = 0,
     max_items: int = 8,
+    allowed_types: set[str] | None = None,
 ) -> list[str]:
-    """Selects ground-truth evidence chunk IDs based on skill overlap and type priority."""
-    target_types = {"case_study", "repo_readme", "repo_code", "proposal"}
+    """Selects ground-truth evidence item IDs based on skill overlap and type priority."""
+    if allowed_types is None:
+        allowed_types = {"case_study", "repo", "review", "repo_code", "repo_readme"}
     candidates: list[tuple[float, int, str, str]] = []
 
-    for chunk in evidence_chunks:
-        ctype = chunk.get("type", "")
-        if ctype not in target_types:
+    for item in evidence_items:
+        itype = item.get("type", "")
+        if itype not in allowed_types:
             continue
 
-        c_skills = chunk.get("skills", [])
-        jaccard = compute_skill_jaccard(job_skills, c_skills)
-        priority = TYPE_PRIORITY.get(ctype, 10)
-        cid = chunk.get("id", "")
-        candidates.append((jaccard, priority, cid, ctype))
+        i_skills = item.get("skills", [])
+        jaccard = compute_skill_jaccard(job_skills, i_skills)
+        priority = TYPE_PRIORITY.get(itype, 10)
+        iid = item.get("id", "")
+        candidates.append((jaccard, priority, iid, itype))
 
-    # Sort descending by Jaccard, ascending by priority rank, ascending by chunk ID
+    # Sort descending by Jaccard, ascending by priority rank, ascending by item ID
     candidates.sort(key=lambda x: (-x[0], x[1], x[2]))
 
-    # Filter by threshold
+    # Filter strictly by threshold (jobs persona skips may have empty gold evidence)
     qualified = [c[2] for c in candidates if c[0] >= jaccard_threshold]
-
-    if not qualified:
-        # Fallback to ensure min_items: pick top items by highest jaccard / overlap
-        qualified = [c[2] for c in candidates[:min_items]]
 
     return qualified[:max_items]
 
@@ -287,7 +285,7 @@ def build_dev_set_for_persona(
     all_jobs: list[dict[str, Any]],
     historical_jobs: list[dict[str, Any]],
     labels_map: dict[str, dict[str, Any]],
-    evidence_chunks: list[dict[str, Any]],
+    evidence_items: list[dict[str, Any]],
     persona_profile: dict[str, Any],
     rules: dict[str, Any],
     seed: int = DEFAULT_SEED,
@@ -314,8 +312,9 @@ def build_dev_set_for_persona(
     selected_jobs = sampled_in + sampled_out
     selected_jobs.sort(key=lambda x: x["id"])
 
+    allowed_types = set(rules.get("allowed_evidence_types", ["case_study", "repo", "review"]))
     jaccard_thresh = rules.get("evidence_jaccard_threshold", 0.20)
-    min_ev = rules.get("min_evidence_items", 1)
+    min_ev = rules.get("min_evidence_items", 0)
     max_ev = rules.get("max_evidence_items", 8)
 
     dev_rows: list[dict[str, Any]] = []
@@ -329,10 +328,11 @@ def build_dev_set_for_persona(
         bid_or_skip = compute_bid_or_skip(job, persona_profile, is_scam, rules)
         evidence_ids = select_relevant_evidence_ids(
             job_skills=job.get("skills", []),
-            evidence_chunks=evidence_chunks,
+            evidence_items=evidence_items,
             jaccard_threshold=jaccard_thresh,
             min_items=min_ev,
             max_items=max_ev,
+            allowed_types=allowed_types,
         )
         fair_price_band = compute_fair_price_band(job, historical_jobs)
         n_requirements = len(set(job.get("skills", [])))

@@ -38,6 +38,7 @@ def register_portfolio_tools(
     get_persona_fn: Callable[[], str],
     data_dir: Path | str | None = None,
     use_hash_embedder: bool = False,
+    vector_store: Any | None = None,
 ) -> None:
     """Registers read-only portfolio exploration tools onto the FastMCP server."""
     persona_root = Path(data_dir or DEFAULT_DATA_DIR)
@@ -137,6 +138,7 @@ def register_portfolio_tools(
             retriever = get_retriever(
                 persona=active_persona,
                 use_hash_embedder=use_hash_embedder,
+                vector_store=vector_store,
             )
             evidence_items = await retriever.retrieve(
                 query=req_clean,

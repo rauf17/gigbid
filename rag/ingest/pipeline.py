@@ -80,6 +80,8 @@ def ingest_persona(
         if to_embed:
             vectors = emb.embed_documents([c.text for c in to_embed])
             v_store.upsert_chunks(to_embed, vectors)
+
+        v_store.save_manifest(emb)
     finally:
         if vector_store is None:
             v_store.close()

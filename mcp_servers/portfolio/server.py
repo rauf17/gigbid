@@ -47,6 +47,7 @@ def create_mcp_server(
     default_persona: str | None = None,
     data_dir: Path | str | None = None,
     use_hash_embedder: bool = False,
+    vector_store: Any | None = None,
 ) -> FastMCP:
     """Builds and configures the FastMCP server with tools, resources, and prompts."""
     if default_persona:
@@ -60,6 +61,7 @@ def create_mcp_server(
         get_persona_fn=get_current_persona,
         data_dir=data_dir,
         use_hash_embedder=use_hash_embedder,
+        vector_store=vector_store,
     )
 
     # 2. Register resource templates
@@ -124,11 +126,13 @@ def create_app(
     expected_token: str | None = None,
     data_dir: Path | str | None = None,
     use_hash_embedder: bool = False,
+    vector_store: Any | None = None,
 ) -> Starlette:
     """Builds ASGI Starlette application with streamable HTTP transport and middleware."""
     server = mcp_instance or create_mcp_server(
         data_dir=data_dir,
         use_hash_embedder=use_hash_embedder,
+        vector_store=vector_store,
     )
     app = server.streamable_http_app()
     app.add_middleware(

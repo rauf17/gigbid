@@ -32,6 +32,7 @@ import json
 import random
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from typing import Any
 
 CATEGORIES = ["AI/ML", "Full-Stack Web", "Data Analysis"]
 
@@ -40,137 +41,236 @@ COUNTRIES = [
     "Netherlands", "Singapore", "France", "Switzerland", "Sweden", "Ireland"
 ]
 
-SKILLS_BY_CAT = {
+JOB_ARCHETYPES: dict[str, list[dict[str, Any]]] = {
     "AI/ML": [
-        "Python", "PyTorch", "FastAPI", "Docker", "pgvector", "LangChain",
-        "Transformers", "vLLM", "Hugging Face", "MLOps", "OpenAI API", "Redis"
+        {
+            "title": "Senior LLM Engineer for Production RAG Pipeline",
+            "skills": ["Python", "FastAPI", "pgvector", "LangChain", "Docker"],
+            "description": (
+                "We are seeking an experienced AI/ML engineer to build and optimize our enterprise RAG retrieval pipeline in Python. "
+                "The system must index 2M+ technical documents using pgvector and LangChain, achieving sub-second latency and high precision. "
+                "Experience with chunking strategies, hybrid search, and hallucination evaluation is required. "
+                "You will deploy the service as a containerized FastAPI application with Docker and Redis caching."
+            ),
+        },
+        {
+            "title": "Real-Time Fraud Detection Microservice with PyTorch",
+            "skills": ["PyTorch", "Kafka", "FastAPI", "Redis", "Docker"],
+            "description": (
+                "Looking for a machine learning engineer to build a real-time transaction scoring microservice. "
+                "Must handle streaming Kafka events with p99 latency under 40ms. "
+                "Hands-on experience with PyTorch, Docker, and Redis feature stores is essential. "
+                "Clean code, typed FastAPI interfaces, and comprehensive unit tests are mandatory."
+            ),
+        },
+        {
+            "title": "Fine-Tune Open-Source LLMs for Medical Coding",
+            "skills": ["Transformers", "PyTorch", "vLLM", "Hugging Face", "MLOps"],
+            "description": (
+                "Need a specialist to fine-tune Llama-3 and Mistral models on clinical notes. "
+                "Tasks include data curation, LoRA fine-tuning, and high-throughput vLLM deployment. "
+                "Must have hands-on experience with PyTorch, Hugging Face Transformers, and production MLOps evaluation against gold standards."
+            ),
+        },
+        {
+            "title": "Multi-Agent Workflow Development in LangGraph",
+            "skills": ["LangGraph", "FastAPI", "Redis", "OpenAI API", "Python"],
+            "description": (
+                "We are building an autonomous customer triage system in Python using LangGraph. "
+                "The graph routes support tickets to specialized sub-agents with human approval gates. "
+                "Candidate must have deep familiarity with LangGraph state machines, Redis session memory, OpenAI API function calling, and FastAPI endpoints."
+            ),
+        },
+        {
+            "title": "Computer Vision Specialist for Defect Detection (YOLOv8)",
+            "skills": ["PyTorch", "TimeSeries", "Scikit-Learn", "Docker", "FastAPI"],
+            "description": (
+                "Manufacturing client requires an automated visual inspection pipeline for production lines. "
+                "You will train and deploy models in PyTorch running on edge devices. "
+                "Must be proficient in Python, Scikit-Learn, TimeSeries sensor tracking, Docker containerization, and FastAPI inference services."
+            ),
+        },
+        {
+            "title": "Time-Series Demand Forecasting with LightGBM",
+            "skills": ["LightGBM", "Pandas", "Scikit-Learn", "Python", "MLflow"],
+            "description": (
+                "Retail brand needs a hierarchical demand forecasting engine for 20,000 SKUs across 8 regional warehouses. "
+                "You will build feature pipelines in Pandas, train LightGBM models with Scikit-Learn, and integrate with MLflow tracking in Python. "
+                "Deliverables include weekly inference scripts and backtesting reports."
+            ),
+        },
+        {
+            "title": "Semantic Search Engine for Legal Contracts",
+            "skills": ["Python", "pgvector", "FastAPI", "Transformers", "Docker"],
+            "description": (
+                "LegalTech company building a semantic contract discovery platform. "
+                "You will implement dense neural embeddings with Hugging Face Transformers, store and index vector embeddings in PostgreSQL using pgvector, "
+                "and expose search endpoints via a containerized FastAPI microservice deployed with Docker in Python."
+            ),
+        },
+        {
+            "title": "Speech-to-Text Transcription Microservice with Whisper",
+            "skills": ["Whisper", "PyTorch", "FastAPI", "Docker", "Python"],
+            "description": (
+                "Media production studio seeks an AI engineer to deploy an automated audio transcription pipeline. "
+                "You will fine-tune and serve Whisper models with PyTorch, optimize GPU batching, "
+                "and wrap the worker in a Docker container exposing asynchronous FastAPI endpoints in Python."
+            ),
+        },
     ],
     "Full-Stack Web": [
-        "TypeScript", "React", "Next.js", "Node.js", "Python", "FastAPI",
-        "Tailwind CSS", "PostgreSQL", "Redis", "Docker", "Stripe API", "AWS"
+        {
+            "title": "Full-Stack Next.js 14 & FastAPI Developer for SaaS Billing",
+            "skills": ["Next.js", "FastAPI", "Stripe API", "PostgreSQL", "Tailwind CSS"],
+            "description": (
+                "We need a senior full-stack developer to architect our multi-tenant SaaS subscription portal. "
+                "Frontend built in Next.js 14 App Router with Tailwind CSS; backend powered by FastAPI and PostgreSQL. "
+                "Must have extensive experience integrating Stripe API webhooks, checkout flows, and automated invoicing."
+            ),
+        },
+        {
+            "title": "Real-Time Collaborative Canvas App with WebSockets",
+            "skills": ["React", "TypeScript", "Node.js", "WebSockets", "Redis"],
+            "description": (
+                "Looking for an experienced engineer to build a real-time multiplayer board for remote design teams. "
+                "Stack: React, TypeScript, Node.js, WebSockets, and Redis pub/sub. "
+                "Must solve synchronization race conditions, live presence indicators, and state conflicts."
+            ),
+        },
+        {
+            "title": "High-Throughput Logistics Dispatch Dashboard",
+            "skills": ["React", "TypeScript", "FastAPI", "Tailwind CSS", "Docker"],
+            "description": (
+                "Seeking a frontend/fullstack developer to build a live driver dispatch console. "
+                "The app tracks 3,000+ simultaneous vehicles with live telemetry feeds. "
+                "Frontend implemented in React and TypeScript with Tailwind CSS styling, communicating with a containerized FastAPI backend deployed via Docker."
+            ),
+        },
+        {
+            "title": "Developer API Platform & Interactive Documentation Console",
+            "skills": ["Next.js", "FastAPI", "PostgreSQL", "Docker", "AWS"],
+            "description": (
+                "We are launching our public REST API and need a developer hub with interactive consoles, API key management, and usage metrics. "
+                "Built with Next.js frontends, FastAPI services, and PostgreSQL data stores. "
+                "Containerized deployment with Docker on AWS cloud infrastructure."
+            ),
+        },
+        {
+            "title": "HIPAA-Compliant Telehealth Consultation Web App",
+            "skills": ["Next.js", "Node.js", "PostgreSQL", "Tailwind CSS", "TypeScript"],
+            "description": (
+                "Healthcare startup seeking a full-stack engineer to build an encrypted telehealth consultation portal. "
+                "Features include calendar scheduling, patient intake, and audit logging. "
+                "Must have strong experience in Next.js, TypeScript, Node.js, PostgreSQL, and Tailwind CSS."
+            ),
+        },
+        {
+            "title": "Headless E-Commerce Storefront & Checkout Optimization",
+            "skills": ["Next.js", "React", "Tailwind CSS", "TypeScript", "Stripe API"],
+            "description": (
+                "E-commerce retailer looking to decrease cart abandonment by rebuilding our checkout flow. "
+                "Re-architecting storefront components with Next.js, React, and TypeScript styled with Tailwind CSS. "
+                "Includes seamless Stripe API payment processing and mobile responsiveness."
+            ),
+        },
+        {
+            "title": "Cloud Resource Provisioning & Infrastructure Portal",
+            "skills": ["React", "TypeScript", "Node.js", "AWS", "Docker"],
+            "description": (
+                "DevOps SaaS seeking a full-stack developer to build a cloud resource provisioning dashboard. "
+                "Built with React and TypeScript on Node.js backends. "
+                "Deep knowledge of AWS SDKs, Docker container life-cycles, and infrastructure metrics is essential."
+            ),
+        },
+        {
+            "title": "Interactive Survey & Customer Feedback Web Application",
+            "skills": ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL", "FastAPI"],
+            "description": (
+                "Product team needs a dynamic customer feedback collection application. "
+                "Built using Next.js with TypeScript and Tailwind CSS, backed by a FastAPI backend writing to PostgreSQL. "
+                "Features branch logic, instant CSV exports, and respondent dashboards."
+            ),
+        },
     ],
     "Data Analysis": [
-        "SQL", "Python", "PostgreSQL", "Snowflake", "dbt", "Power BI",
-        "Tableau", "Pandas", "BigQuery", "Looker", "DuckDB", "Airflow"
+        {
+            "title": "Lead Analytics Engineer: dbt & Snowflake Modeling",
+            "skills": ["dbt", "Snowflake", "SQL", "Airflow", "Python"],
+            "description": (
+                "We are revamping our corporate data warehouse and need an expert to build modular dbt models in Snowflake. "
+                "You will transform raw event streams into Kimball star schemas using SQL and Python. "
+                "Orchestration with Airflow DAGs and automated schema tests is required."
+            ),
+        },
+        {
+            "title": "SaaS Churn & Cohort Retention Analytics",
+            "skills": ["SQL", "Snowflake", "Tableau", "Python", "Pandas"],
+            "description": (
+                "B2B SaaS company needs a data analyst to conduct deep-dive cohort retention and gross churn analysis. "
+                "You will write advanced SQL window functions in Snowflake, analyze user behavior with Python and Pandas, "
+                "and build interactive Tableau dashboards for leadership."
+            ),
+        },
+        {
+            "title": "Multi-Touch Marketing Attribution in BigQuery",
+            "skills": ["BigQuery", "SQL", "Python", "Looker", "Airflow"],
+            "description": (
+                "E-commerce brand seeking an analyst to build a multi-touch attribution model across paid channels. "
+                "You will analyze 1.5M touchpoints using SQL and Python in BigQuery, orchestrate ETL jobs with Airflow, "
+                "and produce executive Looker dashboards showing channel ROAS."
+            ),
+        },
+        {
+            "title": "Hospital Operations & Patient Flow Power BI Dashboard",
+            "skills": ["Power BI", "PostgreSQL", "SQL", "Python", "DuckDB"],
+            "description": (
+                "Regional hospital group needs an operational analyst to model emergency room wait times and bed utilization. "
+                "Must connect to PostgreSQL databases, process local metrics with DuckDB and Python, write clean SQL queries, "
+                "and deliver automated daily reports in Power BI."
+            ),
+        },
+        {
+            "title": "Subscription Revenue Recognition & ASC 606 Reporting",
+            "skills": ["dbt", "SQL", "Snowflake", "Pandas", "Python"],
+            "description": (
+                "FinTech company requires automated revenue recognition modeling for enterprise contracts. "
+                "You will write automated dbt models in Snowflake reconciling deferred revenue schedules using SQL and Python with Pandas. "
+                "Deliverables must pass audit scrutiny."
+            ),
+        },
+        {
+            "title": "Retail Inventory Reorder & Safety Stock Modeling",
+            "skills": ["DuckDB", "Python", "SQL", "Tableau", "Pandas"],
+            "description": (
+                "Retail chain needs an analytical model to optimize inventory reorder points across 50 stores. "
+                "You will analyze lead times and stockout frequencies using SQL and Python with Pandas and DuckDB. "
+                "Final deliverables include automated Tableau replenishment dashboards."
+            ),
+        },
+        {
+            "title": "Financial Risk & Treasury Liquidity Analytics",
+            "skills": ["SQL", "Python", "Pandas", "Power BI", "PostgreSQL"],
+            "description": (
+                "Investment firm seeking a quantitative data analyst to build treasury liquidity forecasting models. "
+                "Candidate will extract transaction logs from PostgreSQL with SQL, calculate value-at-risk scenarios in Python using Pandas, "
+                "and publish live Power BI KPI reports."
+            ),
+        },
+        {
+            "title": "E-Commerce Conversion Funnel & A/B Testing Analytics",
+            "skills": ["BigQuery", "SQL", "Python", "Tableau", "Pandas"],
+            "description": (
+                "Consumer app needs an analyst to evaluate multivariate A/B tests and onboarding funnels. "
+                "Responsibilities include querying BigQuery clickstream events using SQL, statistical hypothesis testing in Python with Pandas, "
+                "and presenting conversion lift insights in Tableau."
+            ),
+        },
     ],
 }
 
-JOB_TEMPLATES = {
-    "AI/ML": [
-        (
-            "Senior LLM Engineer for Production RAG Pipeline",
-            ("We are seeking an experienced AI/ML engineer to build and optimize our enterprise RAG retrieval pipeline. "
-            "The system must index 2M+ technical documents using pgvector and LangChain, achieving sub-second latency and high precision. "
-            "Experience with chunking strategies, hybrid BM25 + dense search, and hallucination evaluation is required. "
-            "You will deploy the service as a containerized FastAPI application with Redis caching.")
-        ),
-        (
-            "Real-Time Fraud Detection Microservice with PyTorch",
-            ("Looking for a machine learning engineer to build a real-time transaction scoring microservice. "
-            "Must handle streaming Kafka events at 10k TPS with p99 latency under 40ms. "
-            "Experience with gradient boosting, ONNX runtime, Docker, and Redis feature stores is essential. "
-            "Clean code, typed interfaces, and unit tests are mandatory.")
-        ),
-        (
-            "Fine-Tune Open-Source LLMs for Medical Coding",
-            ("Need a specialist to fine-tune Llama-3 or Mistral on our proprietary clinical dataset. "
-            "Tasks include data curation, LoRA/QLoRA fine-tuning, vLLM deployment, and evaluation against gold standards. "
-            "Must have hands-on experience with PyTorch, Hugging Face Transformers, and GPU memory optimization.")
-        ),
-        (
-            "Multi-Agent Workflow Development in LangGraph",
-            ("We are building an autonomous customer triage system using LangGraph. "
-            "The graph will route incoming support tickets to specialized sub-agents with human-in-the-loop approval gates. "
-            "Candidate must have deep familiarity with LangGraph state machines, structured Pydantic hand-offs, and streaming SSE.")
-        ),
-        (
-            "Computer Vision Specialist for Defect Detection (YOLOv8)",
-            ("Manufacturing client requires an automated visual inspection pipeline for factory production lines. "
-            "You will train and deploy a quantized YOLOv8 model running on Jetson edge devices processing 30fps video streams. "
-            "Must be proficient in Python, OpenCV, PyTorch, and RTSP video ingestion.")
-        ),
-        (
-            "Time-Series Demand Forecasting with LightGBM",
-            ("Retail brand needs a hierarchical demand forecasting engine for 20,000 SKUs across 8 regional warehouses. "
-            "You will build feature pipelines in Pandas, train LightGBM models, and integrate with MLflow tracking. "
-            "Deliverables include automated weekly inference scripts and backtesting reports.")
-        ),
-    ],
-    "Full-Stack Web": [
-        (
-            "Full-Stack Next.js 14 & FastAPI Developer for SaaS Billing",
-            ("We need a senior full-stack developer to architect our multi-tenant SaaS subscription portal. "
-            "Frontend built in Next.js 14 App Router with Tailwind CSS; backend powered by FastAPI and PostgreSQL. "
-            "Must have extensive experience with Stripe Connect, webhook reconciliation, and idempotent state machines.")
-        ),
-        (
-            "Real-Time Collaborative Canvas App with WebSockets",
-            ("Looking for an experienced engineer to build a real-time multiplayer board for remote design teams. "
-            "Stack: React, TypeScript, Node.js, WebSockets, and Redis pub/sub. "
-            "Must have solved synchronization race conditions and state conflicts using CRDTs or operational transforms.")
-        ),
-        (
-            "High-Throughput Logistics Dispatch Dashboard",
-            ("Seeking a frontend/fullstack developer to build a live driver dispatch console. "
-            "The app tracks 3,000+ simultaneous vehicles with WebGL map layers, virtualized data tables, and live telemetry feeds. "
-            "Proficiency in React, TypeScript, Tailwind, and FastAPI is required.")
-        ),
-        (
-            "Developer API Platform & Interactive Documentation Console",
-            ("We are launching our public REST API and need a developer hub with interactive consoles, API key management, and usage metrics. "
-            "Built with Next.js, FastAPI, PostgreSQL, and OpenAPI schema generators. Dockerized deployment on AWS.")
-        ),
-        (
-            "HIPAA-Compliant Telehealth Consultation Web App",
-            ("Healthcare startup seeking a full-stack engineer to build an encrypted telehealth consultation portal. "
-            "Features include WebRTC video rooms, calendar scheduling, automated waiting queues, and audit logging. "
-            "Must have strong experience in Next.js, Node.js, PostgreSQL, and healthcare security compliance.")
-        ),
-        (
-            "Headless E-Commerce Checkout Optimization",
-            ("E-commerce retailer looking to decrease cart abandonment by rebuilding our checkout flow. "
-            "Re-architecting Shopify storefront APIs with Next.js Edge Functions and Tailwind CSS. "
-            "Must understand Web Vitals, mobile responsiveness, and payment gateway integrations.")
-        ),
-    ],
-    "Data Analysis": [
-        (
-            "Lead Analytics Engineer: dbt & Snowflake Modeling",
-            ("We are revamping our corporate data warehouse and need an expert to build modular dbt models in Snowflake. "
-            "You will transform raw Stripe and Salesforce event streams into Kimball star schemas (facts and dimensions). "
-            "Experience with dbt incremental models, Jinja, and automated schema tests is required.")
-        ),
-        (
-            "SaaS Churn & Cohort Retention Analytics",
-            ("B2B SaaS company needs a data analyst to conduct deep-dive cohort retention and gross churn analysis. "
-            "You will write advanced SQL window functions in PostgreSQL/Snowflake and build interactive Tableau dashboards. "
-            "Deliverables include monthly retention matrices and churn driver correlation models.")
-        ),
-        (
-            "Multi-Touch Marketing Attribution in BigQuery",
-            ("E-commerce brand seeking an analyst to build a multi-touch attribution model across paid social, search, and email. "
-            "You will analyze 1.5M touchpoints using SQL and Python in BigQuery, implementing Markov chain and position-based attribution. "
-            "Must produce executive Looker dashboards showing channel ROAS.")
-        ),
-        (
-            "Hospital Operations & Patient Flow Power BI Dashboard",
-            ("Regional hospital group needs an operational analyst to model emergency room wait times and bed utilization. "
-            "Must connect to PostgreSQL databases, write clean DAX queries in Power BI, and deliver automated daily executive reports. "
-            "Healthcare metrics experience preferred.")
-        ),
-        (
-            "Subscription Revenue Recognition & ASC 606 Reporting",
-            ("FinTech company requires automated revenue recognition modeling for multi-year enterprise contracts. "
-            "You will write automated dbt models reconciling deferred revenue schedules against Stripe billing invoices. "
-            "Deliverables must pass external financial audit scrutiny.")
-        ),
-        (
-            "Retail Inventory Reorder & Safety Stock Modeling",
-            ("Retail chain needs an analytical model to optimize inventory reorder points across 50 stores. "
-            "You will analyze historical lead times, stockout frequencies, and holding costs using SQL and Python Pandas. "
-            "Final output: daily automated reorder recommendation reports.")
-        ),
-    ]
+SKILLS_BY_CAT = {
+    cat: sorted({skill for arch in archs for skill in arch["skills"]})
+    for cat, archs in JOB_ARCHETYPES.items()
 }
 
 
@@ -268,10 +368,11 @@ def generate_synthetic_job(
     is_stream: bool = False,
     client_id: str | None = None
 ) -> dict:
-    """Generates a single realistic synthetic job posting."""
-    title_template, desc_template = rng.choice(JOB_TEMPLATES[category])
-    skills_pool = SKILLS_BY_CAT[category]
-    selected_skills = rng.sample(skills_pool, k=rng.randint(3, 5))
+    """Generates a single realistic synthetic job posting using unified archetypes."""
+    archetype = rng.choice(JOB_ARCHETYPES[category])
+    title = archetype["title"]
+    desc_template = archetype["description"]
+    selected_skills = list(archetype["skills"])
 
     budget_type = rng.choice(["fixed", "hourly", "fixed"])  # ~66% fixed, 33% hourly
 
@@ -302,7 +403,7 @@ def generate_synthetic_job(
 
     return {
         "id": job_id,
-        "title": title_template,
+        "title": title,
         "description": desc_template,
         "category": category,
         "skills": selected_skills,

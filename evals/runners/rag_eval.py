@@ -136,14 +136,22 @@ def get_n_req_slice(n_req: int) -> str:
 def aggregate_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
     """Computes mean metrics and count for a list of evaluation records."""
     if not records:
-        return {"count": 0, "recall_at_5": 0.0, "mrr": 0.0, "ndcg_at_10": 0.0}
+        return {
+            "count": 0,
+            "recall_at_5": 0.0,
+            "recall_at_5_ceiling": 0.0,
+            "mrr": 0.0,
+            "ndcg_at_10": 0.0,
+        }
     count = len(records)
     mean_r5 = float(np.mean([r["recall_at_5"] for r in records]))
+    mean_r5_ceiling = float(np.mean([r.get("recall_at_5_ceiling", 0.0) for r in records]))
     mean_mrr = float(np.mean([r["mrr"] for r in records]))
     mean_ndcg = float(np.mean([r["ndcg_at_10"] for r in records]))
     return {
         "count": count,
         "recall_at_5": round(mean_r5, 4),
+        "recall_at_5_ceiling": round(mean_r5_ceiling, 4),
         "mrr": round(mean_mrr, 4),
         "ndcg_at_10": round(mean_ndcg, 4),
     }
@@ -173,6 +181,7 @@ async def evaluate_dev_set(
     data_dir: Path,
     limit: int | None = None,
     use_hash_embedder: bool = False,
+    vector_store: Any | None = None,
 ) -> tuple[dict[str, Any], list[Path]]:
     """Runs evaluation on dev set jobs using specified retriever variant."""
     from rag.index.bm25 import BM25Index
@@ -211,27 +220,28 @@ async def evaluate_dev_set(
         if limit and limit > 0:
             lines = lines[:limit]
 
-        # Candidate items for random baseline (34 experience items: case studies, repos, reviews)
+        # Candidate items for random baseline (35 experience items: case studies, repos, reviews, cv)
         candidate_items: list[str] = []
         rng = random.Random(42 + sum(ord(c) for c in persona))
         if variant == "random":
             chunks_file = data_dir.parent.parent / "data" / "processed" / "index" / f"{persona}_chunks.jsonl"
             if chunks_file.is_file():
-                raw_cids = [
-                    json.loads(line)["id"]
+                raw_chunks = [
+                    json.loads(line)
                     for line in chunks_file.read_text(encoding="utf-8").splitlines()
                     if line.strip()
                 ]
                 candidate_items = sorted(
-                    {roll_up_to_item_id(c) for c in raw_cids if "_prop_" not in c and "_cv_" not in c}
+                    {roll_up_to_item_id(c["id"]) for c in raw_chunks if c.get("type") != "proposal"}
                 )
 
         retriever = None
-        if variant in {"v0", "v0_naive"}:
+        if variant in {"v0", "v0_naive", "v0_unfiltered", "v0_naive_unfiltered"}:
             retriever = get_retriever(
-                variant="v0_naive",
+                variant=variant,
                 persona=persona,
                 use_hash_embedder=use_hash_embedder,
+                vector_store=vector_store,
             )
 
         print(f"[rag_eval] Evaluating {len(lines)} jobs for persona '{persona}' using variant '{variant}'...")
@@ -244,6 +254,9 @@ async def evaluate_dev_set(
 
             query = f"{job.get('title', '')}\n\n{job.get('description', '')}".strip()
             gold_ids = set(gold.get("relevant_evidence_ids", []))
+            if not gold_ids:
+                # Exclude empty-gold jobs from retrieval metrics (they are evaluated in decision eval)
+                continue
             n_req = int(gold.get("n_requirements", 0))
 
             if variant == "random":
@@ -251,7 +264,12 @@ async def evaluate_dev_set(
             elif variant == "bm25_skills":
                 assert bm25_index is not None
                 skill_query = " ".join(job.get("skills", []))
-                hits = bm25_index.search(query=skill_query, k=25, persona=persona)
+                hits = bm25_index.search(
+                    query=skill_query,
+                    k=35,
+                    persona=persona,
+                    chunk_type=["case_study", "repo_readme", "repo_code", "review", "cv"],
+                )
                 retrieved_ids = roll_up_retrieved_ids([c.id for c, _ in hits])[:10]
             elif variant == "oracle":
                 assert bm25_index is not None
@@ -270,6 +288,7 @@ async def evaluate_dev_set(
                 retrieved_ids = roll_up_retrieved_ids([item.id for item in items])[:10]
 
             r5 = compute_recall_at_k(retrieved_ids, gold_ids, k=5)
+            r5_ceiling = float(min(5, len(gold_ids)) / len(gold_ids))
             mrr = compute_mrr(retrieved_ids, gold_ids, k=10)
             ndcg = compute_ndcg_at_k(retrieved_ids, gold_ids, k=10)
 
@@ -280,6 +299,7 @@ async def evaluate_dev_set(
                     "n_requirements": n_req,
                     "n_req_slice": get_n_req_slice(n_req),
                     "recall_at_5": r5,
+                    "recall_at_5_ceiling": r5_ceiling,
                     "mrr": mrr,
                     "ndcg_at_10": ndcg,
                 }
@@ -374,8 +394,12 @@ def run_rag_eval(
     print(f"  {ts_file}")
     print(f"  {latest_file}")
     print("\nSummary Metrics:")
-    print(f"  Overall: Count={results['overall']['count']}, Recall@5={results['overall']['recall_at_5']:.4f}, "
-          f"MRR={results['overall']['mrr']:.4f}, nDCG@10={results['overall']['ndcg_at_10']:.4f}")
+    print(
+        f"  Overall: Count={results['overall']['count']}, "
+        f"Recall@5={results['overall']['recall_at_5']:.4f} "
+        f"(Ceiling={results['overall']['recall_at_5_ceiling']:.4f}), "
+        f"MRR={results['overall']['mrr']:.4f}, nDCG@10={results['overall']['ndcg_at_10']:.4f}"
+    )
 
     return output_payload
 

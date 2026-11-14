@@ -64,6 +64,10 @@ def get_retriever(
     if selected_variant in {"v0", "v0_naive"}:
         from rag.variants.v0_naive import V0NaiveRetriever
 
-        return V0NaiveRetriever(**kwargs)
+        return V0NaiveRetriever(unfiltered=False, **kwargs)
+    elif selected_variant in {"v0_unfiltered", "v0_naive_unfiltered"}:
+        from rag.variants.v0_naive import V0NaiveRetriever
+
+        return V0NaiveRetriever(unfiltered=True, **kwargs)
     else:
         raise ValueError(f"Unknown RAG retriever variant: '{selected_variant}'")

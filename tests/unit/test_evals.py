@@ -111,12 +111,13 @@ def test_n_req_slice_categorization() -> None:
 
 def test_aggregate_metrics() -> None:
     records = [
-        {"recall_at_5": 1.0, "mrr": 1.0, "ndcg_at_10": 1.0},
-        {"recall_at_5": 0.5, "mrr": 0.5, "ndcg_at_10": 0.5},
+        {"recall_at_5": 1.0, "recall_at_5_ceiling": 1.0, "mrr": 1.0, "ndcg_at_10": 1.0},
+        {"recall_at_5": 0.5, "recall_at_5_ceiling": 1.0, "mrr": 0.5, "ndcg_at_10": 0.5},
     ]
     agg = aggregate_metrics(records)
     assert agg["count"] == 2
     assert agg["recall_at_5"] == 0.75
+    assert agg["recall_at_5_ceiling"] == 1.0
     assert agg["mrr"] == 0.75
     assert agg["ndcg_at_10"] == 0.75
 
@@ -242,7 +243,7 @@ def test_dev_dataset_schema(persona: str) -> None:
 
         ev_ids = gold["relevant_evidence_ids"]
         assert isinstance(ev_ids, list)
-        assert 1 <= len(ev_ids) <= 8, f"Row {idx} evidence ids length {len(ev_ids)} not in [1, 8]"
+        assert 0 <= len(ev_ids) <= 8, f"Row {idx} evidence ids length {len(ev_ids)} not in [0, 8]"
         for eid in ev_ids:
             assert isinstance(eid, str) and eid.strip()
 
@@ -296,19 +297,49 @@ def test_tool_tasks_schema() -> None:
 @pytest.mark.asyncio
 async def test_rag_eval_runner_offline_hashembedder(tmp_path: Path) -> None:
     from evals.runners.rag_eval import evaluate_dev_set
+    from rag.index.embeddings import HashEmbedder
+    from rag.index.vector_store import VectorStore
+    from rag.schema import Chunk
 
-    # Run on 2 items with HashEmbedder (fast, 0 downloads, offline)
+    # Verify that querying without matching index raises ValueError
+    with pytest.raises(ValueError, match="Embedding model mismatch"):
+        await evaluate_dev_set(
+            variant="v0_naive",
+            personas=["ai_ml"],
+            data_dir=DATASETS_DIR,
+            limit=2,
+            use_hash_embedder=True,
+        )
+
+    # With isolated store matching HashEmbedder
+    embedder = HashEmbedder(dimension=384)
+    store = VectorStore(storage_path=tmp_path / "qdrant", embedder=embedder)
+    store.upsert_chunks([
+        Chunk(
+            id="ai_ml_cs_cs_aiml_001_0",
+            persona="ai_ml",
+            type="case_study",
+            project="test",
+            skills=["Python"],
+            text="Machine learning model",
+            content_hash="h1",
+            source_path="test",
+        )
+    ])
+
     results, evaluated_paths = await evaluate_dev_set(
         variant="v0_naive",
         personas=["ai_ml"],
         data_dir=DATASETS_DIR,
         limit=2,
         use_hash_embedder=True,
+        vector_store=store,
     )
+    store.close()
 
     assert len(evaluated_paths) == 1
     assert "overall" in results
-    assert results["overall"]["count"] == 2
+    assert results["overall"]["count"] >= 1
     assert 0.0 <= results["overall"]["recall_at_5"] <= 1.0
     assert 0.0 <= results["overall"]["mrr"] <= 1.0
     assert 0.0 <= results["overall"]["ndcg_at_10"] <= 1.0

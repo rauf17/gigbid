@@ -1,0 +1,71 @@
+{
+  "variant": "oracle",
+  "timestamp": "2026-11-14T13:14:22.027045+00:00",
+  "git_commit": "7f1868e9ea738a0067a5fb26e024e6a1f856e4dd",
+  "dataset_hash": "b731a25c64f5a612",
+  "config": {
+    "variant": "oracle",
+    "k": 10,
+    "embedder": "bm25",
+    "dimension": 0,
+    "personas": [
+      "ai_ml",
+      "fullstack",
+      "data_analyst"
+    ],
+    "limit": null
+  },
+  "overall": {
+    "count": 511,
+    "recall_at_5": 0.5564,
+    "recall_at_5_ceiling": 0.6806,
+    "mrr": 1.0,
+    "ndcg_at_10": 0.852
+  },
+  "by_persona": {
+    "ai_ml": {
+      "count": 182,
+      "recall_at_5": 0.6122,
+      "recall_at_5_ceiling": 0.7404,
+      "mrr": 1.0,
+      "ndcg_at_10": 0.8508
+    },
+    "fullstack": {
+      "count": 172,
+      "recall_at_5": 0.4966,
+      "recall_at_5_ceiling": 0.668,
+      "mrr": 1.0,
+      "ndcg_at_10": 0.8191
+    },
+    "data_analyst": {
+      "count": 157,
+      "recall_at_5": 0.5573,
+      "recall_at_5_ceiling": 0.625,
+      "mrr": 1.0,
+      "ndcg_at_10": 0.8895
+    }
+  },
+  "by_n_requirements": {
+    "1-2": {
+      "count": 0,
+      "recall_at_5": 0.0,
+      "recall_at_5_ceiling": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_10": 0.0
+    },
+    "3-4": {
+      "count": 0,
+      "recall_at_5": 0.0,
+      "recall_at_5_ceiling": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_10": 0.0
+    },
+    "5+": {
+      "count": 511,
+      "recall_at_5": 0.5564,
+      "recall_at_5_ceiling": 0.6806,
+      "mrr": 1.0,
+      "ndcg_at_10": 0.852
+    }
+  }
+}

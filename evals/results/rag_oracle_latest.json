@@ -1,8 +1,8 @@
 {
   "variant": "oracle",
-  "timestamp": "2026-11-13T21:25:14.793463+00:00",
-  "git_commit": "f2ccb94df6eb7fdf59f8e0edcc5db3f2cb73ed46",
-  "dataset_hash": "ac7d46be72b918cb",
+  "timestamp": "2026-11-14T13:14:22.027045+00:00",
+  "git_commit": "7f1868e9ea738a0067a5fb26e024e6a1f856e4dd",
+  "dataset_hash": "b731a25c64f5a612",
   "config": {
     "variant": "oracle",
     "k": 10,
@@ -16,49 +16,56 @@
     "limit": null
   },
   "overall": {
-    "count": 600,
-    "recall_at_5": 0.7085,
+    "count": 511,
+    "recall_at_5": 0.5564,
+    "recall_at_5_ceiling": 0.6806,
     "mrr": 1.0,
-    "ndcg_at_10": 0.8925
+    "ndcg_at_10": 0.852
   },
   "by_persona": {
     "ai_ml": {
-      "count": 200,
-      "recall_at_5": 0.7503,
+      "count": 182,
+      "recall_at_5": 0.6122,
+      "recall_at_5_ceiling": 0.7404,
       "mrr": 1.0,
-      "ndcg_at_10": 0.9205
+      "ndcg_at_10": 0.8508
     },
     "fullstack": {
-      "count": 200,
-      "recall_at_5": 0.7096,
+      "count": 172,
+      "recall_at_5": 0.4966,
+      "recall_at_5_ceiling": 0.668,
       "mrr": 1.0,
-      "ndcg_at_10": 0.889
+      "ndcg_at_10": 0.8191
     },
     "data_analyst": {
-      "count": 200,
-      "recall_at_5": 0.6656,
+      "count": 157,
+      "recall_at_5": 0.5573,
+      "recall_at_5_ceiling": 0.625,
       "mrr": 1.0,
-      "ndcg_at_10": 0.8679
+      "ndcg_at_10": 0.8895
     }
   },
   "by_n_requirements": {
     "1-2": {
       "count": 0,
       "recall_at_5": 0.0,
+      "recall_at_5_ceiling": 0.0,
       "mrr": 0.0,
       "ndcg_at_10": 0.0
     },
     "3-4": {
-      "count": 408,
-      "recall_at_5": 0.7651,
-      "mrr": 1.0,
-      "ndcg_at_10": 0.9123
+      "count": 0,
+      "recall_at_5": 0.0,
+      "recall_at_5_ceiling": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_10": 0.0
     },
     "5+": {
-      "count": 192,
-      "recall_at_5": 0.5882,
+      "count": 511,
+      "recall_at_5": 0.5564,
+      "recall_at_5_ceiling": 0.6806,
       "mrr": 1.0,
-      "ndcg_at_10": 0.8504
+      "ndcg_at_10": 0.852
     }
   }
 }

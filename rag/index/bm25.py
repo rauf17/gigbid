@@ -69,7 +69,7 @@ class BM25Index:
         limit: int = 5,
         k: int | None = None,
         persona: str | None = None,
-        chunk_type: str | None = None,
+        chunk_type: str | list[str] | set[str] | None = None,
         skills: list[str] | str | None = None,
         outcome: str | None = None,
         filters: dict[str, Any] | None = None,
@@ -81,7 +81,7 @@ class BM25Index:
         actual_limit = k if k is not None else limit
         f = filters or {}
         p = persona or f.get("persona")
-        t = chunk_type or f.get("type")
+        t = chunk_type or f.get("type") or f.get("types")
         o = outcome or f.get("outcome")
         s = skills or f.get("skills")
 
@@ -99,8 +99,12 @@ class BM25Index:
             # Apply filters
             if p and chunk.persona != p:
                 continue
-            if t and chunk.type != t:
-                continue
+            if t:
+                if isinstance(t, (list, tuple, set, frozenset)):
+                    if chunk.type not in t:
+                        continue
+                elif chunk.type != t:
+                    continue
             if o and chunk.outcome != o:
                 continue
             if s:
