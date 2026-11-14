@@ -508,6 +508,7 @@ async def node_approval(
     state: BidGraphState,
     config: RunnableConfig,
     writer: StreamWriter,
+    store: BaseStore | None = None,
 ) -> dict[str, Any]:
     """Suspends execution via interrupt() to present preview and await human approval.
 
@@ -576,6 +577,23 @@ async def node_approval(
         edited_text = decision_val.get("edited_text", "")
         orig_text = draft_obj.cover_letter if draft_obj else ""
         diff_record = {"original": orig_text, "edited": edited_text, "reason": decision_val.get("reason", "")}
+
+        if store is not None:
+            try:
+                from agent.memory.store import record_proposal_edit
+
+                await record_proposal_edit(
+                    user_id=state.get("user_id", "default_user"),
+                    original_text=orig_text,
+                    edited_text=edited_text,
+                    edit_id=uuid4().hex[:8],
+                    store=store,
+                    deps=deps,
+                    trace_id=state.get("trace_id", ""),
+                    reason=decision_val.get("reason", ""),
+                )
+            except Exception as exc:  # noqa: BLE001
+                logger.debug("Failed recording edit to memory store: %s", exc)
 
         updated_draft = draft_obj.model_copy(update={"cover_letter": edited_text}) if hasattr(draft_obj, "model_copy") else draft_obj
         recheck = await compliance.run({"draft": updated_draft}, deps)
