@@ -468,8 +468,8 @@ def run_rag_eval(
     if smoke and effective_limit is None:
         effective_limit = 10 if len(personas) > 1 else 30
 
-    canonical_variant = variant
-    if variant in {"bm25_skills", "skill_tag_lookup_REFERENCE"}:
+    canonical_variant = "_".join(variant) if isinstance(variant, list) else variant
+    if canonical_variant in {"bm25_skills", "skill_tag_lookup_REFERENCE"}:
         canonical_variant = "skill_tag_lookup_REFERENCE"
 
     results, evaluated_paths = asyncio.run(

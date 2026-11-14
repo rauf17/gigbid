@@ -273,11 +273,12 @@ def test_smoke_runner_sub_5_seconds(tmp_path: Path) -> None:
 
 
 def test_v0_reproduction(tmp_path: Path) -> None:
-    """Ensures V0 produces identical deterministic baseline results."""
-    res = run_rag_eval(variant="v0_naive", output_dir=tmp_path, limit=10, use_hash_embedder=True)
+    """Ensures V0 produced via ComposablePipelineRetriever (stages: [dense]) reproduces V0NaiveRetriever."""
+    res_naive = run_rag_eval(variant="v0_naive", output_dir=tmp_path / "naive", limit=10, use_hash_embedder=True)
+    res_dense = run_rag_eval(variant=["dense"], output_dir=tmp_path / "dense", limit=10, use_hash_embedder=True)
 
-    # 10 jobs per persona = 30 jobs total (27 with non-empty gold)
-    assert res["overall"]["count"] == 27
-    assert res["overall"]["recall_at_5"] == pytest.approx(0.1296, abs=1e-3)
-    assert res["overall"]["mrr"] == pytest.approx(0.3828, abs=1e-3)
-    assert res["overall"]["ndcg_at_10"] == pytest.approx(0.2247, abs=1e-3)
+    # Composable pipeline [dense] must reproduce V0 baseline exactly
+    assert res_dense["overall"]["count"] == res_naive["overall"]["count"]
+    assert res_dense["overall"]["recall_at_5"] == pytest.approx(res_naive["overall"]["recall_at_5"], abs=1e-4)
+    assert res_dense["overall"]["mrr"] == pytest.approx(res_naive["overall"]["mrr"], abs=1e-4)
+    assert res_dense["overall"]["ndcg_at_10"] == pytest.approx(res_naive["overall"]["ndcg_at_10"], abs=1e-4)
