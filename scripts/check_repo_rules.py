@@ -83,6 +83,28 @@ for f in files:
     if rel.startswith("evals/datasets/") and re.search(r"hidden|test_set", rel):
         fails.append(f"hidden/test set committed: {rel}")
 
+# hardcoded model names in code (R8)
+MODEL_NAME_PATTERN = re.compile(r"gpt-oss|qwen|llama|gemini|claude|gpt-4", re.IGNORECASE)
+for f in files:
+    rel = f.relative_to(ROOT).as_posix()
+    if not rel.endswith(".py"):
+        continue
+    if (
+        rel == "agent/llm.py"
+        or rel == "scripts/check_repo_rules.py"
+        or rel.startswith(("tests/", "data/"))
+    ):
+        continue
+    try:
+        txt = f.read_text(errors="ignore")
+    except OSError:
+        continue
+    match = MODEL_NAME_PATTERN.search(txt)
+    if match:
+        fails.append(
+            f"hardcoded model name '{match.group(0)}' in {rel} (must be configured in agent/config.yaml)"
+        )
+
 if fails:
     print("REPO RULE FAILURES:"); [print(" -", x) for x in fails]; sys.exit(1)
 print("repo rules OK")

@@ -22,6 +22,7 @@ apps/web/test-results/
 # generated / private data
 data/raw/
 data/processed/index/
+data/processed/llm_cache/
 evals/datasets/*hidden*
 evals/datasets/*test_set*
 # local model + db volumes
