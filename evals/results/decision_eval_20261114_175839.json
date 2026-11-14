@@ -1,0 +1,80 @@
+{
+  "benchmark": "decision_eval",
+  "timestamp": "2026-11-14T17:58:39.564117+00:00",
+  "git_commit": "57e2695",
+  "dataset_hash": "b731a25c",
+  "smoke": true,
+  "models_used": {
+    "analyst": "openai/gpt-oss-20b",
+    "risk_assessor": "openai/gpt-oss-20b",
+    "fit_matcher": "openai/gpt-oss-20b",
+    "pricing": "deterministic_heuristics",
+    "decision": "pure_function"
+  },
+  "overall": {
+    "count": 30,
+    "bid_or_skip_f1": 0.0,
+    "bid_or_skip_precision": 0.0,
+    "bid_or_skip_recall": 0.0,
+    "bid_or_skip_accuracy": 0.3667,
+    "scam_precision": 0.0,
+    "scam_recall": 0.0,
+    "scam_f1": 0.0,
+    "injection_detection_rate": 1.0,
+    "price_in_band_rate": 0.9,
+    "latency_p50_ms": 115.53,
+    "latency_p95_ms": 384.6,
+    "total_tokens": 32534,
+    "total_cost_usd": 0.0
+  },
+  "by_persona": {
+    "ai_ml": {
+      "count": 10,
+      "bid_or_skip_f1": 0.0,
+      "bid_or_skip_precision": 0.0,
+      "bid_or_skip_recall": 0.0,
+      "bid_or_skip_accuracy": 0.4,
+      "scam_precision": 0.0,
+      "scam_recall": 0.0,
+      "scam_f1": 0.0,
+      "injection_detection_rate": 1.0,
+      "price_in_band_rate": 1.0,
+      "latency_p50_ms": 95.08,
+      "latency_p95_ms": 137.03,
+      "total_tokens": 10888,
+      "total_cost_usd": 0.0
+    },
+    "fullstack": {
+      "count": 10,
+      "bid_or_skip_f1": 0.0,
+      "bid_or_skip_precision": 0.0,
+      "bid_or_skip_recall": 0.0,
+      "bid_or_skip_accuracy": 0.4,
+      "scam_precision": 0.0,
+      "scam_recall": 0.0,
+      "scam_f1": 0.0,
+      "injection_detection_rate": 1.0,
+      "price_in_band_rate": 1.0,
+      "latency_p50_ms": 140.56,
+      "latency_p95_ms": 362.35,
+      "total_tokens": 10806,
+      "total_cost_usd": 0.0
+    },
+    "data_analyst": {
+      "count": 10,
+      "bid_or_skip_f1": 0.0,
+      "bid_or_skip_precision": 0.0,
+      "bid_or_skip_recall": 0.0,
+      "bid_or_skip_accuracy": 0.3,
+      "scam_precision": 0.0,
+      "scam_recall": 0.0,
+      "scam_f1": 0.0,
+      "injection_detection_rate": 1.0,
+      "price_in_band_rate": 0.7,
+      "latency_p50_ms": 251.67,
+      "latency_p95_ms": 718.35,
+      "total_tokens": 10840,
+      "total_cost_usd": 0.0
+    }
+  }
+}

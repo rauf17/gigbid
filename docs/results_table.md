@@ -1,10 +1,10 @@
 # GigBid Evaluation Results Table
 
-This document records official benchmark evaluation results for the GigBid autonomous agent platform across RAG retriever variants (V0 Naive, V1 Decompose, V2 Hybrid BM25+Dense, V3 Cross-Encoder Rerank, V4 Outcome-Aware) and baseline reference models.
+This document records official benchmark evaluation results for the GigBid autonomous agent platform across RAG retriever variants (V0 Naive, V1 Decompose, V2 Hybrid BM25+Dense, V3 Cross-Encoder Rerank, V4 Outcome-Aware), agent decision nodes, proposal verification (R5), and adversarial prompt injection defense (R9).
 
 > [!NOTE]
 > All benchmark runs evaluate against the 600-job deterministic dev evaluation set (`evals/datasets/dev_<persona>.jsonl`, 200 jobs/persona).
-> Metrics are automatically updated by running `make eval-all` or `uv run python scripts/results_table.py`.
+> Metrics are automatically updated by running `make eval-all`, `make eval-nodes`, or `uv run python scripts/results_table.py`.
 
 ---
 
@@ -99,3 +99,59 @@ This document records official benchmark evaluation results for the GigBid auton
 | `v0_naive_unfiltered` | 1-2 skills | 0 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
 | `v0_naive_unfiltered` | 3-4 skills | 0 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
 | `v0_naive_unfiltered` | 5+ skills | 511 | 0.0519 | 0.6806 | 0.1904 | 0.0845 |
+
+---
+
+### Agent Decision Pipeline Performance (Smoke)
+
+| Metric | Value |
+|:---|:---:|
+| Jobs Evaluated | 30 |
+| **Bid/Skip F1 Score** | **0.0000** |
+| Bid/Skip Precision | 0.0000 |
+| Bid/Skip Recall | 0.0000 |
+| Bid/Skip Accuracy | 0.3667 |
+| Scam Detection Precision | 0.0000 |
+| Scam Detection Recall | 0.0000 |
+| **Injection Detection Rate** | **1.0000** |
+| Price-in-Band Rate | 0.9000 |
+| Latency p95 (ms) | 1238.4 |
+| Total Tokens | 32,534 |
+| Total Cost (USD) | $0.0000 |
+| Dataset SHA / Commit | `b731a25c` / `57e2695` |
+
+---
+
+### Proposal Claim Verification & Quality (R5) (Smoke)
+
+| Metric | Value |
+|:---|:---:|
+| Proposals Evaluated | 15 |
+| Avg Claims per Proposal | 1.00 |
+| Unsupported Claims Before Verification | 15 |
+| Unsupported Claims After Verification | 0 |
+| Unsupported Rate Before Verification | 1.0000 |
+| **Unsupported Rate After Verification** | **0.0000** |
+| **Unsupported Rate Reduction (R5 Delta)** | **1.0000** |
+| Critic Grounding Score (Mean) | 0.9000 |
+| Critic Personalization Score (Mean) | 0.8500 |
+| Critic Accept Rate | 0.0000 |
+| Compliance Clean Rate | 0.0000 |
+| Total Compliance Violations Caught | 15 |
+| Latency p95 (ms) | 1431.7 |
+| Dataset SHA / Commit | `b731a25c` / `57e2695` |
+
+---
+
+### Adversarial Prompt Injection Defense (R9) (Smoke)
+
+| Metric | Value |
+|:---|:---:|
+| Total Adversarial Jobs Tested | 10 |
+| **Attack Success Rate (Without Defenses)** | **0.9000** |
+| **Attack Success Rate (With Defenses)** | **0.0000** |
+| **ASR Absolute Reduction** | **0.9000** |
+| **Defense Effectiveness Rate** | **1.0000** |
+| Injection Flagging Rate | 1.0000 |
+| Latency p95 (ms) | 286.6 |
+| Dataset SHA / Commit | `b731a25c` / `57e2695` |

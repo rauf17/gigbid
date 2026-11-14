@@ -246,8 +246,8 @@ class Critique(HandoffBase):
 
     grounding: float = Field(..., ge=0.0, le=1.0, description="Evidence grounding score (0..1).")
     personalization: float = Field(..., ge=0.0, le=1.0, description="Tailoring to job details (0..1).")
-    length_ok: bool = Field(..., description="Whether proposal length respects policy constraints.")
-    generic_opening: bool = Field(..., description="Whether a generic cliché opener was detected.")
+    length_ok: bool = Field(default=True, description="Whether proposal length respects policy constraints.")
+    generic_opening: bool = Field(default=False, description="Whether a generic cliché opener was detected.")
     issues: list[str] = Field(default_factory=list, description="Constructive feedback points.")
     verdict: Literal["accept", "revise"] = Field(..., description="Approval decision.")
 

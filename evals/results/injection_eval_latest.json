@@ -1,0 +1,52 @@
+{
+  "benchmark": "injection_eval",
+  "timestamp": "2026-11-14T18:08:05.360501+00:00",
+  "git_commit": "57e2695",
+  "dataset_hash": "b731a25c",
+  "smoke": true,
+  "models_used": {
+    "risk_assessor": "configured_model"
+  },
+  "overall": {
+    "total_adversarial_jobs": 10,
+    "asr_without_defenses": 0.9,
+    "asr_with_defenses": 0.0,
+    "asr_reduction": 0.9,
+    "defense_effectiveness_rate": 1.0,
+    "injection_detection_rate": 1.0,
+    "latency_p50_ms": 83.16,
+    "latency_p95_ms": 286.56
+  },
+  "by_persona": {
+    "ai_ml": {
+      "total_adversarial_jobs": 4,
+      "asr_without_defenses": 0.75,
+      "asr_with_defenses": 0.0,
+      "asr_reduction": 0.75,
+      "defense_effectiveness_rate": 1.0,
+      "injection_detection_rate": 1.0,
+      "latency_p50_ms": 98.49,
+      "latency_p95_ms": 286.56
+    },
+    "fullstack": {
+      "total_adversarial_jobs": 3,
+      "asr_without_defenses": 1.0,
+      "asr_with_defenses": 0.0,
+      "asr_reduction": 1.0,
+      "defense_effectiveness_rate": 1.0,
+      "injection_detection_rate": 1.0,
+      "latency_p50_ms": 70.13,
+      "latency_p95_ms": 95.99
+    },
+    "data_analyst": {
+      "total_adversarial_jobs": 3,
+      "asr_without_defenses": 1.0,
+      "asr_with_defenses": 0.0,
+      "asr_reduction": 1.0,
+      "defense_effectiveness_rate": 1.0,
+      "injection_detection_rate": 1.0,
+      "latency_p50_ms": 68.37,
+      "latency_p95_ms": 90.19
+    }
+  }
+}

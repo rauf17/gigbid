@@ -91,8 +91,10 @@ class VectorStore:
             actual_name = getattr(embedder, "name", getattr(embedder, "model_name", type(embedder).__name__))
             actual_dim = getattr(embedder, "dimension", None)
             if expected_embedder and actual_name != expected_embedder:
-                # Allow offline HashEmbedder to query standard 384-dim bge-small index for smoke testing
-                if expected_embedder == "BAAI/bge-small-en-v1.5" and actual_name == "HashEmbedder":
+                # Allow offline HashEmbedder interoperability when dimensions match (384)
+                if expected_dim == actual_dim and (
+                    expected_embedder == "HashEmbedder" or actual_name == "HashEmbedder"
+                ):
                     pass
                 else:
                     raise ValueError(

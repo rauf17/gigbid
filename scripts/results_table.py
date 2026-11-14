@@ -25,6 +25,108 @@ CANONICAL_ORDER = [
 ]
 
 
+def load_json_if_exists(p: Path) -> dict[str, Any] | None:
+    """Safely loads a JSON result file if it exists."""
+    if p.is_file():
+        try:
+            return json.loads(p.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return None
+    return None
+
+
+def format_decision_table(data: dict[str, Any] | None) -> str:
+    """Renders agent decision pipeline evaluation results."""
+    if not data or "overall" not in data:
+        return ""
+    ov = data["overall"]
+    commit = str(data.get("git_commit", "unknown"))[:7]
+    d_hash = str(data.get("dataset_hash", "unknown"))[:8]
+    smoke_tag = " (Smoke)" if data.get("smoke") else ""
+
+    lines = [
+        f"### Agent Decision Pipeline Performance{smoke_tag}",
+        "",
+        "| Metric | Value |",
+        "|:---|:---:|",
+        f"| Jobs Evaluated | {ov.get('count', 0)} |",
+        f"| **Bid/Skip F1 Score** | **{ov.get('bid_or_skip_f1', 0.0):.4f}** |",
+        f"| Bid/Skip Precision | {ov.get('bid_or_skip_precision', 0.0):.4f} |",
+        f"| Bid/Skip Recall | {ov.get('bid_or_skip_recall', 0.0):.4f} |",
+        f"| Bid/Skip Accuracy | {ov.get('bid_or_skip_accuracy', 0.0):.4f} |",
+        f"| Scam Detection Precision | {ov.get('scam_precision', 0.0):.4f} |",
+        f"| Scam Detection Recall | {ov.get('scam_recall', 0.0):.4f} |",
+        f"| **Injection Detection Rate** | **{ov.get('injection_detection_rate', 0.0):.4f}** |",
+        f"| Price-in-Band Rate | {ov.get('price_in_band_rate', 0.0):.4f} |",
+        f"| Latency p95 (ms) | {ov.get('latency_p95_ms', 0.0):.1f} |",
+        f"| Total Tokens | {int(ov.get('total_tokens', 0)):,} |",
+        f"| Total Cost (USD) | ${float(ov.get('total_cost_usd', 0.0)):.4f} |",
+        f"| Dataset SHA / Commit | `{d_hash}` / `{commit}` |",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def format_proposal_table(data: dict[str, Any] | None) -> str:
+    """Renders proposal verification and claim audit evaluation results (R5)."""
+    if not data or "overall" not in data:
+        return ""
+    ov = data["overall"]
+    commit = str(data.get("git_commit", "unknown"))[:7]
+    d_hash = str(data.get("dataset_hash", "unknown"))[:8]
+    smoke_tag = " (Smoke)" if data.get("smoke") else ""
+
+    lines = [
+        f"### Proposal Claim Verification & Quality (R5){smoke_tag}",
+        "",
+        "| Metric | Value |",
+        "|:---|:---:|",
+        f"| Proposals Evaluated | {ov.get('proposals_evaluated', 0)} |",
+        f"| Avg Claims per Proposal | {ov.get('avg_claims_per_proposal', 0.0):.2f} |",
+        f"| Unsupported Claims Before Verification | {ov.get('unsupported_claims_before', 0)} |",
+        f"| Unsupported Claims After Verification | {ov.get('unsupported_claims_after', 0)} |",
+        f"| Unsupported Rate Before Verification | {ov.get('unsupported_rate_before', 0.0):.4f} |",
+        f"| **Unsupported Rate After Verification** | **{ov.get('unsupported_rate_after', 0.0):.4f}** |",
+        f"| **Unsupported Rate Reduction (R5 Delta)** | **{ov.get('unsupported_rate_reduction', 0.0):.4f}** |",
+        f"| Critic Grounding Score (Mean) | {ov.get('critic_grounding_mean', 0.0):.4f} |",
+        f"| Critic Personalization Score (Mean) | {ov.get('critic_personalization_mean', 0.0):.4f} |",
+        f"| Critic Accept Rate | {ov.get('critic_accept_rate', 0.0):.4f} |",
+        f"| Compliance Clean Rate | {ov.get('compliance_clean_rate', 0.0):.4f} |",
+        f"| Total Compliance Violations Caught | {ov.get('compliance_total_violations', 0)} |",
+        f"| Latency p95 (ms) | {ov.get('latency_p95_ms', 0.0):.1f} |",
+        f"| Dataset SHA / Commit | `{d_hash}` / `{commit}` |",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def format_injection_table(data: dict[str, Any] | None) -> str:
+    """Renders prompt injection defense evaluation results (R9)."""
+    if not data or "overall" not in data:
+        return ""
+    ov = data["overall"]
+    commit = str(data.get("git_commit", "unknown"))[:7]
+    d_hash = str(data.get("dataset_hash", "unknown"))[:8]
+    smoke_tag = " (Smoke)" if data.get("smoke") else ""
+
+    lines = [
+        f"### Adversarial Prompt Injection Defense (R9){smoke_tag}",
+        "",
+        "| Metric | Value |",
+        "|:---|:---:|",
+        f"| Total Adversarial Jobs Tested | {ov.get('total_adversarial_jobs', 0)} |",
+        f"| **Attack Success Rate (Without Defenses)** | **{ov.get('asr_without_defenses', 0.0):.4f}** |",
+        f"| **Attack Success Rate (With Defenses)** | **{ov.get('asr_with_defenses', 0.0):.4f}** |",
+        f"| **ASR Absolute Reduction** | **{ov.get('asr_reduction', 0.0):.4f}** |",
+        f"| **Defense Effectiveness Rate** | **{ov.get('defense_effectiveness_rate', 0.0):.4f}** |",
+        f"| Injection Flagging Rate | {ov.get('injection_detection_rate', 0.0):.4f} |",
+        f"| Latency p95 (ms) | {ov.get('latency_p95_ms', 0.0):.1f} |",
+        f"| Dataset SHA / Commit | `{d_hash}` / `{commit}` |",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def load_latest_results(results_dir: Path) -> list[dict[str, Any]]:
     """Loads all latest evaluation result files sorted by canonical variant order."""
     if not results_dir.is_dir():
@@ -151,16 +253,21 @@ def format_n_req_table(results: list[dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
-def generate_results_markdown(results: list[dict[str, Any]]) -> str:
+def generate_results_markdown(
+    results: list[dict[str, Any]],
+    decision_data: dict[str, Any] | None = None,
+    proposal_data: dict[str, Any] | None = None,
+    injection_data: dict[str, Any] | None = None,
+) -> str:
     """Generates complete Markdown document from evaluation results."""
     doc_lines = [
         "# GigBid Evaluation Results Table",
         "",
-        "This document records official benchmark evaluation results for the GigBid autonomous agent platform across RAG retriever variants (V0 Naive, V1 Decompose, V2 Hybrid BM25+Dense, V3 Cross-Encoder Rerank, V4 Outcome-Aware) and baseline reference models.",
+        "This document records official benchmark evaluation results for the GigBid autonomous agent platform across RAG retriever variants (V0 Naive, V1 Decompose, V2 Hybrid BM25+Dense, V3 Cross-Encoder Rerank, V4 Outcome-Aware), agent decision nodes, proposal verification (R5), and adversarial prompt injection defense (R9).",
         "",
         "> [!NOTE]",
         "> All benchmark runs evaluate against the 600-job deterministic dev evaluation set (`evals/datasets/dev_<persona>.jsonl`, 200 jobs/persona).",
-        "> Metrics are automatically updated by running `make eval-all` or `uv run python scripts/results_table.py`.",
+        "> Metrics are automatically updated by running `make eval-all`, `make eval-nodes`, or `uv run python scripts/results_table.py`.",
         "",
         "---",
         "",
@@ -169,7 +276,7 @@ def generate_results_markdown(results: list[dict[str, Any]]) -> str:
     if not results:
         doc_lines.extend(
             [
-                "_No evaluation results found yet. Run `make eval-all` to execute the baseline evaluation._",
+                "_No retrieval evaluation results found yet. Run `make eval-all` to execute the baseline evaluation._",
                 "",
             ]
         )
@@ -181,6 +288,21 @@ def generate_results_markdown(results: list[dict[str, Any]]) -> str:
         doc_lines.append("---")
         doc_lines.append("")
         doc_lines.append(format_n_req_table(results))
+
+    if decision_data:
+        doc_lines.append("---")
+        doc_lines.append("")
+        doc_lines.append(format_decision_table(decision_data))
+
+    if proposal_data:
+        doc_lines.append("---")
+        doc_lines.append("")
+        doc_lines.append(format_proposal_table(proposal_data))
+
+    if injection_data:
+        doc_lines.append("---")
+        doc_lines.append("")
+        doc_lines.append(format_injection_table(injection_data))
 
     return "\n".join(doc_lines)
 
@@ -204,7 +326,16 @@ def main() -> None:
     results = load_latest_results(args.results_dir)
     print(f"[results_table] Found {len(results)} latest RAG result file(s).")
 
-    md_content = generate_results_markdown(results)
+    decision_data = load_json_if_exists(args.results_dir / "decision_eval_latest.json")
+    proposal_data = load_json_if_exists(args.results_dir / "proposal_eval_latest.json")
+    injection_data = load_json_if_exists(args.results_dir / "injection_eval_latest.json")
+
+    md_content = generate_results_markdown(
+        results,
+        decision_data=decision_data,
+        proposal_data=proposal_data,
+        injection_data=injection_data,
+    )
     args.output_doc.parent.mkdir(parents=True, exist_ok=True)
     args.output_doc.write_text(md_content, encoding="utf-8")
 

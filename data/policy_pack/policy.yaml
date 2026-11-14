@@ -85,11 +85,13 @@ rules:
     severity: block
     detector:
       regex:
-        - "(?i)ignore\\s+(?:all\\s+)?(?:previous|prior|above)\\s+instructions"
-        - "(?i)disregard\\s+(?:all\\s+)?(?:previous|prior|above)\\s+instructions"
-        - "(?i)system\\s+prompt\\s+override"
+        - "(?i)(?:ignore|disregard|forget)\\s+(?:all\\s+|any\\s+|prior\\s+|previous\\s+)?(?:instructions|rules|constraints|alerts|guidelines)"
+        - "(?i)(?:system|instruction|agent)\\s+(?:override|directive|prompt\\s+updated)"
+        - "(?i)--- (?:BEGIN|END) (?:ASSISTANT|SYSTEM|JOB) (?:INSTRUCTION|SPECIFICATION) ---"
+        - "(?i)\"system_instruction\"\\s*:"
         - "(?i)<\\s*/?(?:system|untrusted_data|instruction|admin)\\s*>"
         - "(?i)you\\s+are\\s+now\\s+in\\s+(?:developer|unrestricted|god|dan)\\s+mode"
+        - "(?i)you\\s+are\\s+now\\s+an?\\s+(?:automatic|automated)\\s+bidding\\s+agent"
       llm_check: true
 
   - id: POL-009-FAIR-USE-AUTOMATION

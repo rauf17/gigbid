@@ -1,4 +1,4 @@
-.PHONY: install dev api test eval eval-smoke eval-all seed data demo lint check lock mcp-marketplace mcp-portfolio ingest
+.PHONY: install dev api test eval eval-smoke eval-all eval-nodes eval-nodes-smoke seed data demo lint check lock mcp-marketplace mcp-portfolio ingest
 install:
 	uv sync --extra dev
 lock:
@@ -42,6 +42,16 @@ eval-all:
 	uv run python -m evals.runners.rag_eval --variant v2_hybrid
 	uv run python -m evals.runners.rag_eval --variant v3_rerank
 	uv run python -m evals.runners.rag_eval --variant v4_outcome
+	uv run python scripts/results_table.py
+eval-nodes-smoke:
+	uv run python evals/runners/decision_eval.py --smoke
+	uv run python evals/runners/proposal_eval.py --smoke
+	uv run python evals/runners/injection_eval.py --smoke
+	uv run python scripts/results_table.py
+eval-nodes:
+	uv run python evals/runners/decision_eval.py
+	uv run python evals/runners/proposal_eval.py
+	uv run python evals/runners/injection_eval.py
 	uv run python scripts/results_table.py
 demo:
 	@echo "TODO: run one job inbox -> approval -> reply against GigSim (Phase 4)"
