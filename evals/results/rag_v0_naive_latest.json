@@ -1,7 +1,7 @@
 {
   "variant": "v0_naive",
-  "timestamp": "2026-11-14T13:15:29.793764+00:00",
-  "git_commit": "7f1868e9ea738a0067a5fb26e024e6a1f856e4dd",
+  "timestamp": "2026-11-14T17:23:07.825832+00:00",
+  "git_commit": "7d8f6007586370f8666ff091f766b395d98646b0",
   "dataset_hash": "b731a25c64f5a612",
   "config": {
     "variant": "v0_naive",
@@ -13,14 +13,19 @@
       "fullstack",
       "data_analyst"
     ],
-    "limit": null
+    "limit": null,
+    "smoke": false
   },
   "overall": {
     "count": 511,
     "recall_at_5": 0.2867,
     "recall_at_5_ceiling": 0.6806,
     "mrr": 0.7417,
-    "ndcg_at_10": 0.4617
+    "ndcg_at_10": 0.4617,
+    "latency_p50_ms": 66.75,
+    "latency_p95_ms": 88.93,
+    "total_tokens": 0,
+    "total_cost_usd": 0.0
   },
   "by_persona": {
     "ai_ml": {
@@ -28,21 +33,33 @@
       "recall_at_5": 0.2911,
       "recall_at_5_ceiling": 0.7404,
       "mrr": 0.8188,
-      "ndcg_at_10": 0.4993
+      "ndcg_at_10": 0.4993,
+      "latency_p50_ms": 69.33,
+      "latency_p95_ms": 89.01,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
     },
     "fullstack": {
       "count": 172,
       "recall_at_5": 0.2953,
       "recall_at_5_ceiling": 0.668,
       "mrr": 0.7162,
-      "ndcg_at_10": 0.455
+      "ndcg_at_10": 0.455,
+      "latency_p50_ms": 68.58,
+      "latency_p95_ms": 94.08,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
     },
     "data_analyst": {
       "count": 157,
       "recall_at_5": 0.2723,
       "recall_at_5_ceiling": 0.625,
       "mrr": 0.6801,
-      "ndcg_at_10": 0.4253
+      "ndcg_at_10": 0.4253,
+      "latency_p50_ms": 63.81,
+      "latency_p95_ms": 79.91,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
     }
   },
   "by_n_requirements": {
@@ -51,21 +68,33 @@
       "recall_at_5": 0.0,
       "recall_at_5_ceiling": 0.0,
       "mrr": 0.0,
-      "ndcg_at_10": 0.0
+      "ndcg_at_10": 0.0,
+      "latency_p50_ms": 0.0,
+      "latency_p95_ms": 0.0,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
     },
     "3-4": {
       "count": 0,
       "recall_at_5": 0.0,
       "recall_at_5_ceiling": 0.0,
       "mrr": 0.0,
-      "ndcg_at_10": 0.0
+      "ndcg_at_10": 0.0,
+      "latency_p50_ms": 0.0,
+      "latency_p95_ms": 0.0,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
     },
     "5+": {
       "count": 511,
       "recall_at_5": 0.2867,
       "recall_at_5_ceiling": 0.6806,
       "mrr": 0.7417,
-      "ndcg_at_10": 0.4617
+      "ndcg_at_10": 0.4617,
+      "latency_p50_ms": 66.75,
+      "latency_p95_ms": 88.93,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
     }
   }
 }

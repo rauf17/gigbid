@@ -1,0 +1,305 @@
+{
+  "best_variant": "v4_outcome",
+  "best_stages": [
+    "hybrid",
+    "rerank",
+    "outcome_boost"
+  ],
+  "best_metrics": {
+    "count": 511,
+    "recall_at_5": 0.3298,
+    "recall_at_5_ceiling": 0.6806,
+    "mrr": 0.7396,
+    "ndcg_at_10": 0.488,
+    "latency_p50_ms": 103.1,
+    "latency_p95_ms": 133.16,
+    "total_tokens": 0,
+    "total_cost_usd": 0.0
+  },
+  "v0_metrics": {
+    "count": 511,
+    "recall_at_5": 0.2867,
+    "recall_at_5_ceiling": 0.6806,
+    "mrr": 0.7417,
+    "ndcg_at_10": 0.4617,
+    "latency_p50_ms": 77.17,
+    "latency_p95_ms": 109.47,
+    "total_tokens": 0,
+    "total_cost_usd": 0.0
+  },
+  "ablations": [
+    {
+      "name": "minus_hybrid",
+      "stages": [
+        "dense",
+        "rerank",
+        "outcome_boost"
+      ],
+      "metrics": {
+        "count": 511,
+        "recall_at_5": 0.3298,
+        "recall_at_5_ceiling": 0.6806,
+        "mrr": 0.7396,
+        "ndcg_at_10": 0.4904,
+        "latency_p50_ms": 105.17,
+        "latency_p95_ms": 263.26,
+        "total_tokens": 0,
+        "total_cost_usd": 0.0
+      },
+      "delta_vs_best": {
+        "delta_recall_at_5": 0.0,
+        "delta_mrr": 0.0,
+        "delta_ndcg_at_10": 0.0024
+      },
+      "delta_vs_v0": {
+        "delta_recall_at_5": 0.0431,
+        "delta_mrr": -0.0021,
+        "delta_ndcg_at_10": 0.0287
+      }
+    },
+    {
+      "name": "minus_rerank",
+      "stages": [
+        "hybrid",
+        "outcome_boost"
+      ],
+      "metrics": {
+        "count": 511,
+        "recall_at_5": 0.3038,
+        "recall_at_5_ceiling": 0.6806,
+        "mrr": 0.719,
+        "ndcg_at_10": 0.4871,
+        "latency_p50_ms": 114.78,
+        "latency_p95_ms": 149.69,
+        "total_tokens": 0,
+        "total_cost_usd": 0.0
+      },
+      "delta_vs_best": {
+        "delta_recall_at_5": -0.026,
+        "delta_mrr": -0.0206,
+        "delta_ndcg_at_10": -0.0009
+      },
+      "delta_vs_v0": {
+        "delta_recall_at_5": 0.0171,
+        "delta_mrr": -0.0227,
+        "delta_ndcg_at_10": 0.0254
+      }
+    },
+    {
+      "name": "minus_outcome_boost",
+      "stages": [
+        "hybrid",
+        "rerank"
+      ],
+      "metrics": {
+        "count": 511,
+        "recall_at_5": 0.3308,
+        "recall_at_5_ceiling": 0.6806,
+        "mrr": 0.7397,
+        "ndcg_at_10": 0.4878,
+        "latency_p50_ms": 80.95,
+        "latency_p95_ms": 108.07,
+        "total_tokens": 0,
+        "total_cost_usd": 0.0
+      },
+      "delta_vs_best": {
+        "delta_recall_at_5": 0.001,
+        "delta_mrr": 0.0001,
+        "delta_ndcg_at_10": -0.0002
+      },
+      "delta_vs_v0": {
+        "delta_recall_at_5": 0.0441,
+        "delta_mrr": -0.002,
+        "delta_ndcg_at_10": 0.0261
+      }
+    }
+  ],
+  "failure_cases": [
+    {
+      "job_id": "job_hist_00943",
+      "persona": "fullstack",
+      "title": "Senior LLM Engineer for Production RAG Pipeline",
+      "required_skills": [
+        "Python",
+        "FastAPI",
+        "pgvector",
+        "LangChain",
+        "Docker"
+      ],
+      "gold_evidence_ids": [
+        "fullstack_cs_cs_fs_010",
+        "fullstack_repo_saas-subscription-core",
+        "fullstack_review_rev_fullstack_010"
+      ],
+      "v0_retrieved": [
+        "fullstack_cs_cs_fs_010",
+        "fullstack_cv",
+        "fullstack_cs_cs_fs_019",
+        "fullstack_cs_cs_fs_020",
+        "fullstack_cs_cs_fs_011"
+      ],
+      "best_retrieved": [
+        "fullstack_cv",
+        "fullstack_cs_cs_fs_015",
+        "fullstack_cs_cs_fs_011",
+        "fullstack_cs_cs_fs_019",
+        "fullstack_cs_cs_fs_020"
+      ],
+      "v0_ndcg_at_10": 0.6049,
+      "best_ndcg_at_10": 0.0,
+      "v0_recall_at_5": 0.3333,
+      "best_recall_at_5": 0.0,
+      "ndcg_drop": 0.6049,
+      "failure_reason": "Hybrid BM25 sparse fusion or cross-encoder reranker pushed exact technical entity matches (e.g. specialized library/tool) out of the top-5."
+    },
+    {
+      "job_id": "job_stream_00031",
+      "persona": "fullstack",
+      "title": "Senior LLM Engineer for Production RAG Pipeline",
+      "required_skills": [
+        "Python",
+        "FastAPI",
+        "pgvector",
+        "LangChain",
+        "Docker"
+      ],
+      "gold_evidence_ids": [
+        "fullstack_cs_cs_fs_010",
+        "fullstack_repo_saas-subscription-core",
+        "fullstack_review_rev_fullstack_010"
+      ],
+      "v0_retrieved": [
+        "fullstack_cs_cs_fs_010",
+        "fullstack_cv",
+        "fullstack_cs_cs_fs_019",
+        "fullstack_cs_cs_fs_020",
+        "fullstack_cs_cs_fs_011"
+      ],
+      "best_retrieved": [
+        "fullstack_cv",
+        "fullstack_cs_cs_fs_015",
+        "fullstack_cs_cs_fs_011",
+        "fullstack_cs_cs_fs_019",
+        "fullstack_cs_cs_fs_020"
+      ],
+      "v0_ndcg_at_10": 0.6049,
+      "best_ndcg_at_10": 0.0,
+      "v0_recall_at_5": 0.3333,
+      "best_recall_at_5": 0.0,
+      "ndcg_drop": 0.6049,
+      "failure_reason": "Hybrid BM25 sparse fusion or cross-encoder reranker pushed exact technical entity matches (e.g. specialized library/tool) out of the top-5."
+    },
+    {
+      "job_id": "job_stream_00340",
+      "persona": "fullstack",
+      "title": "Senior LLM Engineer for Production RAG Pipeline",
+      "required_skills": [
+        "Python",
+        "FastAPI",
+        "pgvector",
+        "LangChain",
+        "Docker"
+      ],
+      "gold_evidence_ids": [
+        "fullstack_cs_cs_fs_010",
+        "fullstack_repo_saas-subscription-core",
+        "fullstack_review_rev_fullstack_010"
+      ],
+      "v0_retrieved": [
+        "fullstack_cs_cs_fs_010",
+        "fullstack_cv",
+        "fullstack_cs_cs_fs_019",
+        "fullstack_cs_cs_fs_020",
+        "fullstack_cs_cs_fs_011"
+      ],
+      "best_retrieved": [
+        "fullstack_cv",
+        "fullstack_cs_cs_fs_015",
+        "fullstack_cs_cs_fs_011",
+        "fullstack_cs_cs_fs_019",
+        "fullstack_cs_cs_fs_020"
+      ],
+      "v0_ndcg_at_10": 0.6049,
+      "best_ndcg_at_10": 0.0,
+      "v0_recall_at_5": 0.3333,
+      "best_recall_at_5": 0.0,
+      "ndcg_drop": 0.6049,
+      "failure_reason": "Hybrid BM25 sparse fusion or cross-encoder reranker pushed exact technical entity matches (e.g. specialized library/tool) out of the top-5."
+    },
+    {
+      "job_id": "job_stream_00454",
+      "persona": "fullstack",
+      "title": "Senior LLM Engineer for Production RAG Pipeline",
+      "required_skills": [
+        "Python",
+        "FastAPI",
+        "pgvector",
+        "LangChain",
+        "Docker"
+      ],
+      "gold_evidence_ids": [
+        "fullstack_cs_cs_fs_010",
+        "fullstack_repo_saas-subscription-core",
+        "fullstack_review_rev_fullstack_010"
+      ],
+      "v0_retrieved": [
+        "fullstack_cs_cs_fs_010",
+        "fullstack_cv",
+        "fullstack_cs_cs_fs_019",
+        "fullstack_cs_cs_fs_020",
+        "fullstack_cs_cs_fs_011"
+      ],
+      "best_retrieved": [
+        "fullstack_cv",
+        "fullstack_cs_cs_fs_015",
+        "fullstack_cs_cs_fs_011",
+        "fullstack_cs_cs_fs_019",
+        "fullstack_cs_cs_fs_020"
+      ],
+      "v0_ndcg_at_10": 0.6049,
+      "best_ndcg_at_10": 0.0,
+      "v0_recall_at_5": 0.3333,
+      "best_recall_at_5": 0.0,
+      "ndcg_drop": 0.6049,
+      "failure_reason": "Hybrid BM25 sparse fusion or cross-encoder reranker pushed exact technical entity matches (e.g. specialized library/tool) out of the top-5."
+    },
+    {
+      "job_id": "job_stream_00472",
+      "persona": "fullstack",
+      "title": "Senior LLM Engineer for Production RAG Pipeline",
+      "required_skills": [
+        "Python",
+        "FastAPI",
+        "pgvector",
+        "LangChain",
+        "Docker"
+      ],
+      "gold_evidence_ids": [
+        "fullstack_cs_cs_fs_010",
+        "fullstack_repo_saas-subscription-core",
+        "fullstack_review_rev_fullstack_010"
+      ],
+      "v0_retrieved": [
+        "fullstack_cs_cs_fs_010",
+        "fullstack_cv",
+        "fullstack_cs_cs_fs_019",
+        "fullstack_cs_cs_fs_020",
+        "fullstack_cs_cs_fs_011"
+      ],
+      "best_retrieved": [
+        "fullstack_cv",
+        "fullstack_cs_cs_fs_015",
+        "fullstack_cs_cs_fs_011",
+        "fullstack_cs_cs_fs_019",
+        "fullstack_cs_cs_fs_020"
+      ],
+      "v0_ndcg_at_10": 0.6049,
+      "best_ndcg_at_10": 0.0,
+      "v0_recall_at_5": 0.3333,
+      "best_recall_at_5": 0.0,
+      "ndcg_drop": 0.6049,
+      "failure_reason": "Hybrid BM25 sparse fusion or cross-encoder reranker pushed exact technical entity matches (e.g. specialized library/tool) out of the top-5."
+    }
+  ],
+  "markdown_table": "### Pipeline Ablation Analysis\n\n**Best Pipeline**: `v4_outcome` (nDCG@10 = 0.4880)\n\n| Configuration | Recall@5 | \u0394 vs Best | MRR | \u0394 vs Best | nDCG@10 | \u0394 vs Best | \u0394 vs V0 |\n|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|\n| **`v4_outcome` (Full)** | **0.3298** | `\u2014` | **0.7396** | `\u2014` | **0.4880** | `\u2014` | `+0.0263` |\n| `minus_hybrid` | 0.3298 | `+0.0000` | 0.7396 | `+0.0000` | 0.4904 | `+0.0024` | `+0.0287` |\n| `minus_rerank` | 0.3038 | `-0.0260` | 0.7190 | `-0.0206` | 0.4871 | `-0.0009` | `+0.0254` |\n| `minus_outcome_boost` | 0.3308 | `+0.0010` | 0.7397 | `+0.0001` | 0.4878 | `-0.0002` | `+0.0261` |\n| `v0_naive` (Baseline) | 0.2867 | `-0.0263` | 0.7417 | `\u2014` | 0.4617 | `-0.0263` | `0.0000` |\n"
+}

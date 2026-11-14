@@ -43,6 +43,9 @@ try:
 except ImportError:
     pass
 
+if "LLM_CACHE" not in os.environ:
+    os.environ["LLM_CACHE"] = "1"
+
 DEFAULT_DATA_DIR = Path(__file__).resolve().parent.parent / "datasets"
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent.parent / "results"
 DEFAULT_PERSONAS = ["ai_ml", "fullstack", "data_analyst"]

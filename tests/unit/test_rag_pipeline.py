@@ -5,7 +5,7 @@ Hermetic, offline, requiring zero external downloads or network calls.
 from __future__ import annotations
 
 import time
-from typing import Any
+from pathlib import Path
 
 import pytest
 
@@ -19,7 +19,6 @@ from rag.stages.base import compute_rrf_scores, roll_up_to_item_id
 from rag.stages.decompose import DecomposeStage
 from rag.stages.outcome_boost import OutcomeBoostStage
 from rag.stages.rerank import RerankStage
-
 
 # -----------------------------------------------------------------------------
 # 1. Hand-computed Reciprocal Rank Fusion (RRF) test
@@ -102,8 +101,6 @@ def test_outcome_boost_math() -> None:
       win_rate = (won_count + 1) / (total_count + 2)
       boosted_score = score * (1 + alpha * win_rate)
     """
-    stage = OutcomeBoostStage(alpha=0.2)
-
     # Hand-calculate for 3 won out of 4 total proposals:
     # win_rate = (3 + 1) / (4 + 2) = 4 / 6 = 2 / 3
     # factor = 1 + 0.2 * (2 / 3) = 1 + 0.133333 = 1.133333
@@ -244,10 +241,10 @@ def test_rerank_stage_stub_encoder() -> None:
 # -----------------------------------------------------------------------------
 
 
-def test_smoke_runner_sub_5_seconds() -> None:
+def test_smoke_runner_sub_5_seconds(tmp_path: Path) -> None:
     """Guarantees the smoke evaluation runner executes hermetically in < 5 seconds."""
     t0 = time.perf_counter()
-    res = run_rag_eval(variant="v0_naive", smoke=True)
+    res = run_rag_eval(variant="v0_naive", output_dir=tmp_path, smoke=True)
     elapsed = time.perf_counter() - t0
 
     assert elapsed < 5.0, f"Smoke eval took {elapsed:.2f}s, exceeding 5.0s budget"
@@ -263,9 +260,9 @@ def test_smoke_runner_sub_5_seconds() -> None:
 # -----------------------------------------------------------------------------
 
 
-def test_v0_reproduction() -> None:
+def test_v0_reproduction(tmp_path: Path) -> None:
     """Ensures V0 produces identical deterministic baseline results."""
-    res = run_rag_eval(variant="v0_naive", limit=10, use_hash_embedder=True)
+    res = run_rag_eval(variant="v0_naive", output_dir=tmp_path, limit=10, use_hash_embedder=True)
 
     # 10 jobs per persona = 30 jobs total (27 with non-empty gold)
     assert res["overall"]["count"] == 27

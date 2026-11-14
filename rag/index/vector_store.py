@@ -90,12 +90,16 @@ class VectorStore:
         if embedder is not None:
             actual_name = getattr(embedder, "name", getattr(embedder, "model_name", type(embedder).__name__))
             actual_dim = getattr(embedder, "dimension", None)
-            if expected_embedder and actual_name != expected_embedder and actual_name != "HashEmbedder":
-                raise ValueError(
-                    f"Embedding model mismatch: index was built with '{expected_embedder}' "
-                    f"(dimension {expected_dim}), but queried with '{actual_name}' (dimension {actual_dim}). "
-                    f"Please re-index or use the matching embedder."
-                )
+            if expected_embedder and actual_name != expected_embedder:
+                # Allow offline HashEmbedder to query standard 384-dim bge-small index for smoke testing
+                if expected_embedder == "BAAI/bge-small-en-v1.5" and actual_name == "HashEmbedder":
+                    pass
+                else:
+                    raise ValueError(
+                        f"Embedding model mismatch: index was built with '{expected_embedder}' "
+                        f"(dimension {expected_dim}), but queried with '{actual_name}' (dimension {actual_dim}). "
+                        f"Please re-index or use the matching embedder."
+                    )
             if expected_dim is not None and actual_dim is not None and actual_dim != expected_dim:
                 raise ValueError(
                     f"Embedding dimension mismatch: index was built with dimension {expected_dim}, "

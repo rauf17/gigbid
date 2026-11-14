@@ -1,0 +1,100 @@
+{
+  "variant": "v3_rerank",
+  "timestamp": "2026-11-14T14:55:14.284494+00:00",
+  "git_commit": "7d8f6007586370f8666ff091f766b395d98646b0",
+  "dataset_hash": "b731a25c64f5a612",
+  "config": {
+    "variant": "v3_rerank",
+    "k": 10,
+    "embedder": "BAAI/bge-small-en-v1.5",
+    "dimension": 384,
+    "personas": [
+      "ai_ml",
+      "fullstack",
+      "data_analyst"
+    ],
+    "limit": null,
+    "smoke": false
+  },
+  "overall": {
+    "count": 511,
+    "recall_at_5": 0.3308,
+    "recall_at_5_ceiling": 0.6806,
+    "mrr": 0.7397,
+    "ndcg_at_10": 0.4878,
+    "latency_p50_ms": 97.57,
+    "latency_p95_ms": 2982.38,
+    "total_tokens": 0,
+    "total_cost_usd": 0.0
+  },
+  "by_persona": {
+    "ai_ml": {
+      "count": 182,
+      "recall_at_5": 0.4322,
+      "recall_at_5_ceiling": 0.7404,
+      "mrr": 0.7393,
+      "ndcg_at_10": 0.517,
+      "latency_p50_ms": 92.42,
+      "latency_p95_ms": 2670.01,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    },
+    "fullstack": {
+      "count": 172,
+      "recall_at_5": 0.2499,
+      "recall_at_5_ceiling": 0.668,
+      "mrr": 0.6362,
+      "ndcg_at_10": 0.4332,
+      "latency_p50_ms": 91.03,
+      "latency_p95_ms": 3086.78,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    },
+    "data_analyst": {
+      "count": 157,
+      "recall_at_5": 0.3018,
+      "recall_at_5_ceiling": 0.625,
+      "mrr": 0.8535,
+      "ndcg_at_10": 0.5137,
+      "latency_p50_ms": 107.37,
+      "latency_p95_ms": 3287.77,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    }
+  },
+  "by_n_requirements": {
+    "1-2": {
+      "count": 0,
+      "recall_at_5": 0.0,
+      "recall_at_5_ceiling": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_10": 0.0,
+      "latency_p50_ms": 0.0,
+      "latency_p95_ms": 0.0,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    },
+    "3-4": {
+      "count": 0,
+      "recall_at_5": 0.0,
+      "recall_at_5_ceiling": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_10": 0.0,
+      "latency_p50_ms": 0.0,
+      "latency_p95_ms": 0.0,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    },
+    "5+": {
+      "count": 511,
+      "recall_at_5": 0.3308,
+      "recall_at_5_ceiling": 0.6806,
+      "mrr": 0.7397,
+      "ndcg_at_10": 0.4878,
+      "latency_p50_ms": 97.57,
+      "latency_p95_ms": 2982.38,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    }
+  }
+}
