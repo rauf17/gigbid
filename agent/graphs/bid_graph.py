@@ -399,11 +399,13 @@ async def node_verifier(
         deps,
     )
     dur = (time.perf_counter() - t0) * 1000.0
+    checks_count = len(report.checks) if report and getattr(report, "checks", None) else 0
+    removed_count = len(report.removed) if report and getattr(report, "removed", None) else 0
     write_audit_trace(
         trace_id=state.get("trace_id", ""),
         thread_id=thread_id,
         node_name="verifier",
-        observation=f"Verification: checks={len(report.checks)}, removed={len(report.removed)}",
+        observation=f"Verification: checks={checks_count}, removed={removed_count}",
         duration_ms=dur,
     )
     writer({"event": "node_end", "node": "verifier", "duration_ms": dur, "tokens": 0})

@@ -25,5 +25,6 @@ jobs:
       - run: uv run python scripts/check_repo_rules.py
       - run: make data
       - run: uv run python scripts/migrate_db.py
+      - run: uv run python scripts/render_graphs.py
       - run: uv run pytest -q
   # TODO Phase 5: playwright job (apps/web) + integration job against GigSim

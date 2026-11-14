@@ -178,3 +178,51 @@ flowchart TD
 | **Claim Verification (R5)** | `evals/runners/proposal_eval.py` | Unsupported Rate After | Unsupported Rate After $= 0.0$ |
 | **Injection Defense (R9)** | `evals/runners/injection_eval.py` | Attack Success Rate (ASR) | ASR With Defenses $\le 0.05$ |
 | **Model Routing (R8)** | `scripts/check_repo_rules.py` | Model name decoupling | Zero hardcoded models in `.py` |
+
+---
+
+## 5. StateGraph Bid Graph Orchestration, Durability & Memory
+
+The full autonomous bidding lifecycle is orchestrated by a hand-written LangGraph `StateGraph` (`agent/graphs/bid_graph.py`).
+
+### 5.1 Graph Topology Diagram
+
+![Bid Graph Architecture](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/docs/images/bid_graph.png)
+
+```mermaid
+graph TD;
+	__start__ --> intake;
+	intake -.-> analyst;
+	intake -.-> risk_assessor;
+	intake -.-> fit_matcher;
+	analyst --> join;
+	risk_assessor --> join;
+	fit_matcher --> join;
+	join --> decide;
+	decide -.-> pricing;
+	decide -.-> __end__;
+	pricing --> writer;
+	writer --> verifier;
+	verifier --> critic;
+	critic -.-> writer;
+	critic -.-> compliance;
+	compliance -.-> approval;
+	compliance -.-> __end__;
+	approval -.-> submit;
+	approval -.-> __end__;
+	submit --> __end__;
+```
+
+### 5.2 The Three-Way Split (State vs. Trace vs. Memory)
+1. **In-Flight State (`BidGraphState`)**: Lightweight, typed dictionary containing only active thread data required for node hand-offs. Kept lean to ensure sub-millisecond serialization during checkpointing.
+2. **Audit Trace (`audit_trace` table)**: PostgreSQL append-only record tracking node latencies, token spends, observation messages, and error states. PII (emails, phone numbers, tokens) is masked before storage.
+3. **Long-Term Memory (LangGraph Store)**: Partitioned into `("style", user_id)` and `("outcome", user_id, category)` namespaces. Promoted only after satisfying multi-proposal observation thresholds ($\ge 2$) and passing contradiction detection.
+
+### 5.3 Human-in-the-Loop & Autonomy Guard
+- **Approval Interrupt**: The `approval` node invokes `interrupt(payload)` to freeze execution until explicit human review.
+- **Strict Prohibition of `auto_send`**: Bidding requires financial spend (Connects). Enabling `auto_send=True` in configuration raises an immediate `ValueError` at compilation and node execution.
+- **Dry-Run Preview**: A read-only preview is computed prior to suspension, displaying exact bid amounts, Connects expenditure, and grounded cover letter text.
+
+### 5.4 Durability & Crash Recovery
+- Backed by `AsyncPostgresSaver` on port **5433**.
+- State is checkpointed at every graph superstep. In the event of a catastrophic process kill (`kill -9`, container eviction), restarting processes query pending checkpoints and resume via `Command(resume=decision)` with zero duplicate submissions or wasted Connects.
