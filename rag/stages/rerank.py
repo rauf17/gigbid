@@ -1,7 +1,10 @@
 """Cross-encoder reranking stage scoring top candidate passages against query."""
 from __future__ import annotations
 
+import hashlib
+import json
 import logging
+from pathlib import Path
 from typing import Any
 
 from rag.retriever import EvidenceItem
@@ -9,6 +12,30 @@ from rag.retriever import EvidenceItem
 logger = logging.getLogger(__name__)
 
 DEFAULT_RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+DEFAULT_CACHE_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "processed" / "rerank_cache.json"
+
+_MEM_CACHE: dict[str, float] = {}
+_CACHE_LOADED = False
+
+
+def _get_cache() -> dict[str, float]:
+    global _MEM_CACHE, _CACHE_LOADED
+    if not _CACHE_LOADED:
+        if DEFAULT_CACHE_PATH.is_file():
+            try:
+                _MEM_CACHE = json.loads(DEFAULT_CACHE_PATH.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                _MEM_CACHE = {}
+        _CACHE_LOADED = True
+    return _MEM_CACHE
+
+
+def _save_cache() -> None:
+    try:
+        DEFAULT_CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        DEFAULT_CACHE_PATH.write_text(json.dumps(_MEM_CACHE), encoding="utf-8")
+    except OSError:
+        pass
 
 
 class RerankStage:
@@ -40,11 +67,31 @@ class RerankStage:
             return []
 
         pool = candidates[:rerank_pool_size]
-        pairs = [(query, item.text) for item in pool]
+        cache = _get_cache()
+
+        # Build pair keys
+        q_hash = hashlib.md5(query.encode("utf-8")).hexdigest()
+        keys: list[str] = []
+        unseen_pairs: list[tuple[str, str]] = []
+        unseen_keys: list[str] = []
+
+        for item in pool:
+            t_hash = hashlib.md5(item.text.encode("utf-8")).hexdigest()
+            key = f"{q_hash}_{t_hash}"
+            keys.append(key)
+            if key not in cache:
+                unseen_pairs.append((query, item.text))
+                unseen_keys.append(key)
 
         try:
-            encoder = self._get_encoder()
-            scores = encoder.predict(pairs, batch_size=32)
+            if unseen_pairs:
+                encoder = self._get_encoder()
+                new_scores = encoder.predict(unseen_pairs, batch_size=32, show_progress_bar=False)
+                for k, score in zip(unseen_keys, new_scores, strict=True):
+                    cache[k] = float(score)
+                _save_cache()
+
+            scores = [cache[k] for k in keys]
 
             scored_candidates: list[EvidenceItem] = []
             for item, score in zip(pool, scores, strict=True):

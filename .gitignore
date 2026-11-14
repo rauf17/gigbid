@@ -24,6 +24,7 @@ data/raw/
 data/processed/index/
 data/processed/llm_cache/
 data/processed/llm_calls.jsonl
+data/processed/rerank_cache.json
 evals/datasets/*hidden*
 evals/datasets/*test_set*
 # local model + db volumes
