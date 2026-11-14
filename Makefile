@@ -1,4 +1,9 @@
-.PHONY: install dev api test eval eval-smoke eval-all eval-nodes eval-nodes-smoke seed data demo lint check lock mcp-marketplace mcp-portfolio ingest
+.PHONY: install dev api test eval eval-smoke eval-all eval-nodes eval-nodes-smoke seed data demo lint check lock mcp-marketplace mcp-portfolio ingest db-up db-down
+db-up:
+	docker compose -f infra/docker-compose.yml up -d postgres redis
+	uv run python scripts/migrate_db.py
+db-down:
+	docker compose -f infra/docker-compose.yml down
 install:
 	uv sync --extra dev
 lock:

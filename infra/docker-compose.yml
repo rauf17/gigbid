@@ -1,2 +1,28 @@
-# TODO Phase 6: web, api, worker, 3 MCP servers, gigsim, postgres(+pgvector), redis, ollama.
-services: {}
+services:
+  postgres:
+    image: postgres:17
+    container_name: gigbid_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: gigbid
+      POSTGRES_USER: gigbid
+      POSTGRES_PASSWORD: gigbid
+    ports:
+      - "5433:5432"
+    volumes:
+      - gigbid_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gigbid -d gigbid"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: gigbid_redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+
+volumes:
+  gigbid_pgdata:
