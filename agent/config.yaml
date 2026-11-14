@@ -5,23 +5,162 @@ marketplace:
   live_poll_interval_minutes: 180
 
 profiles:
-  open:                   # REQUIRED: open-weight only (local Ollama/vLLM or hosted open provider)
-    provider: openrouter  # ollama | openrouter | groq | together
+  open:                   # REQUIRED: open-weight only (Groq provider)
+    provider: groq
+    request_timeout: 30.0
+    max_retries: 3
+    fallback_model: openai/gpt-oss-20b
+    rate_limits:
+      requests_per_minute: 30   # TODO: adjust per Groq tier limits from console
+      tokens_per_minute: 20000  # TODO: adjust per Groq tier limits from console
+    pricing:
+      # Cost in USD per 1M tokens (free tier = 0.0)
+      openai/gpt-oss-20b:
+        prompt_usd_per_m: 0.0
+        completion_usd_per_m: 0.0
+      openai/gpt-oss-120b:
+        prompt_usd_per_m: 0.0
+        completion_usd_per_m: 0.0
+      qwen/qwen3.8-27b:
+        prompt_usd_per_m: 0.0
+        completion_usd_per_m: 0.0
     nodes:
-      scout: {model: TBD-small}
-      analyst: {model: TBD-small}
-      risk_assessor: {model: TBD-small}
-      fit_matcher: {model: TBD-small}
-      pricing: {model: TBD-small}
-      verifier: {model: TBD-mid}
-      writer: {model: TBD-large}
-      critic: {model: TBD-large}
-      compliance: {model: TBD-small}
-      client_liaison: {model: TBD-large}
-    fallback_model: TBD-small
+      scout:
+        model: openai/gpt-oss-20b
+        temperature: 0.1
+        max_output_tokens: 1024
+        reasoning_effort: low
+      analyst:
+        model: openai/gpt-oss-20b
+        temperature: 0.1
+        max_output_tokens: 2048
+        reasoning_effort: low
+      risk_assessor:
+        model: openai/gpt-oss-20b
+        temperature: 0.0
+        max_output_tokens: 1024
+        reasoning_effort: low
+      fit_matcher:
+        model: openai/gpt-oss-20b
+        temperature: 0.1
+        max_output_tokens: 1024
+        reasoning_effort: low
+      pricing:
+        model: openai/gpt-oss-20b
+        temperature: 0.0
+        max_output_tokens: 1024
+        reasoning_effort: low
+      compliance:
+        model: openai/gpt-oss-20b
+        temperature: 0.0
+        max_output_tokens: 1024
+        reasoning_effort: low
+      requirement_decomposer:
+        model: openai/gpt-oss-20b
+        temperature: 0.1
+        max_output_tokens: 2048
+        reasoning_effort: low
+      verifier:
+        model: openai/gpt-oss-120b
+        temperature: 0.0
+        max_output_tokens: 2048
+        reasoning_effort: medium
+      writer:
+        model: openai/gpt-oss-120b
+        temperature: 0.5
+        max_output_tokens: 4096
+        reasoning_effort: medium
+      critic:
+        model: openai/gpt-oss-120b
+        temperature: 0.2
+        max_output_tokens: 2048
+        reasoning_effort: medium
+      client_liaison:
+        model: openai/gpt-oss-120b
+        temperature: 0.4
+        max_output_tokens: 2048
+        reasoning_effort: medium
     embeddings: nomic-embed-text      # open model, CPU-friendly
     reranker: bge-reranker-v2-m3
-  paid:                   # OPTIONAL
+
+  open_alt:               # Alternative open-weight profile for model comparison
+    provider: groq
+    request_timeout: 30.0
+    max_retries: 3
+    fallback_model: openai/gpt-oss-20b
+    rate_limits:
+      requests_per_minute: 30   # TODO: adjust per Groq tier limits from console
+      tokens_per_minute: 20000  # TODO: adjust per Groq tier limits from console
+    pricing:
+      openai/gpt-oss-20b:
+        prompt_usd_per_m: 0.0
+        completion_usd_per_m: 0.0
+      openai/gpt-oss-120b:
+        prompt_usd_per_m: 0.0
+        completion_usd_per_m: 0.0
+      qwen/qwen3.8-27b:
+        prompt_usd_per_m: 0.0
+        completion_usd_per_m: 0.0
+    nodes:
+      scout:
+        model: openai/gpt-oss-20b
+        temperature: 0.1
+        max_output_tokens: 1024
+        reasoning_effort: low
+      analyst:
+        model: openai/gpt-oss-20b
+        temperature: 0.1
+        max_output_tokens: 2048
+        reasoning_effort: low
+      risk_assessor:
+        model: openai/gpt-oss-20b
+        temperature: 0.0
+        max_output_tokens: 1024
+        reasoning_effort: low
+      fit_matcher:
+        model: openai/gpt-oss-20b
+        temperature: 0.1
+        max_output_tokens: 1024
+        reasoning_effort: low
+      pricing:
+        model: openai/gpt-oss-20b
+        temperature: 0.0
+        max_output_tokens: 1024
+        reasoning_effort: low
+      compliance:
+        model: openai/gpt-oss-20b
+        temperature: 0.0
+        max_output_tokens: 1024
+        reasoning_effort: low
+      requirement_decomposer:
+        model: openai/gpt-oss-20b
+        temperature: 0.1
+        max_output_tokens: 2048
+        reasoning_effort: low
+      verifier:
+        model: qwen/qwen3.8-27b
+        temperature: 0.0
+        max_output_tokens: 2048
+        reasoning_effort: medium
+      writer:
+        model: qwen/qwen3.8-27b
+        temperature: 0.5
+        max_output_tokens: 4096
+        reasoning_effort: medium
+      critic:
+        model: qwen/qwen3.8-27b
+        temperature: 0.2
+        max_output_tokens: 2048
+        reasoning_effort: medium
+      client_liaison:
+        model: qwen/qwen3.8-27b
+        temperature: 0.4
+        max_output_tokens: 2048
+        reasoning_effort: medium
+    embeddings: nomic-embed-text
+    reranker: bge-reranker-v2-m3
+
+  paid:                   # OPTIONAL placeholder
     provider: openai
     nodes: {}
 
@@ -34,8 +173,8 @@ budgets:
   max_graph_steps: 30
   max_revisions: 2
   max_tokens_per_job: 12000
-  declared_p95_latency_s: {job_analysed: TBD, proposal: TBD}
-  declared_cost_usd: {job_analysed: TBD, proposal: TBD}
+  declared_p95_latency_s: {job_analysed: 12.0, proposal: 25.0}
+  declared_cost_usd: {job_analysed: 0.01, proposal: 0.03}
 
 thresholds:
   minimum_fit_score: 0.60
