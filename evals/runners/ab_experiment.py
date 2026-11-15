@@ -500,12 +500,13 @@ async def run_ab_experiment(
 
     cfg = load_config()
     profile = cfg.get("profiles", {}).get(cfg.get("active_profile", "open"), {})
+    nodes_cfg = profile.get("nodes", {})
     models_used = {
-        "analyst": profile.get("nodes", {}).get("analyst", {}).get("model", "openai/gpt-oss-20b"),
-        "fit_matcher": profile.get("nodes", {}).get("fit_matcher", {}).get("model", "openai/gpt-oss-20b"),
-        "writer_arm_a": profile.get("nodes", {}).get("writer_arm_a", {}).get("model", "openai/gpt-oss-120b"),
-        "writer_arm_b": profile.get("nodes", {}).get("writer_arm_b", {}).get("model", "openai/gpt-oss-120b"),
-        "verifier": profile.get("nodes", {}).get("verifier", {}).get("model", "openai/gpt-oss-120b"),
+        "analyst": nodes_cfg.get("analyst", {}).get("model", "configured_model"),
+        "fit_matcher": nodes_cfg.get("fit_matcher", {}).get("model", "configured_model"),
+        "writer_arm_a": nodes_cfg.get("writer_arm_a", {}).get("model", "configured_model"),
+        "writer_arm_b": nodes_cfg.get("writer_arm_b", {}).get("model", "configured_model"),
+        "verifier": nodes_cfg.get("verifier", {}).get("model", "configured_model"),
         "compliance": "deterministic_heuristics",
     }
 
