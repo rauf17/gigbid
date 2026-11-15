@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Live smoke test verifying full autonomous bid flow against a running GigBid stack.
 
 Requirements:
