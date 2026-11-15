@@ -69,12 +69,15 @@ Documented in [docs/rd/hypotheses.md](file:///c:/Users/AR/Desktop/Agentic_A2/gig
 
 ## 3. Decision Evaluation & Triage Performance
 
-Source: [evals/results/decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) (Mode: `real`, Commit: `4ae8a327`).
+Source: [evals/results/decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) (Mode: `real`, Commit: `94b1696`).
 
 | Metric | Value | File Source | Description |
 | :--- | :---: | :--- | :--- |
 | **Evaluated Jobs** | `78` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Total evaluated development set opportunities |
-| **Bid/Skip F1 Score** | `0.7500` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Macro harmonic mean of precision and recall |
+| **Bid/Skip F1 Score (Macro)** | `0.7500` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Macro harmonic mean of precision and recall across all personas |
+| **Bid/Skip F1 Score (AI/ML)** | `0.6207` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Persona F1 score for Dr. Elena Rostova ($n=23$) |
+| **Bid/Skip F1 Score (Full-Stack)** | `0.7879` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Persona F1 score for Marcus Vance ($n=29$) |
+| **Bid/Skip F1 Score (Data Analyst)** | `0.8235` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Persona F1 score for Amina Al-Mansoor ($n=26$) |
 | **Bid/Skip Recall** | `1.0000` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | 100% recall on genuine profitable opportunities |
 | **Bid/Skip Precision** | `0.6000` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Precision on bidding recommendations |
 | **Bid/Skip Accuracy** | `0.6923` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Overall classification accuracy |
@@ -86,7 +89,6 @@ Source: [evals/results/decision_eval_latest.json](file:///c:/Users/AR/Desktop/Ag
 | **Price In-Band Rate** | `0.8846` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | 88.46% of submitted bid prices fell inside client budget bands |
 | **Decision Latency p50** | `310.64` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Median triage decision latency in milliseconds |
 | **Decision Latency p95** | `921.85` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | 95th percentile triage decision latency in milliseconds |
-| **Decision Latency p95 (Benchmark)** | `1698.6` | [decision_eval_20261114_202802.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_20261114_202802.json) | 95th percentile latency in ms reported in docs/results_table.md (commit `d42e2ba`) |
 
 ---
 

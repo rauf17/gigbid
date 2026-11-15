@@ -106,7 +106,7 @@ This document records official benchmark evaluation results for the GigBid auton
 
 | Benchmark | Mode | Primary Metric | Primary Value | p95 Lat (ms) | Real LLM Calls | Models Used |
 |:---|:---:|:---|:---:|:---:|:---|:---|
-| Decision Pipeline | `real` | Bid/Skip F1 | **0.7500** | 1698.6 | `0` | `analyst:openai/gpt-oss-20b, risk_assessor:openai/gpt-oss-20b, fit_matcher:openai/gpt-oss-20b, pricing:deterministic_heuristics, decision:pure_function` |
+| Decision Pipeline | `real` | Bid/Skip F1 | **0.7500** | 921.85 | `0` | `analyst:openai/gpt-oss-20b, risk_assessor:openai/gpt-oss-20b, fit_matcher:openai/gpt-oss-20b, pricing:deterministic_heuristics, decision:pure_function` |
 | Proposal Verification (R5) | `real` | Post-Verify Unsupported Rate | **0.0000** | 1411.7 | `0` | `analyst:openai/gpt-oss-20b, fit_matcher:openai/gpt-oss-20b, writer:openai/gpt-oss-120b, verifier:openai/gpt-oss-120b, critic:openai/gpt-oss-120b, compliance:deterministic_heuristics` |
 | Injection Defense (R9) | `real` | Defense Effectiveness Rate | **0.7778** | 2722.5 | `0` | `risk_assessor:openai/gpt-oss-20b` |
 
@@ -117,21 +117,21 @@ This document records official benchmark evaluation results for the GigBid auton
 | Metric | Value |
 |:---|:---:|
 | **LLM Mode** | **`real`** |
-| Jobs Evaluated | 60 |
+| Jobs Evaluated | 78 |
 | **Bid/Skip F1 Score** | **0.7500** |
 | Bid/Skip Precision | 0.6000 |
 | Bid/Skip Recall | 1.0000 |
-| Bid/Skip Accuracy | 0.6000 |
-| Scam Detection Precision | 0.0000 |
-| Scam Detection Recall | 0.0000 |
+| Bid/Skip Accuracy | 0.6923 |
+| Scam Detection Precision | 1.0000 |
+| Scam Detection Recall | 0.2778 |
 | **Injection Detection Rate** | **1.0000** |
-| Price-in-Band Rate | 0.9000 |
-| Latency p95 (ms) | 1698.6 |
+| Price-in-Band Rate | 0.8846 |
+| Latency p95 (ms) | 921.85 |
 | Total Tokens | 0 |
 | Total Cost (USD) | $0.0000 |
 | Non-Cache LLM Calls | `0` |
 | Models Used | `analyst:openai/gpt-oss-20b, risk_assessor:openai/gpt-oss-20b, fit_matcher:openai/gpt-oss-20b, pricing:deterministic_heuristics, decision:pure_function` |
-| Dataset SHA / Commit | `b731a25c` / `d42e2ba` |
+| Dataset SHA / Commit | `b731a25c` / `94b1696` |
 
 ---
 

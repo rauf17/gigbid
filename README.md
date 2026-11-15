@@ -173,7 +173,7 @@ synthetic jobs across three personas (511 have gold evidence).
 
 | Benchmark | Primary metric | Value | p95 (ms) |
 |:---|:---|:---:|:---:|
-| Decision pipeline | Bid/skip F1 | 0.7500 | 1698.6 |
+| Decision pipeline | Bid/skip F1 | 0.7500 | 921.85 |
 | Proposal verification | Unsupported claims after verification | 0.0000 | 1411.7 |
 | Injection defence | Defence effectiveness | 0.7778 | 2722.5 |
 | Scam detection | Precision / Recall ($n=78$, 18 scam) | 1.0000 / 0.2778 | 921.85 |
@@ -289,7 +289,7 @@ Claude Desktop (`claude_desktop_config.json`):
 1. **Synthetic data.** Jobs are generated from archetypes. Real postings will be messier.
 2. **Gold labels come from skill tags**, so retrieval scores measure agreement with that key.
 3. **The simulator rewards metric-led proposals**, so the A/B result may not transfer to real clients.
-4. **Small samples.** 60 decision jobs, 15 proposal generations and 10 injection probes, limited by
+4. **Small samples.** 78 decision jobs, 15 proposal generations and 10 injection probes, limited by
    free-tier model quotas.
 5. **Not run:** R&D questions A and C, judge calibration against 30 hand labels, and the blind human panel.
 6. **The live Upwork adapter is a stub.** Only GigSim is implemented. The GitHub MCP is not

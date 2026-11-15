@@ -95,8 +95,8 @@ R&D Question B evaluates retrieval strategies for grounding proposal generation 
 - **Per-Variant Judge Score**: `not run` (automated downstream proposal quality scoring per RAG retrieval variant was not run).
 - **GigSim Reply Rate per RAG Variant**: `not run` (downstream simulator bidding was evaluated across strategy arms in Extension X2, but was not run per RAG retrieval variant).
 
-### Shipped Production Choice
-We shipped **V2 Hybrid with Persona Metadata Filtering**. It delivers `0.3121` Recall@5 (`0.3450` in AI/ML) and `0.4870` nDCG@10 within an acceptable `296.7ms` p95 latency envelope, avoiding the `2,982.4ms` latency penalty of transformer cross-encoders.
+### Retrieval configuration: running vs recommended
+The running system uses V0 dense retrieval with persona and evidence-type filtering (`agent/config.yaml`: `variant: v0_naive`, `pipeline: [dense]`). V2 hybrid had the best measured Recall@5 (`0.3121` vs `0.2867`, `evals/results/rag_v2_hybrid_latest.json`) at about 297 ms p95 (`296.7ms`) and is recommended, but is not enabled in the deployed image.
 
 ---
 
@@ -221,7 +221,7 @@ Evaluated across $n=20$ benchmark jobs using open-weights models (`openai/gpt-os
 | `rag_v2_hybrid_latest.json` | V2 Hybrid BM25+Dense | `d6e46c2` | Recall@5: `0.3121`, nDCG@10: `0.4870`, Latency p95: `296.7ms` |
 | `rag_v3_rerank_latest.json` | V3 Cross-Encoder Rerank| `7d8f600` | Recall@5: `0.3308`, nDCG@10: `0.4878`, Latency p95: `2982.4ms` |
 | `rag_v4_outcome_latest.json` | V4 Outcome Boosting | `7d8f600` | Recall@5: `0.3298`, nDCG@10: `0.4880`, Latency p95: `133.2ms` |
-| `decision_eval_latest.json` | Triage Decision Engine | `d42e2ba` | Bid/Skip F1: `0.7500`, Recall: `1.0000`, Precision: `0.6000` |
+| `decision_eval_latest.json` | Triage Decision Engine | `94b1696` | Jobs: `78`, Bid/Skip F1: `0.7500` (AI/ML: `0.6207`, FullStack: `0.7879`, Data Analyst: `0.8235`), Precision: `0.6000`, Recall: `1.0000`, Latency p95: `921.85ms` |
 | `proposal_eval_latest.json` | Proposal & NLI Verifier| `d42e2ba` | Unsupported Rate (Post): `0.0000`, Clean Rate: `1.0000` |
 | `injection_eval_latest.json` | Prompt Injection Shield| `d42e2ba` | Defense Effectiveness: `0.7778`, ASR Reduction: `0.7000` |
 | `ab_experiment_latest.json` | Proposal A/B Trial | `da8b1df` | Reply Rate: `0.2333` vs `0.1083` ($p=0.0101$), McNemar $p=0.0015$ |
