@@ -26,8 +26,36 @@ uv run gigbid-portfolio-mcp --stdio --persona ai_ml
 
 ## 2. Claude Desktop Integration
 
-To connect the Portfolio MCP server to Claude Desktop, add the following snippet to your `claude_desktop_config.json`:
+To connect the Portfolio MCP server directly to Claude Desktop, add the following configuration to your `claude_desktop_config.json`:
 
+### Option A: Direct Execution via `uvx` (Zero Local Installation)
+```json
+{
+  "mcpServers": {
+    "portfolio": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/rauf17/gigbid",
+        "gigbid-portfolio-mcp",
+        "--stdio",
+        "--persona",
+        "ai_ml"
+      ],
+      "env": {
+        "PORTFOLIO_PERSONA": "ai_ml",
+        "USE_HASH_EMBEDDER": "1"
+      }
+    }
+  }
+}
+```
+
+> [!NOTE]
+> **Standalone Persona Data & Auto-Indexing**:
+> The package bundles the verified freelancer persona corpus (`data/personas/`). On first execution, the server automatically builds the local vector collection using the deterministic offline `HashEmbedder` in ~3 seconds (no Hugging Face model downloads or network secrets required).
+
+### Option B: Local Repository Execution via `uv`
 ```json
 {
   "mcpServers": {
@@ -49,6 +77,11 @@ To connect the Portfolio MCP server to Claude Desktop, add the following snippet
     }
   }
 }
+```
+
+### Option C: Containerized Execution via Docker
+```bash
+docker run -i --rm -e PORTFOLIO_PERSONA=ai_ml gigbid-space gigbid-portfolio-mcp --stdio
 ```
 
 ---
