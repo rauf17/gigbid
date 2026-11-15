@@ -48,7 +48,7 @@ build-backend = "setuptools.build_meta"
 include = ["agent*", "apps*", "rag*", "mcp_servers*", "worker*", "evals*", "gigsim*", "data*"]
 
 [tool.setuptools.package-data]
-"*" = ["*.json", "*.yaml", "*.yml", "*.md", "*.txt"]
+"*" = ["*.json", "*.yaml", "*.yml", "*.md", "*.txt", "*.sqlite", "*.jsonl", "*.pdf", "*.pkl", "*.lock", "*.sql"]
 
 [tool.ruff]
 line-length = 100

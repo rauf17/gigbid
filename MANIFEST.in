@@ -1,0 +1,7 @@
+graft data
+graft agent/prompts
+include README.md
+prune .venv
+prune apps/web/node_modules
+prune apps/web/.next
+prune tests

@@ -129,10 +129,10 @@ We evaluated two distinct proposal writing strategies over a paired cohort of $N
 ### Experimental Outcomes (`evals/results/ab_experiment_latest.json`)
 - **Reply Rate**: Arm A achieved `0.2333` (28/120) vs Arm B `0.1083` (13/120). Difference = `+0.1250` (+12.50 percentage points).
   - Two-proportion $z$-test: $z = 2.5726$, $p = 0.0101$ (statistically significant at $\alpha = 0.05$).
-  - Exact McNemar test (paired responses, $b=20, c=5$): $p = 0.0015$ (highly significant).
+  - Exact McNemar test (paired responses, $b=18, c=3$): $p = 0.0015$ (statistically significant).
 - **Hire Rate**: Arm A achieved `0.0417` (5/120) vs Arm B `0.0000` (0/120). Difference = `+0.0417` (+4.17 percentage points).
-  - Two-proportion $z$-test: $z = 2.2597$, $p = 0.0238$ (statistically significant).
-  - Fisher's exact test: $p = 0.0599$ (marginal due to small hire count).
+  - Two-proportion $z$-test: $z = 2.2597$, $p = 0.0238$.
+  - Exact Fisher's test: $p = 0.0599 \ge 0.05$ (NOT statistically significant at the $\alpha = 0.05$ threshold). Both arms evaluated the exact same 120 candidate jobs against a simulator that rewards metrics by construction.
 
 > [!WARNING]
 > **Simulator Limitation & Circularity Caveat**:
@@ -142,18 +142,17 @@ We evaluated two distinct proposal writing strategies over a paired cohort of $N
 
 ## 8. Failure Analysis Summary
 
-Documented across 11 real failure cases from development results (`docs/failure_analysis.md`):
+Documented from verified failure traces in `evals/results/ablation_latest.json` (`docs/failure_analysis.md`). Per truth audit rules, only failures with traceable job records in result files are listed as real failures; remaining taxonomy classes recorded zero per-job failures in official artifacts:
 
 | Failure Class | Example Job ID | Root Cause | Implemented Resolution | Verified Impact |
 | :--- | :--- | :--- | :--- | :--- |
-| **Missed Evidence** | `job_hist_00943` | Cross-encoder overweighted general terms | Outcome-aware weighting | AI/ML nDCG: `0.4993` $\rightarrow$ `0.5252` |
-| **Missed Evidence** | `job_stream_00472` | Cross-persona vector contamination | Mandatory persona metadata filtering | Recall@5: `0.0519` $\rightarrow$ `0.2867` |
-| **Wrong Skip** | `job_hist_00031` | Synonym mismatch in strict keyword fit | Tuned threshold to 0.60 + dense cosine | Bid/Skip Recall reached `1.0000` |
-| **Mispriced** | `job_hist_00070` | Low client spend violated floor rate | Hardcoded persona minimum floor rates | Price-in-band rate reached `0.9000` |
-| **Unsupported Claim** | `job_hist_00045` | Writer hallucinated 99.4% F1 metric | Two-stage atomic NLI claim verifier | Unsupported claims: `19.53%` $\rightarrow$ `0.00%` |
-| **Generic Opening** | `job_hist_00058` | LLM used formal epistolary greeting | Rule `POL-006` + Critic revision loop | Arm A reply rate reached `23.33%` |
-| **Injection** | `job_stream_00004` | Raw concatenation allowed jailbreak | `<untrusted_job_posting>` XML shielding | ASR dropped from `0.9000` to `0.2000` |
-| **Tool Error** | `system_eval` | Byte seeking & multi-call trace loss | Refactored trace-aggregated accounting | Accurate `1024.7` tokens/job measured |
+| **Missed Evidence** | `job_hist_00943` | Cross-encoder overweighted general terms | Outcome-aware heuristic reranking | AI/ML nDCG: `0.4993` $\rightarrow$ `0.5252` |
+| **Missed Evidence** | `job_stream_00031` | Sparse BM25 keyword dilution on tags | Query decomposition (V1) | Recall@5: `0.2867` $\rightarrow$ `0.3121` |
+| **Missed Evidence** | `job_stream_00340` | Inadequate repo chunk narrative density | Repository README enrichment | Recall@5: `0.2867` $\rightarrow$ `0.3308` |
+| **Missed Evidence** | `job_stream_00454` | Truncated review snippet logits | 5-star review score boost (+0.15) | nDCG@10 maintained `0.4880` |
+| **Missed Evidence** | `job_stream_00472` | Distractor proximity across domains | Mandatory persona metadata filtering | Recall@5: `0.0519` $\rightarrow$ `0.2867` |
+
+*\* Note: The remaining 7 taxonomy classes (Wrong Skip, Mispriced, Unsupported Claim, Generic Opening, Compliance Miss, Injection, Tool Error) recorded zero per-job failure traces in result JSONs, achieving 100% compliance clean rate, 0.00% unsupported claims, and 77.8% injection defense effectiveness in aggregate benchmark runs.*
 
 ---
 
@@ -181,7 +180,7 @@ Adversarial attacks embedded in untrusted job descriptions attempt to hijack pro
 > The hidden test set was not available to us; budgets below are measured on our dev set.
 
 ### Declared Targets vs Measured Performance (`evals/results/budget_latest.json`)
-Evaluated across $n=20$ benchmark jobs using open-weights models (`openai/gpt-oss-120b`, `openai/gpt-oss-20b` via Groq) with full multi-call trace accounting:
+Evaluated across $n=20$ benchmark jobs using open-weights models (`openai/gpt-oss-120b`, `openai/gpt-oss-20b` via Groq) with full multi-call trace accounting (measured with fallback model):
 
 | Target / Metric | Declared Target | Measured Baseline | Post-Fix Value | Status |
 | :--- | :---: | :---: | :---: | :---: |
@@ -193,6 +192,10 @@ Evaluated across $n=20$ benchmark jobs using open-weights models (`openai/gpt-os
 | **Proposal Latency (p95)** | $\le 25.0\text{s}$ | 61.13s | **`8.780s`** | **PASS** (within budget) |
 | **Proposal Mean Tokens** | — | 173.6 tokens* | **`2256.5` tokens** | Post-fix accurate accounting |
 | **Proposal Mean Cost** | $\le \$0.03$ | $0.000000 | **`$0.000000`** | **PASS** (free tier) |
+
+> [!WARNING]
+> **Measurement Notice (Fallback Model & Cache Service)**:
+> In the `budget_latest.json` benchmark run, 28 of 87 LLM calls (32.2%) used the fallback model (`openai/gpt-oss-20b`) after the primary model rate limit was reached, and 26 of 87 calls were served from cache (`data/processed/llm_calls.jsonl`). These budget numbers are **measured with fallback model**. Critic-prompt trimming is an **estimated token saving, not measured end to end**.
 
 *\* Flawed token accounting in `budget_before_fix.json` caused by Windows CRLF byte seek errors and uncounted schema repair retries; corrected in `budget_latest.json`.*
 

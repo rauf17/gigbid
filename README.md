@@ -71,8 +71,7 @@ docker compose up --build
 
 ### Reviewer Credentials
 - **URL**: `http://localhost:3000` (or `<LIVE_URL>`)
-- **Email**: `<REVIEWER_EMAIL>`
-- **Password**: `<REVIEWER_PASSWORD>`
+- Reviewer login is in the private Classroom comment.
 
 ---
 
@@ -144,7 +143,18 @@ All benchmark numbers are copied directly from artifacts in `evals/results/` and
 
 - **Arm A (Result-First Opener)**: Reply Rate = `0.2333` (28/120), Hire Rate = `0.0417` (5/120).
 - **Arm B (Question-First Opener)**: Reply Rate = `0.1083` (13/120), Hire Rate = `0.0000` (0/120).
-- **Statistical Significance**: Two-proportion $z$-test reply $p = 0.0101$, hire $p = 0.0238$; exact McNemar paired reply $p = 0.0015$; Fisher's exact hire count $p = 0.0599$.
+- **Statistical Significance**: Reply difference is statistically significant (exact McNemar paired $p = 0.0015$; two-proportion $z = 2.5726$, $p = 0.0101$). Hire difference is NOT statistically significant (Fisher's exact $p = 0.0599 \ge 0.05$). Both arms evaluated the exact same 120 candidate jobs against a simulator that rewards metrics by construction.
+
+### Latency, Cost Accounting & Resource Budgets
+*Source: `evals/results/budget_latest.json` ($N=20$ benchmark jobs, measured with fallback model)*
+
+| Stage | Declared Target | Measured p95 Latency | Mean Tokens | Mean Cost (USD) | Status |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| Job Analysed | $\le 12.0\text{s}$ | **`9.749s`** | 1024.7 tokens | **`$0.000000`** | **PASS** (within budget) |
+| Proposal Generation | $\le 25.0\text{s}$ | **`8.780s`** | 2256.5 tokens | **`$0.000000`** | **PASS** (within budget) |
+
+> [!NOTE]
+> Budget numbers were **measured with fallback model**: in `data/processed/llm_calls.jsonl`, 28 of 87 calls (32.2%) used fallback model `openai/gpt-oss-20b` after the primary Groq rate limit was reached, and 26 of 87 calls were served from cache. Critic-prompt trimming is an **estimated token saving, not measured end to end**.
 
 ---
 

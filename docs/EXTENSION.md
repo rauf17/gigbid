@@ -39,13 +39,14 @@ Because both arms evaluate identical candidate jobs ($N = 120$ total, $n = 40$ p
 
 1. **Two-Proportion $z$-Test**:
    - **Reply Rate**: Difference $+12.50\%$ (95% CI: $[+3.11\%, +21.89\%]$), $z = 2.5726$, two-sided $p = \mathbf{0.0101}$ ($p < 0.05$).
-   - **Hire Rate**: Difference $+4.17\%$ (95% CI: $[+0.59\%, +7.74\%]$), $z = 2.2597$, two-sided $p = \mathbf{0.0238}$ ($p < 0.05$).
+   - **Hire Rate**: Difference $+4.17\%$ (95% CI: $[+0.59\%, +7.74\%]$), $z = 2.2597$, two-sided $p = 0.0238$ (unpaired approximation).
 2. **Exact McNemar Test (Paired Reply Outcome)**:
    - Evaluates discordant outcomes across identical paired jobs: Arm A replied while Arm B did not on $b = 18$ jobs; Arm B replied while Arm A did not on $c = 3$ jobs (both replied: $10$, neither: $89$).
-   - Exact two-sided binomial test on discordant pairs: $p = \mathbf{0.0015}$ ($p < 0.01$, highly significant).
+   - Exact two-sided binomial test on discordant pairs: $p = \mathbf{0.0015}$ ($p < 0.01$, statistically significant).
 3. **Fisher's Exact Test (Hire Counts)**:
    - Contingency table: Arm A hires ($5/120$) vs Arm B hires ($0/120$).
-   - Odds Ratio: $\infty$, two-sided $p = \mathbf{0.0599}$ (one-sided $p = 0.0298$).
+   - Odds Ratio: $\infty$, two-sided $p = \mathbf{0.0599}$ ($p \ge 0.05$, **NOT statistically significant**). The exact test fails to reject the null hypothesis of equal hire rates at the standard $\alpha = 0.05$ level.
+   - **Simulator Context**: Both arms evaluated the exact same 120 candidate jobs against a simulator that rewards metrics by construction.
 
 ---
 

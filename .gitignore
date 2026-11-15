@@ -39,3 +39,4 @@ mcp_servers/**/state/
 .idea/
 .vscode/
 docs/assignment/
+docs/report.html
