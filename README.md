@@ -156,7 +156,7 @@ synthetic jobs across three personas (511 have gold evidence).
 \* Reference only. It queries the skills field the gold labels were derived from.
 
 - **Shipped choice:** V2 hybrid (BM25 + dense, reciprocal rank fusion) with persona filtering. The
-  reranker gained +0.0008 nDCG@10 over V2 for roughly ten times the latency.
+  reranker gained negligible nDCG@10 over V2 for roughly ten times the latency.
 - **Negative results:** hybrid gained +2.54 points of Recall@5 against a pre-registered +8.
   Decomposition hurt (-5.91 points). Outcome-aware boosting was neutral.
 - **Past proposals in the pool** dropped Recall@5 from 0.2867 to 0.0519, so retrieval is restricted to
@@ -209,7 +209,7 @@ saving, not measured end to end. The hidden test set was not available, so these
 
 ### Change request (our own drill)
 
-No instructor change request was released before 11 Nov, so we ran our own. A new banned phrase, a
+No instructor change request was released in Classroom before submission, so we ran our own. A new banned phrase, a
 shorter length cap and a higher fit threshold changed only `agent/config.yaml` and
 `data/policy_pack/policy.yaml`, with no Python edits. See [docs/CHANGE_REQUEST.md](docs/CHANGE_REQUEST.md).
 

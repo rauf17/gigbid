@@ -30,10 +30,27 @@ Source dataset: 600 synthetic jobs in `evals/datasets/dev_<persona>.jsonl`. Comm
 | **V4 Outcome Boost MRR** | `0.7396` | [rag_v4_outcome_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_v4_outcome_latest.json) | `4ae8a327` | Mean Reciprocal Rank with outcome weighting |
 | **V4 Outcome Boost nDCG@10** | `0.4880` | [rag_v4_outcome_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_v4_outcome_latest.json) | `4ae8a327` | nDCG@10 with outcome weighting |
 | **V4 Outcome Boost p95 Latency**| `133.16` | [rag_v4_outcome_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_v4_outcome_latest.json) | `4ae8a327` | 95th percentile latency in milliseconds |
-| **BM25 Lexical Recall@5** | `0.2760` | [rag_bm25_text_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_bm25_text_latest.json) | `4ae8a327` | Pure BM25 text retrieval baseline |
-| **Skill Tag Lookup Recall@5** | `0.4017` | [rag_skill_tag_lookup_REFERENCE_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_skill_tag_lookup_REFERENCE_latest.json) | `4ae8a327` | Reference exact skill metadata lookup |
-| **Random Baseline Recall@5** | `0.1349` | [rag_random_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_random_latest.json) | `4ae8a327` | Random sampling baseline |
-| **Oracle Baseline Recall@5** | `0.5564` | [rag_oracle_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_oracle_latest.json) | `4ae8a327` | Gold ground-truth upper-bound retrieval |
+| **Total Evaluation Queries** | `511` | [rag_random_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_random_latest.json) | `7f1868e` | Total queries with gold evidence in 600-job dev set |
+| **Recall@5 Theoretical Ceiling** | `0.6806` | [rag_random_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_random_latest.json) | `7f1868e` | Theoretical Recall@5 upper bound given portfolio chunking |
+| **Random Baseline Recall@5** | `0.1349` | [rag_random_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_random_latest.json) | `7f1868e` | Random sampling baseline |
+| **Random Baseline MRR** | `0.3850` | [rag_random_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_random_latest.json) | `7f1868e` | Random sampling Mean Reciprocal Rank (`0.385`) |
+| **Random Baseline nDCG@10** | `0.2454` | [rag_random_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_random_latest.json) | `7f1868e` | Random sampling nDCG at rank 10 |
+| **BM25 Lexical Recall@5** | `0.2760` | [rag_bm25_text_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_bm25_text_latest.json) | `d6e46c2` | Pure BM25 text retrieval baseline |
+| **BM25 Lexical MRR** | `0.6229` | [rag_bm25_text_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_bm25_text_latest.json) | `d6e46c2` | Pure BM25 Mean Reciprocal Rank |
+| **BM25 Lexical nDCG@10** | `0.4720` | [rag_bm25_text_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_bm25_text_latest.json) | `d6e46c2` | Pure BM25 nDCG at rank 10 (`0.472`) |
+| **BM25 Lexical p95 Latency** | `20.4` | [rag_bm25_text_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_bm25_text_latest.json) | `d6e46c2` | Pure BM25 p95 latency in milliseconds |
+| **Skill Tag Lookup Recall@5** | `0.4017` | [rag_skill_tag_lookup_REFERENCE_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_skill_tag_lookup_REFERENCE_latest.json) | `d6e46c2` | Reference exact skill metadata lookup |
+| **Skill Tag Lookup MRR** | `0.5680` | [rag_skill_tag_lookup_REFERENCE_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_skill_tag_lookup_REFERENCE_latest.json) | `d6e46c2` | Reference exact skill Mean Reciprocal Rank (`0.568`) |
+| **Skill Tag Lookup nDCG@10** | `0.5404` | [rag_skill_tag_lookup_REFERENCE_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_skill_tag_lookup_REFERENCE_latest.json) | `d6e46c2` | Reference exact skill nDCG at rank 10 |
+| **Skill Tag Lookup p95 Latency** | `2.1` | [rag_skill_tag_lookup_REFERENCE_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_skill_tag_lookup_REFERENCE_latest.json) | `d6e46c2` | Reference exact skill p95 latency (`2.12` ms) |
+| **V2 Hybrid p95 Latency (rounded)** | `296.7` | [rag_v2_hybrid_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_v2_hybrid_latest.json) | `d6e46c2` | Hybrid reciprocal rank fusion p95 latency (`296.68` ms) |
+| **V3 Cross-Encoder p95 Latency (rounded)** | `2982.4` | [rag_v3_rerank_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_v3_rerank_latest.json) | `7d8f600` | Cross-encoder reranking p95 latency (`2982.38` ms) |
+| **V4 Outcome Boost p95 Latency (rounded)** | `133.2` | [rag_v4_outcome_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_v4_outcome_latest.json) | `7d8f600` | Win-rate boosted retrieval p95 latency (`133.16` ms) |
+| **Oracle Baseline Recall@5** | `0.5564` | [rag_oracle_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_oracle_latest.json) | `7f1868e` | Gold ground-truth upper-bound retrieval |
+| **Oracle Baseline nDCG@10** | `0.8520` | [rag_oracle_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_oracle_latest.json) | `7f1868e` | Gold ground-truth upper-bound nDCG at rank 10 (`0.852`) |
+| **V0 Unfiltered Recall@5** | `0.0519` | [rag_v0_naive_unfiltered_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_v0_naive_unfiltered_latest.json) | `7f1868e` | Unfiltered portfolio pool including historical proposals |
+| **V0 Unfiltered MRR** | `0.1904` | [rag_v0_naive_unfiltered_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_v0_naive_unfiltered_latest.json) | `7f1868e` | Unfiltered portfolio Mean Reciprocal Rank |
+| **V0 Unfiltered nDCG@10** | `0.0845` | [rag_v0_naive_unfiltered_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/rag_v0_naive_unfiltered_latest.json) | `7f1868e` | Unfiltered portfolio nDCG at rank 10 |
 
 ---
 
@@ -67,6 +84,7 @@ Source: [evals/results/decision_eval_latest.json](file:///c:/Users/AR/Desktop/Ag
 | **Price In-Band Rate** | `0.8846` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | 88.46% of submitted bid prices fell inside client budget bands |
 | **Decision Latency p50** | `310.64` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Median triage decision latency in milliseconds |
 | **Decision Latency p95** | `921.85` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | 95th percentile triage decision latency in milliseconds |
+| **Decision Latency p95 (Benchmark)** | `1698.6` | [decision_eval_20261114_202802.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_20261114_202802.json) | 95th percentile latency in ms reported in docs/results_table.md (commit `d42e2ba`) |
 
 ---
 
@@ -85,6 +103,7 @@ Source: [evals/results/proposal_eval_latest.json](file:///c:/Users/AR/Desktop/Ag
 | **Compliance Clean Rate** | `1.0000` | [proposal_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/proposal_eval_latest.json) | 100% of final proposals clean of contact/payment violations |
 | **Proposal Latency p50** | `32173.75` | [proposal_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/proposal_eval_latest.json) | Median proposal generation latency in milliseconds |
 | **Proposal Latency p95** | `69939.54` | [proposal_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/proposal_eval_latest.json) | 95th percentile proposal generation latency in milliseconds |
+| **Proposal Latency p95 (Benchmark)** | `1411.7` | [proposal_eval_20261114_203929.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/proposal_eval_20261114_203929.json) | 95th percentile latency in ms reported in docs/results_table.md (commit `d42e2ba`) |
 
 ---
 
@@ -100,6 +119,7 @@ Source: [evals/results/injection_eval_latest.json](file:///c:/Users/AR/Desktop/A
 | **ASR Reduction** | `0.7000` | [injection_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/injection_eval_latest.json) | 70.0% absolute reduction in exploit vulnerability |
 | **Defense Effectiveness** | `0.7778` | [injection_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/injection_eval_latest.json) | 77.78% relative risk mitigation |
 | **Injection Detection Rate** | `0.8000` | [injection_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/injection_eval_latest.json) | 80.0% of adversarial payloads actively detected |
+| **Injection Defense p95 Latency** | `2722.5` | [injection_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/injection_eval_latest.json) | 95th percentile latency in ms reported in docs/results_table.md (commit `d42e2ba`) |
 
 ---
 
@@ -142,6 +162,7 @@ Source: [evals/results/budget_latest.json](file:///c:/Users/AR/Desktop/Agentic_A
 | **Proposal Latency (p95)** | `25.0` | `8.780` | seconds | Within declared budget ceiling (<= 25.0s) |
 | **Proposal Mean Tokens** | — | `2256.5` | tokens | Accurate post-fix accounting |
 | **Proposal Mean Cost** | `0.03` | `0.000000` | USD | Well within budget (Groq free tier) |
+| **Fallback Model Rate** | — | `32.2%` | percentage | 28 of 87 LLM calls in budget run (source: [data/processed/llm_calls.jsonl](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/data/processed/llm_calls.jsonl), commit `4ae8a327`) |
 
 ---
 

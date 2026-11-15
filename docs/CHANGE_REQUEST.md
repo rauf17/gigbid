@@ -2,7 +2,7 @@
 
 > [!NOTE]
 > **Instructor Change Request Notice**:
-> The instructor's live change request was not available to us. Consequently, we conducted our own rigorous, pre-planned change-request drill to test the architectural decoupling and configuration agility of the GigBid system under simulated policy changes.
+> As of 11 Nov 2026, no instructor change request was released in Classroom before submission. Consequently, we conducted our own rigorous, pre-planned change-request drill to test the architectural decoupling and configuration agility of the GigBid system under simulated policy changes.
 
 ---
 
