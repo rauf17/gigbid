@@ -111,7 +111,7 @@ async def decide_approval(
         if isinstance(compliance_check, dict):
             violations = compliance_check.get("violations", [])
 
-    final_status = res.get("status", BidStatus.COMPLETED)
+    final_status = res.get("status", BidStatus.SUBMITTED)
     if violations:
         return ApprovalDecisionResponse(
             thread_id=thread_id,

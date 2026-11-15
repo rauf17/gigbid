@@ -48,7 +48,7 @@ async def _enqueue_to_arq_worker(user_id: str, job_id: str) -> bool:
         settings = RedisSettings.from_dsn(redis_url)
         pool = await create_pool(settings)
         await pool.enqueue_job("analyse_job", user_id, job_id, _job_id=f"analyse:{user_id}:{job_id}")
-        await pool.close()
+        await pool.aclose()
         return True
     except Exception as exc:  # noqa: BLE001
         logger.debug("[runs_service] Failed enqueueing to Arq worker: %s", exc)

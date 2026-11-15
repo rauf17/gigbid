@@ -226,3 +226,32 @@ graph TD;
 ### 5.4 Durability & Crash Recovery
 - Backed by `AsyncPostgresSaver` on port **5433**.
 - State is checkpointed at every graph superstep. In the event of a catastrophic process kill (`kill -9`, container eviction), restarting processes query pending checkpoints and resume via `Command(resume=decision)` with zero duplicate submissions or wasted Connects.
+
+---
+
+## 6. FastAPI Backend, Tenancy, Streaming & Worker Architecture (Part D / E1)
+
+### 6.1 Authentication & Multi-Tenant Scoping
+- **Dual Session Mechanism**: Endpoints accept signed HS256 JWT tokens via HTTP-only cookie (`access_token`) and standard `Authorization: Bearer <token>` headers.
+- **Strict Tenancy Enforcement**: Reusable dependency `current_user` extracts the authenticated tenant. Every database query, thread creation, approval lookup, and memory mutation is hard-scoped by `user_id`. Tenant isolation tests enforce that tenant A can never inspect or alter tenant B's resources.
+- **Credential Protection**: External marketplace tokens (stored via `POST /connections/marketplace`) are encrypted at rest with Fernet (`TOKEN_ENCRYPTION_KEY`). Tokens are never returned in API responses.
+
+### 6.2 Service-Layer Decoupling
+To maintain testability and separation of concerns:
+- **Routers (`apps/api/routers/`)**: Pure HTTP transport layer handling serialization, route metadata, `operation_id`, and status codes. Zero business logic resides in routers.
+- **Services (`apps/api/services/`)**: Encapsulates workflow logic (triage joining, graph invocation, approval resolution, memory deletion, and metrics aggregation).
+
+### 6.3 Real-Time SSE Streaming (`apps/api/streaming.py`)
+- Emits real-time progress events over LangGraph `updates` and `custom` stream modes.
+- Sends 15-second keep-alive heartbeats (`: ping`) to prevent intermediate proxy timeouts.
+- Handles clean cancellations on client disconnects and supports replaying current state upon reconnection via the `Last-Event-ID` header.
+
+### 6.4 Autonomous Arq Worker & Idempotency (`worker/`)
+- **Job Scouting & Deduplication**: Polls saved searches, dedupes candidate jobs using Redis atomic keys (`job_scouted:{user_id}:{job_id}`), and enqueues analysis tasks.
+- **Idempotent Analysis**: Guarantees that worker restarts, container evictions, or duplicate task deliveries never trigger double-analysis or double-submission of bids.
+- **Budgetary Guardrails**: Automatically halts scouting and pipeline execution if the user's weekly Connects budget or daily proposal limit has been reached.
+
+### 6.5 Degraded Mode (R9 / A6)
+- When the marketplace MCP server is down, reads return structured HTTP 503 (`error: "marketplace_unavailable"`, `retryable: true`, `queued: bool`).
+- New pipeline runs are transparently queued in Redis and resumed once connectivity is restored.
+- The `/health/dependencies` probe exposes real-time health across PostgreSQL, Redis, MCP servers, and LLM providers.

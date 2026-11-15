@@ -78,13 +78,16 @@ async def list_jobs(
         if min_fit is not None and (fit_score is None or fit_score < min_fit):
             continue
 
+        client_str = getattr(j, "client_name", "") or getattr(j, "client_id", "") or ""
+        budget_val = getattr(j, "budget", None) or getattr(j, "budget_max", None)
+
         summaries.append(
             JobSummaryResponse(
                 id=j.id,
                 title=j.title,
-                client_name=j.client_name,
+                client_name=client_str,
                 category=j.category,
-                budget=j.budget,
+                budget=budget_val,
                 connects_cost=j.connects_cost,
                 fit_score=fit_score,
                 risk_score=risk_score,
@@ -92,7 +95,7 @@ async def list_jobs(
                 recommended_action=rec_action,
                 quote=quote,
                 status=status_val,
-                created_at=j.created_at,
+                created_at=getattr(j, "created_at", None) or getattr(j, "posted_at", None),
             )
         )
 
@@ -141,14 +144,17 @@ async def get_job_detail(
     except (psycopg.Error, OSError, ValueError, KeyError) as exc:
         logger.debug("[jobs_service] Could not load thread state for %s: %s", thread_id, exc)
 
+    client_str = getattr(j, "client_name", "") or getattr(j, "client_id", "") or ""
+    budget_val = getattr(j, "budget", None) or getattr(j, "budget_max", None)
+
     return JobDetailResponse(
         id=j.id,
         title=j.title,
         description=j.description,
         skills=j.skills,
-        budget=j.budget,
+        budget=budget_val,
         connects_cost=j.connects_cost,
-        client_name=j.client_name,
+        client_name=client_str,
         category=j.category,
         risk_report=risk_report,
         requirement_evidence_matrix=req_matrix,
