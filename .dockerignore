@@ -1,0 +1,15 @@
+.git
+.venv
+apps/web/node_modules
+apps/web/.next
+apps/web/playwright-report
+apps/web/test-results
+__pycache__
+*.py[cod]
+.pytest_cache
+.ruff_cache
+pgdata
+data/processed/llm_cache
+data/processed/llm_calls.jsonl
+gigsim/state/*.db
+.env

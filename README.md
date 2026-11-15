@@ -1,3 +1,12 @@
+---
+title: GigBid Copilot
+emoji: 🤖
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+---
+
 # GigBid: a multi-agent freelancer copilot
 
 > TODO (Phase 7): 30-second demo GIF here.
