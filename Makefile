@@ -1,4 +1,4 @@
-.PHONY: install dev api test eval eval-smoke eval-all eval-nodes eval-nodes-smoke seed data demo lint check lock mcp-marketplace mcp-portfolio ingest db-up db-down
+.PHONY: install dev api test eval eval-smoke eval-all eval-nodes eval-nodes-smoke seed data demo lint check lock mcp-marketplace mcp-portfolio mcp-workspace ingest db-up db-down
 db-up:
 	docker compose -f infra/docker-compose.yml up -d postgres redis
 	uv run python scripts/migrate_db.py
@@ -16,6 +16,8 @@ mcp-marketplace:
 	uv run uvicorn mcp_servers.marketplace.server:app --port 8002 --reload
 mcp-portfolio:
 	uv run uvicorn mcp_servers.portfolio.server:app --port 8001 --reload
+mcp-workspace:
+	uv run uvicorn mcp_servers.workspace.server:app --port 8003 --reload
 ingest:
 	uv run python -m rag.ingest --persona all
 api:

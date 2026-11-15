@@ -1,17 +1,24 @@
-"""Router for client conversations and thin message forwarding."""
+"""Router for client conversations, suggested replies, and message approvals."""
 from __future__ import annotations
 
-from typing import Annotated
+from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, Query
 
 from agent.marketplace_port import MarketplacePort
 from apps.api.auth.deps import current_user
 from apps.api.deps import get_marketplace_port
 from apps.api.schemas.auth import UserResponse
-from apps.api.schemas.messages import MessageItem, MessageReplyRequest, SuggestedReplyResponse
+from apps.api.schemas.messages import (
+    ConversationApprovalRequest,
+    MessageItem,
+    MessageReplyRequest,
+    SuggestedReplyResponse,
+)
 from apps.api.services.messages_service import (
+    approve_conversation_suggestion,
     get_conversation_messages,
+    get_or_create_conversation_suggestion,
     send_conversation_reply,
 )
 
@@ -40,17 +47,46 @@ async def reply_message(
 
 
 @router.get(
+    "/{conversation_id}/suggestion",
+    response_model=SuggestedReplyResponse,
+    operation_id="get_conversation_suggestion",
+)
+@router.get(
     "/{conversation_id}/suggest",
     response_model=SuggestedReplyResponse,
     operation_id="suggest_conversation_reply",
-    status_code=status.HTTP_501_NOT_IMPLEMENTED,
+    include_in_schema=False,
 )
 async def suggest_reply(
     conversation_id: str,
     user: Annotated[UserResponse, Depends(current_user)],
+    port: Annotated[MarketplacePort, Depends(get_marketplace_port)],
 ) -> SuggestedReplyResponse:
-    """Returns 501 Not Implemented: conversation agent graph is scheduled for subsequent release."""
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Conversation graph not implemented yet. Suggested replies will be available in Phase 5.",
+    """Starts or resumes the conversation graph and returns suggested reply, intent, and slots."""
+    return await get_or_create_conversation_suggestion(
+        user_id=user.id,
+        conversation_id=conversation_id,
+        port=port,
+        persona_id=user.persona_id,
+    )
+
+
+@router.post(
+    "/{conversation_id}/approve",
+    response_model=dict[str, Any],
+    operation_id="approve_conversation_reply",
+)
+async def approve_reply(
+    conversation_id: str,
+    req: ConversationApprovalRequest,
+    user: Annotated[UserResponse, Depends(current_user)],
+    port: Annotated[MarketplacePort, Depends(get_marketplace_port)],
+) -> dict[str, Any]:
+    """Resumes the conversation graph with approval decision, sends message and holds interview slot."""
+    return await approve_conversation_suggestion(
+        user_id=user.id,
+        conversation_id=conversation_id,
+        action=req.action,
+        edited_text=req.edited_text,
+        port=port,
     )

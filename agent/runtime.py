@@ -29,6 +29,10 @@ from langgraph.types import Command
 
 from agent.db import get_db_url
 from agent.graphs.bid_graph import build_bid_graph
+from agent.graphs.conversation_graph import (
+    ConversationGraphState,
+    build_conversation_graph,
+)
 from agent.nodes.base import NodeDeps
 from agent.state import BidGraphState, BidStatus
 
@@ -270,3 +274,74 @@ async def history(
                 }
             )
     return results
+
+
+async def run_conversation(
+    conversation_id: str,
+    user_id: str = "default_user",
+    persona_id: str = "ai_ml",
+    messages: list[dict[str, Any]] | None = None,
+    deps: NodeDeps | None = None,
+    checkpointer: BaseCheckpointSaver | None = None,
+    store: BaseStore | None = None,
+) -> dict[str, Any]:
+    """Starts or advances a client conversation thread until approval interrupt or completion."""
+    thread_id = f"conv:{user_id}:{conversation_id}"
+    active_deps = deps or NodeDeps()
+
+    if checkpointer is not None and store is not None:
+        graph = build_conversation_graph(checkpointer=checkpointer, store=store)
+        config: dict[str, Any] = {"configurable": {"thread_id": thread_id, "deps": active_deps}}
+        init_state: ConversationGraphState = {
+            "thread_id": thread_id,
+            "conversation_id": conversation_id,
+            "user_id": user_id,
+            "persona_id": persona_id,
+            "trace_id": uuid4().hex,
+            "messages": messages or [],
+            "budget": {"steps": 0, "tokens": 0},
+        }
+        await graph.ainvoke(init_state, config=config)
+        state_snap = await graph.aget_state(config)
+        return dict(state_snap.values)
+
+    async with get_checkpointer_and_store() as (cp, st):
+        graph = build_conversation_graph(checkpointer=cp, store=st)
+        config = {"configurable": {"thread_id": thread_id, "deps": active_deps}}
+        init_state = {
+            "thread_id": thread_id,
+            "conversation_id": conversation_id,
+            "user_id": user_id,
+            "persona_id": persona_id,
+            "trace_id": uuid4().hex,
+            "messages": messages or [],
+            "budget": {"steps": 0, "tokens": 0},
+        }
+        await graph.ainvoke(init_state, config=config)
+        state_snap = await graph.aget_state(config)
+        return dict(state_snap.values)
+
+
+async def resume_conversation(
+    thread_id: str,
+    decision: dict[str, Any],
+    deps: NodeDeps | None = None,
+    checkpointer: BaseCheckpointSaver | None = None,
+    store: BaseStore | None = None,
+) -> dict[str, Any]:
+    """Resumes an interrupted conversation execution with reviewer decision."""
+    active_deps = deps or NodeDeps()
+    cmd = Command(resume=decision)
+
+    if checkpointer is not None and store is not None:
+        graph = build_conversation_graph(checkpointer=checkpointer, store=store)
+        config: dict[str, Any] = {"configurable": {"thread_id": thread_id, "deps": active_deps}}
+        res = await graph.ainvoke(cmd, config=config)
+        return dict(res)
+
+    async with get_checkpointer_and_store() as (cp, st):
+        graph = build_conversation_graph(checkpointer=cp, store=st)
+        config = {"configurable": {"thread_id": thread_id, "deps": active_deps}}
+        res = await graph.ainvoke(cmd, config=config)
+        return dict(res)
+

@@ -95,7 +95,16 @@ class MockPort(MarketplacePort):
         return {"balance": 80}
 
     async def list_messages(self, conversation_id: str) -> list[Any]:
-        return []
+        from agent.marketplace_models import Message
+        return [
+            Message(
+                id="msg_init_1",
+                conversation_id=conversation_id,
+                sender="client",
+                text="We would like to schedule an interview call this week.",
+                created_at="2026-11-15T12:00:00Z",
+            )
+        ]
 
     async def create_proposal_draft(self, **kwargs: Any) -> Any:
         return {"id": "prop_draft_1", "job_id": kwargs.get("job_id")}
@@ -104,13 +113,14 @@ class MockPort(MarketplacePort):
         return {"status": "submitted", "proposal_id": kwargs.get("proposal_id")}
 
     async def send_message(self, **kwargs: Any) -> Any:
-        return {
-            "id": "msg_1",
-            "conversation_id": kwargs.get("conversation_id"),
-            "sender_id": "freelancer",
-            "sender_role": "freelancer",
-            "text": kwargs.get("text"),
-        }
+        from agent.marketplace_models import Message
+        return Message(
+            id="msg_reply_1",
+            conversation_id=kwargs.get("conversation_id", "conv_1"),
+            sender="freelancer",
+            text=kwargs.get("text", ""),
+            created_at="2026-11-15T12:05:00Z",
+        )
 
 
 @pytest.fixture
@@ -330,8 +340,25 @@ def test_health_endpoints(client: TestClient) -> None:
     assert "postgres" in data["dependencies"]
 
 
-def test_messages_suggest_returns_501(client: TestClient) -> None:
+def test_messages_suggestion_and_approval(client: TestClient) -> None:
     headers = _get_auth_headers(client, f"user_{uuid4().hex[:6]}@example.com")
-    res = client.get("/messages/conv_123/suggest", headers=headers)
-    assert res.status_code == 501
-    assert "not implemented" in res.json()["detail"].lower()
+    # 1. Get suggestion (starts conversation graph)
+    res = client.get("/messages/conv_123/suggestion", headers=headers)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["conversation_id"] == "conv_123"
+    assert data["intent"] == "interview_request"
+    assert data["status"] == "awaiting_approval"
+    assert data["suggested_reply"] is not None
+    assert len(data["proposed_slots"]) > 0
+
+    # 2. Approve suggestion (resumes graph and sends message)
+    res_app = client.post(
+        "/messages/conv_123/approve",
+        headers=headers,
+        json={"action": "approve"},
+    )
+    assert res_app.status_code == 200
+    app_data = res_app.json()
+    assert app_data.get("status") == "replied"
+    assert app_data.get("sent_message") is not None

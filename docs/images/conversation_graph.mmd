@@ -1,0 +1,27 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	read_messages(read_messages)
+	classify_intent(classify_intent)
+	flag_scam(flag_scam)
+	draft_reply(draft_reply)
+	compliance(compliance)
+	approval(approval)
+	send(send)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> read_messages;
+	approval --> send;
+	classify_intent -.-> draft_reply;
+	classify_intent -.-> flag_scam;
+	compliance --> approval;
+	draft_reply --> compliance;
+	read_messages --> classify_intent;
+	flag_scam --> __end__;
+	send --> __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc

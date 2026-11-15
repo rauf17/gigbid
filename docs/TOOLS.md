@@ -110,7 +110,42 @@ All external marketplace interactions in GigBid are strictly mediated through Mo
 
 ---
 
-## 4. Tool Permissions & Allowlist
+## 4. Workspace MCP Server (`workspace`)
+
+- **Host & Port**: `http://127.0.0.1:8003/mcp` (or stdio mode via `uv run python -m mcp_servers.workspace.server --stdio`)
+- **Transport**: Streamable HTTP (`POST /mcp` / SSE) and stdio
+- **Authentication**: Bearer Token via `Authorization: Bearer <WORKSPACE_MCP_TOKEN>` header (HTTP 401 on unauthorized access).
+- **Backend Storage**: Local deterministic mock store (`mcp_servers/workspace/state/workspace_state.json`, gitignored) and SQLite audit log (`audit.db`).
+- **Live API Status**: **Real Google Calendar and Gmail APIs are NOT wired (mock only).** Runs strictly over a local deterministic mock store for assignment compliance and sandbox isolation.
+
+### Tool Registry Table
+
+| Tool Name | Server | Read / Write | Annotations | Auth | Owner | Test |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `list_free_slots` | `workspace` | Read | `readOnlyHint=true`<br>`idempotentHint=true`<br>`destructiveHint=false`<br>`openWorldHint=false` | Bearer (`WORKSPACE_MCP_TOKEN`) | `client_liaison` | `mcp_servers/workspace/tests/test_workspace.py`<br>`tests/contract/test_workspace_schema_snapshot.py` |
+| `create_tentative_hold` | `workspace` | Write | `readOnlyHint=false`<br>`idempotentHint=true`<br>`destructiveHint=false`<br>`openWorldHint=false` | Bearer (`WORKSPACE_MCP_TOKEN`) | `client_liaison`, `approval` | `mcp_servers/workspace/tests/test_workspace.py`<br>`tests/contract/test_workspace_schema_snapshot.py` |
+| `create_email_draft` | `workspace` | Write | `readOnlyHint=false`<br>`idempotentHint=true`<br>`destructiveHint=false`<br>`openWorldHint=false` | Bearer (`WORKSPACE_MCP_TOKEN`) | `client_liaison` | `mcp_servers/workspace/tests/test_workspace.py`<br>`tests/contract/test_workspace_schema_snapshot.py` |
+
+### Tool Usage Guidance & Constraints
+
+#### `list_free_slots`
+- **When to use**: When a client requests interview availability or asks for scheduling dates.
+- **When NOT to use**: Do NOT use for general technical queries or first-touch bids.
+- **Constraints**: `days_ahead` 1–14 (default 3); `duration_min` 15–120 (default 30).
+
+#### `create_tentative_hold`
+- **When to use**: To place a non-destructive tentative calendar hold on a free slot during client interview scheduling. Invoked **ONLY after human approval** of the message proposal.
+- **When NOT to use**: Never call autonomously before human approval.
+- **Constraints**: `slot_id` 3–64 chars; `title` 3–200 chars; `idempotency_key` up to 128 chars.
+
+#### `create_email_draft`
+- **When to use**: Preparing draft client follow-up correspondence.
+- **When NOT to use**: In-platform marketplace chats (use `send_message` on marketplace port instead).
+- **Constraints**: `to` valid email length; `subject` 1–200 chars; `body` 1–10,000 chars; `idempotency_key` up to 128 chars.
+
+---
+
+## 5. Tool Permissions & Allowlist
 
 | Agent Role | Permitted Tools | Access Level |
 | :--- | :--- | :--- |
@@ -119,5 +154,5 @@ All external marketplace interactions in GigBid are strictly mediated through Mo
 | `proposal_writer` | `search_evidence`, `get_case_study` | Read-only |
 | `risk_assessor` | `get_job`, `get_client_history` | Read-only |
 | `pricing` | `get_job`, `get_client_history`, `get_connects_balance` | Read-only |
-| `client_liaison` | `get_job`, `get_client_history`, `list_messages`, `send_message`, `search_evidence` | Read + Messaging |
-| `approval` / `submit` | `get_job`, `get_client_history`, `get_connects_balance`, `create_proposal_draft`, `submit_proposal` | Full (Read + Destructive Write) |
+| `client_liaison` | `get_job`, `get_client_history`, `list_messages`, `send_message`, `search_evidence`, `list_free_slots`, `create_tentative_hold`, `create_email_draft` | Read + Messaging + Workspace Mock |
+| `approval` / `submit` | `get_job`, `get_client_history`, `get_connects_balance`, `create_proposal_draft`, `submit_proposal`, `create_tentative_hold` | Full (Read + Destructive Write) |

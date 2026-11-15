@@ -1,0 +1,5 @@
+{
+  "interview_request": "Hi, thank you for reaching out! I would be glad to hop on a call to discuss the project and explore how we can collaborate. Here are a few times I am currently free:\n\n{slot_block}\n\nPlease let me know if any of these windows suit your schedule, or feel free to suggest an alternative time.",
+  "negotiation": "Thank you for following up on the terms. Our quote reflects the full scope of deliverables, including rigorous test coverage, automated CI/CD containerization, and post-delivery support. While our core rate is structured to ensure dedicated production quality, we can explore phasing the milestones to align comfortably with your budget targets. Would that approach work for you?",
+  "question": "Thank you for your question. We design and deliver production-ready systems using verified architectures and clean modular patterns. All code is accompanied by comprehensive tests and documentation. I would be happy to elaborate on any specific component or workflow requirements you have in mind."
+}

@@ -255,3 +255,47 @@ To maintain testability and separation of concerns:
 - When the marketplace MCP server is down, reads return structured HTTP 503 (`error: "marketplace_unavailable"`, `retryable: true`, `queued: bool`).
 - New pipeline runs are transparently queued in Redis and resumed once connectivity is restored.
 - The `/health/dependencies` probe exposes real-time health across PostgreSQL, Redis, MCP servers, and LLM providers.
+
+---
+
+## 7. Conversation Graph, Client Liaison & Workspace MCP Mock Architecture (Parts A3 + C1)
+
+### 7.1 StateGraph Architecture & Workflow Topology
+The conversation subsystem automates post-proposal communication and client inquiries via a dedicated hand-written LangGraph `StateGraph` (`agent/graphs/conversation_graph.py`). Each thread executes within its own checkpointed conversation state, backed by PostgreSQL `AsyncPostgresSaver`:
+
+```mermaid
+graph TD;
+	__start__([__start__]) --> read_messages;
+	read_messages --> classify_intent;
+	classify_intent -.->|legitimate intent| draft_reply;
+	classify_intent -.->|scam_signal| flag_scam;
+	draft_reply --> compliance;
+	compliance --> approval;
+	approval -.->|approved| send;
+	approval -.->|rejected| __end__;
+	flag_scam --> __end__;
+	send --> __end__([__end__]);
+```
+
+- **Thread Isolation**: Graph thread IDs map directly to conversation thread IDs (`user_id:conversation_id`).
+- **Idempotent Outbound Actions**: The `send` node delivers outbound messages via `MarketplacePort.send_message` with unique `idempotency_key` headers (`msg:{thread_id}:{message_count}`).
+
+### 7.2 Risk-First Classification & Safety Guardrails
+1. **Risk Rules First**: Deterministic security and anti-scam rules execute prior to invoking LLM classification (`classify_intent`). Off-platform messaging solicitations (Telegram, WhatsApp, Skype), suspicious payment escrow bypasses, or requests for free work trigger the `scam_signal` intent immediately.
+2. **Untrusted Data Isolation**: All incoming client messages are wrapped with `<untrusted_user_input>` delimiters to prevent prompt injection and instruction subversion.
+3. **Scam Suppression (`flag_scam`)**: When classified as `scam_signal`, the pipeline routes directly to `flag_scam`, which suppresses draft generation, disables outbound replies, and marks the conversation with an audit flag.
+
+### 7.3 Workspace MCP Server (Local Mock Only)
+The Workspace MCP server (`mcp_servers/workspace/`) exposes calendar scheduling and drafting capabilities via FastMCP (Streamable HTTP on port `8003` and stdio transport):
+> [!NOTE]
+> **Mock Only**: Real Google Workspace / Google Calendar APIs are explicitly NOT wired. All operations execute against an isolated local JSON store (`workspace_state.json`) with an append-only, PII-masked SQLite audit log (`audit.db`).
+
+- **`list_free_slots(days_ahead, duration_min)`**: Queries available business slots within working hours (09:00 - 17:00 local time).
+- **`create_tentative_hold(slot_id, title, idempotency_key)`**: Idempotently reserves a slot on the calendar. Non-destructive and atomic.
+- **`create_email_draft(to, subject, body, idempotency_key)`**: Non-destructive drafting tool for follow-up email messages.
+
+### 7.4 Human-in-the-Loop & Approval Semantics
+- **Interrupt Before Action**: The `approval` node invokes LangGraph's `interrupt()` primitive to freeze execution before any external mutation occurs.
+- **Hold-On-Approval**: For `interview_request` intents, candidate calendar slots are proposed during `draft_reply`, but `create_tentative_hold` is executed **only after** explicit human approval is received via `POST /messages/{thread}/approve`.
+- **Durability & Crash Recovery**: If the service restarts while an approval is pending, state is fully recovered from PostgreSQL, allowing reviewers to edit, approve, or reject suggestions via the web interface (`/messages`).
+

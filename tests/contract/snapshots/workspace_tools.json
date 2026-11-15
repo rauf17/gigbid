@@ -1,0 +1,317 @@
+[
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+      "title": null
+    },
+    "description": "Saves a draft client follow-up email to the mock workspace inbox/outbox.\n\nWhen to use:\n- When preparing follow-up documentation or external client communications.\n\nWhen NOT to use:\n- In-platform marketplace chats (use send_message on marketplace port instead).\n\nNOTE: Non-destructive, idempotent draft creation. Real Gmail APIs are NOT wired.\n",
+    "inputSchema": {
+      "properties": {
+        "body": {
+          "description": "Draft body text.",
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Body",
+          "type": "string"
+        },
+        "idempotency_key": {
+          "default": "",
+          "description": "Idempotency key for draft persistence.",
+          "maxLength": 128,
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "subject": {
+          "description": "Email subject line.",
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Subject",
+          "type": "string"
+        },
+        "to": {
+          "description": "Recipient email address.",
+          "maxLength": 254,
+          "minLength": 3,
+          "title": "To",
+          "type": "string"
+        }
+      },
+      "required": [
+        "to",
+        "subject",
+        "body"
+      ],
+      "title": "create_email_draftArguments",
+      "type": "object"
+    },
+    "name": "create_email_draft",
+    "outputSchema": {
+      "description": "Output envelope for an email draft.",
+      "properties": {
+        "body": {
+          "description": "Draft body.",
+          "title": "Body",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Creation timestamp in UTC.",
+          "title": "Created At",
+          "type": "string"
+        },
+        "draft_id": {
+          "description": "Unique draft identifier.",
+          "title": "Draft Id",
+          "type": "string"
+        },
+        "idempotency_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Idempotency key.",
+          "title": "Idempotency Key"
+        },
+        "status": {
+          "default": "draft",
+          "description": "Status ('draft').",
+          "title": "Status",
+          "type": "string"
+        },
+        "subject": {
+          "description": "Subject line.",
+          "title": "Subject",
+          "type": "string"
+        },
+        "to": {
+          "description": "Recipient email address.",
+          "title": "To",
+          "type": "string"
+        }
+      },
+      "required": [
+        "draft_id",
+        "to",
+        "subject",
+        "body",
+        "created_at"
+      ],
+      "title": "EmailDraftOutput",
+      "type": "object"
+    }
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+      "title": null
+    },
+    "description": "Places a non-destructive tentative calendar hold on a free slot during client negotiations.\n\nWhen to use:\n- ONLY after human approval has been granted to propose meeting times to a client.\n- To reserve a timeslot tentatively until the client confirms.\n\nWhen NOT to use:\n- Automatically before human sign-off.\n- If the meeting is not requested by the client.\n\nNOTE: Non-destructive, idempotent hold. Real Google Calendar APIs are NOT wired.\n",
+    "inputSchema": {
+      "properties": {
+        "idempotency_key": {
+          "default": "",
+          "description": "Client idempotency key for safe retries without duplicate holds.",
+          "maxLength": 128,
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "slot_id": {
+          "description": "Identifier of the free calendar slot to hold.",
+          "maxLength": 64,
+          "minLength": 3,
+          "title": "Slot Id",
+          "type": "string"
+        },
+        "title": {
+          "description": "Context or title for tentative hold.",
+          "maxLength": 200,
+          "minLength": 3,
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "slot_id",
+        "title"
+      ],
+      "title": "create_tentative_holdArguments",
+      "type": "object"
+    },
+    "name": "create_tentative_hold",
+    "outputSchema": {
+      "description": "Output envelope for a tentative calendar hold.",
+      "properties": {
+        "end_time": {
+          "description": "End timestamp in UTC.",
+          "title": "End Time",
+          "type": "string"
+        },
+        "held_at": {
+          "description": "Timestamp when hold was registered.",
+          "title": "Held At",
+          "type": "string"
+        },
+        "hold_id": {
+          "description": "Unique identifier for the created hold.",
+          "title": "Hold Id",
+          "type": "string"
+        },
+        "idempotency_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Idempotency key.",
+          "title": "Idempotency Key"
+        },
+        "slot_id": {
+          "description": "Held calendar slot ID.",
+          "title": "Slot Id",
+          "type": "string"
+        },
+        "start_time": {
+          "description": "Start timestamp in UTC.",
+          "title": "Start Time",
+          "type": "string"
+        },
+        "status": {
+          "default": "tentative",
+          "description": "Hold status ('tentative' or 'confirmed').",
+          "title": "Status",
+          "type": "string"
+        },
+        "title": {
+          "description": "Hold title.",
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hold_id",
+        "slot_id",
+        "title",
+        "start_time",
+        "end_time",
+        "held_at"
+      ],
+      "title": "TentativeHoldOutput",
+      "type": "object"
+    }
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": null
+    },
+    "description": "Lists available free calendar slots for interview scheduling over upcoming business days.\n\nWhen to use:\n- When a client expresses interest in an interview or asks for availability.\n- To retrieve concrete time windows to propose in conversation messages.\n\nWhen NOT to use:\n- For general technical questions or proposal submissions.\n\nNOTE: Real Google Calendar APIs are NOT wired. Runs against local mock calendar store.\n",
+    "inputSchema": {
+      "properties": {
+        "days_ahead": {
+          "default": 3,
+          "description": "Number of business days ahead to query availability (1-14).",
+          "maximum": 14,
+          "minimum": 1,
+          "title": "Days Ahead",
+          "type": "integer"
+        },
+        "duration_min": {
+          "default": 30,
+          "description": "Duration of interview slot in minutes (15-120).",
+          "maximum": 120,
+          "minimum": 15,
+          "title": "Duration Min",
+          "type": "integer"
+        }
+      },
+      "title": "list_free_slotsArguments",
+      "type": "object"
+    },
+    "name": "list_free_slots",
+    "outputSchema": {
+      "$defs": {
+        "TimeSlot": {
+          "description": "Available calendar meeting slot.",
+          "properties": {
+            "duration_min": {
+              "default": 30,
+              "description": "Duration of slot in minutes.",
+              "title": "Duration Min",
+              "type": "integer"
+            },
+            "end_time": {
+              "description": "ISO 8601 end timestamp in UTC.",
+              "title": "End Time",
+              "type": "string"
+            },
+            "formatted": {
+              "description": "Human-readable representation, e.g. 'Tomorrow, 2:00 PM - 2:30 PM UTC'.",
+              "title": "Formatted",
+              "type": "string"
+            },
+            "slot_id": {
+              "description": "Unique deterministic slot identifier.",
+              "title": "Slot Id",
+              "type": "string"
+            },
+            "start_time": {
+              "description": "ISO 8601 start timestamp in UTC.",
+              "title": "Start Time",
+              "type": "string"
+            }
+          },
+          "required": [
+            "slot_id",
+            "start_time",
+            "end_time",
+            "formatted"
+          ],
+          "title": "TimeSlot",
+          "type": "object"
+        }
+      },
+      "description": "Output envelope for free slots listing.",
+      "properties": {
+        "count": {
+          "default": 0,
+          "description": "Number of available slots found.",
+          "title": "Count",
+          "type": "integer"
+        },
+        "slots": {
+          "description": "List of free calendar slots.",
+          "items": {
+            "$ref": "#/$defs/TimeSlot"
+          },
+          "title": "Slots",
+          "type": "array"
+        },
+        "timezone": {
+          "default": "UTC",
+          "description": "Calendar reference timezone.",
+          "title": "Timezone",
+          "type": "string"
+        }
+      },
+      "title": "ListFreeSlotsOutput",
+      "type": "object"
+    }
+  }
+]

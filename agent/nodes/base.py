@@ -24,6 +24,7 @@ class NodeDeps:
     port: Any | None = None
     retriever: Any | None = None
     portfolio_client: Any | None = None
+    workspace_client: Any | None = None
     llm: Any | None = None
     config: dict[str, Any] = field(default_factory=dict)
     policy: PolicyPack | None = None
