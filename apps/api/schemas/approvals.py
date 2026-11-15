@@ -16,8 +16,11 @@ class PendingApprovalItem(BaseModel):
 class ApprovalDetailResponse(BaseModel):
     thread_id: str
     checkpoint_id: str | None = None
+    job_id: str = ""
+    job_title: str = ""
     draft: dict[str, Any] = Field(default_factory=dict)
     claim_evidence: list[dict[str, Any]] = Field(default_factory=list)
+    evidence_store: dict[str, Any] = Field(default_factory=dict)
     risk: dict[str, Any] = Field(default_factory=dict)
     price_rationale: dict[str, Any] = Field(default_factory=dict)
     dry_run: dict[str, Any] = Field(default_factory=dict)

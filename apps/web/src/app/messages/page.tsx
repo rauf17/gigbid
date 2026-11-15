@@ -53,28 +53,14 @@ export default function MessagesPage() {
 
   async function fetchMessages(convId: string) {
     try {
-      const res = await fetch(`/api/messages?conversation_id=${convId}`);
+      const res = await fetch(`/api/messages?conversation_id=${convId}`, {
+        credentials: "include",
+      });
       if (res.ok) {
         const data = await res.json();
         setMessages(data);
       } else {
-        // Fallback demo mock messages if empty
-        setMessages([
-          {
-            id: "msg_1",
-            conversation_id: convId,
-            sender_id: "client_acme",
-            sender_role: "client",
-            text: convId.includes("interview")
-              ? "Hi! We reviewed your proposal and would love to hop on a quick call this week. What days are you free?"
-              : convId.includes("negotiation")
-              ? "Can you do $50/hr for this milestone instead of $85?"
-              : convId.includes("scam")
-              ? "Contact my manager on Telegram @cryptoboss123 for payment before we start."
-              : "What is your experience deploying vector databases with pgvector?",
-            timestamp: new Date().toISOString(),
-          },
-        ]);
+        setMessages([]);
       }
     } catch {
       setMessages([]);

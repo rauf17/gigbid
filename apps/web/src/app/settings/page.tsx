@@ -18,10 +18,22 @@ export default function SettingsPage() {
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   useEffect(() => {
-    Promise.all([api.profile.get(), api.memory.list()]).then(([p, m]) => {
-      if (p) setProfile(p);
-      if (m) setMemories(m);
-    });
+    Promise.all([api.profile.get(), api.memory.list()])
+      .then(([p, m]: [any, any]) => {
+        if (p) setProfile(p);
+        if (m) {
+          const rawItems = Array.isArray(m) ? m : m.items || [];
+          const normalized = rawItems.map((it: any, idx: number) => ({
+            id: it.id || it.key || `mem_${idx}`,
+            key: it.key,
+            value: typeof it.value === "object" ? JSON.stringify(it.value) : String(it.value),
+          }));
+          setMemories(normalized);
+        }
+      })
+      .catch((err) => {
+        console.warn("Failed loading profile or memories:", err);
+      });
   }, []);
 
   async function handleSave() {

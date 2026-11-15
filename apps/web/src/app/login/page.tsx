@@ -6,8 +6,8 @@ import { api } from "@/lib/client";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("reviewer@gigbid.ai");
-  const [password, setPassword] = useState("password123");
+  const [email, setEmail] = useState("reviewer@gigbid.local");
+  const [password, setPassword] = useState("reviewer123");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -75,7 +75,7 @@ export default function LoginPage() {
         </form>
 
         <div className="pt-2 text-center text-[11px] text-slate-400">
-          Default seed credentials: reviewer@gigbid.ai / (seeded in .env)
+          Default seed credentials: reviewer@gigbid.local / (seeded in .env)
         </div>
       </div>
     </div>

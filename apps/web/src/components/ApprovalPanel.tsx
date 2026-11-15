@@ -1,13 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { MockProposal } from "@/lib/mock_data";
 import { api } from "@/lib/client";
 
 interface ApprovalPanelProps {
   jobId: string;
-  proposal: MockProposal;
-  onUpdate: (updated: MockProposal) => void;
+  proposal: {
+    status: string;
+    cover_letter: string;
+    rejection_reason?: string;
+    compliance_violations?: string[];
+  };
+  onUpdate: (updated: any) => void;
 }
 
 export function ApprovalPanel({ jobId, proposal, onUpdate }: ApprovalPanelProps) {
@@ -15,8 +19,11 @@ export function ApprovalPanel({ jobId, proposal, onUpdate }: ApprovalPanelProps)
   const [showRejectBox, setShowRejectBox] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [draftText, setDraftText] = useState(proposal.cover_letter);
+  const [rejectionReason, setRejectionReason] = useState(proposal.rejection_reason || "");
   const [complianceWarning, setComplianceWarning] = useState<string | null>(
-    proposal.compliance_violations.length > 0 ? proposal.compliance_violations[0] : null
+    proposal.compliance_violations && proposal.compliance_violations.length > 0
+      ? proposal.compliance_violations[0]
+      : null
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [dryRun, setDryRun] = useState(true);
@@ -24,7 +31,7 @@ export function ApprovalPanel({ jobId, proposal, onUpdate }: ApprovalPanelProps)
   async function handleApprove() {
     setIsSubmitting(true);
     try {
-      const res = await api.proposals.approve(jobId);
+      await api.approvals.decide(jobId, { action: "approve" });
       onUpdate({ ...proposal, status: "submitted" });
     } catch (err: any) {
       alert(`Approval error: ${err.message}`);
@@ -37,7 +44,8 @@ export function ApprovalPanel({ jobId, proposal, onUpdate }: ApprovalPanelProps)
     if (!rejectReason.trim()) return;
     setIsSubmitting(true);
     try {
-      await api.proposals.reject(jobId, rejectReason);
+      await api.approvals.decide(jobId, { action: "reject", reason: rejectReason });
+      setRejectionReason(rejectReason);
       onUpdate({ ...proposal, status: "rejected", rejection_reason: rejectReason });
       setShowRejectBox(false);
     } catch (err: any) {
@@ -50,13 +58,13 @@ export function ApprovalPanel({ jobId, proposal, onUpdate }: ApprovalPanelProps)
   async function handleSaveEdit() {
     setIsSubmitting(true);
     try {
-      const res = await api.proposals.update(jobId, { cover_letter: draftText });
-      if (res.status === "compliance_violation" && res.violations?.length) {
+      const res = await api.approvals.decide(jobId, { action: "edit", edited_text: draftText });
+      if ((res.status === "blocked" || res.status === "compliance_violation") && res.violations?.length) {
         setComplianceWarning(res.violations[0]);
       } else {
         setComplianceWarning(null);
+        onUpdate({ ...proposal, cover_letter: draftText, status: "awaiting_approval" });
       }
-      onUpdate(res.proposal);
       setIsEditing(false);
     } catch (err: any) {
       alert(`Update error: ${err.message}`);
@@ -66,7 +74,7 @@ export function ApprovalPanel({ jobId, proposal, onUpdate }: ApprovalPanelProps)
   }
 
   const isApproved = proposal.status === "submitted";
-  const isRejected = proposal.status === "rejected";
+  const isRejected = proposal.status === "rejected" || !!rejectionReason;
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4">
@@ -206,7 +214,7 @@ export function ApprovalPanel({ jobId, proposal, onUpdate }: ApprovalPanelProps)
 
       {isRejected && (
         <div data-testid="rejection-success-badge" className="p-3 bg-rose-50 border border-rose-200 rounded-lg text-rose-800 text-xs font-medium">
-          ✗ Proposal was rejected. Reason: &ldquo;{proposal.rejection_reason}&rdquo;
+          ✗ Proposal was rejected. Reason: &ldquo;{rejectionReason || proposal.rejection_reason}&rdquo;
         </div>
       )}
     </div>

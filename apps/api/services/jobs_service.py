@@ -63,15 +63,78 @@ async def list_jobs(
         return []
 
     skipped_ids = get_skipped_job_ids(user_id)
+
+    # Discover thread states for this user
+    known_thread_ids: set[str] = set()
+    try:
+        url = get_db_url()
+        with psycopg.connect(url) as conn, conn.cursor() as cur:
+            cur.execute(
+                "SELECT DISTINCT thread_id FROM checkpoints WHERE thread_id LIKE %s",
+                (f"{user_id}:%",),
+            )
+            known_thread_ids = {r[0] for r in cur.fetchall()}
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("[jobs_service] Checkpoints lookup failed: %s", exc)
+
+    try:
+        from agent.runtime import _GLOBAL_MEMORY_SAVER
+        if hasattr(_GLOBAL_MEMORY_SAVER, "storage"):
+            for k in _GLOBAL_MEMORY_SAVER.storage:
+                tid = k if isinstance(k, str) else str(k)
+                if tid.startswith(f"{user_id}:"):
+                    known_thread_ids.add(tid)
+    except Exception:  # noqa: BLE001, S110
+        pass
+
+    thread_states: dict[str, dict[str, Any]] = {}
+    if known_thread_ids:
+        try:
+            from agent.graphs.bid_graph import build_bid_graph
+            from agent.runtime import get_checkpointer_and_store
+
+            async with get_checkpointer_and_store() as (cp, st):
+                graph = build_bid_graph(checkpointer=cp, store=st)
+                for j in jobs:
+                    tid = f"{user_id}:{j.id}"
+                    if tid in known_thread_ids:
+                        snap = await graph.aget_state({"configurable": {"thread_id": tid}})
+                        if snap and snap.values:
+                            thread_states[j.id] = dict(snap.values)
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("[jobs_service] Failed loading thread states: %s", exc)
+
     summaries: list[JobSummaryResponse] = []
 
     for j in jobs:
-        status_val = "skipped" if j.id in skipped_ids else "new"
-        fit_score: float | None = None
-        risk_score: float | None = None
-        risk_badges: list[str] = []
-        rec_action = "skip" if j.id in skipped_ids else "pending"
-        quote: float | None = None
+        st = thread_states.get(j.id)
+        if st:
+            fit_obj = st.get("fit")
+            fit_score = getattr(fit_obj, "score", None) if fit_obj else st.get("fit_score")
+            risk_obj = st.get("risk")
+            risk_score = getattr(risk_obj, "scam_score", None) if risk_obj else st.get("risk_score")
+            trust_score = getattr(risk_obj, "client_trust_score", None) if risk_obj else None
+            is_scam = getattr(risk_obj, "is_scam", False) if risk_obj else False
+            scam_reasons = getattr(risk_obj, "reasons", []) if risk_obj else []
+            scam_reason = "; ".join(scam_reasons) if scam_reasons else None
+            dec_obj = st.get("decision")
+            rec_action = getattr(dec_obj, "action", "pending") if dec_obj else "pending"
+            skip_reason = st.get("skip_reason") or (getattr(dec_obj, "rationale", None) if rec_action == "skip" else None)
+            quote_obj = st.get("quote")
+            quote = getattr(quote_obj, "bid_amount", None) if quote_obj else None
+            status_val = st.get("status", "awaiting_approval")
+            risk_badges = getattr(risk_obj, "reasons", []) if risk_obj else []
+        else:
+            status_val = "skipped" if j.id in skipped_ids else "not_analysed"
+            fit_score = None
+            risk_score = None
+            trust_score = None
+            is_scam = False
+            scam_reason = None
+            rec_action = "skip" if j.id in skipped_ids else "pending"
+            quote = None
+            risk_badges = []
+            skip_reason = _MEMORY_JOB_SKIPS.get((user_id, j.id), {}).get("reason") if j.id in skipped_ids else None
 
         if status_filter and status_val != status_filter:
             continue
@@ -85,17 +148,28 @@ async def list_jobs(
             JobSummaryResponse(
                 id=j.id,
                 title=j.title,
+                description=getattr(j, "description", "") or "",
                 client_name=client_str,
+                client_id=getattr(j, "client_id", None) or client_str,
+                client_country=getattr(j, "client_country", None),
                 category=j.category,
                 budget=budget_val,
+                budget_min=getattr(j, "budget_min", None),
+                budget_max=getattr(j, "budget_max", None),
+                budget_type=getattr(j, "budget_type", "fixed"),
                 connects_cost=j.connects_cost,
                 fit_score=fit_score,
                 risk_score=risk_score,
+                client_trust_score=trust_score,
                 risk_badges=risk_badges,
                 recommended_action=rec_action,
                 quote=quote,
                 status=status_val,
+                skip_reason=skip_reason,
+                is_scam=is_scam,
+                scam_reason=scam_reason,
                 created_at=getattr(j, "created_at", None) or getattr(j, "posted_at", None),
+                posted_at=getattr(j, "posted_at", None),
             )
         )
 
@@ -153,9 +227,16 @@ async def get_job_detail(
         description=j.description,
         skills=j.skills,
         budget=budget_val,
+        budget_min=getattr(j, "budget_min", None),
+        budget_max=getattr(j, "budget_max", None),
+        budget_type=getattr(j, "budget_type", "fixed"),
         connects_cost=j.connects_cost,
         client_name=client_str,
+        client_id=getattr(j, "client_id", None) or client_str,
+        client_country=getattr(j, "client_country", None),
         category=j.category,
+        status=last_run_state.get("status", "not_analysed") if last_run_state else "not_analysed",
+        posted_at=getattr(j, "posted_at", None),
         risk_report=risk_report,
         requirement_evidence_matrix=req_matrix,
         price_rationale=price_rationale,

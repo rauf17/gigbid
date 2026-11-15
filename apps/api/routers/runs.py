@@ -53,7 +53,8 @@ async def get_state(
     user: Annotated[UserResponse, Depends(current_user)],
 ) -> RunStateResponse:
     """Returns state summary, active node, and approval status for the given thread."""
-    return await get_run_state(user_id=user.id, thread_id=thread_id)
+    actual_thread_id = thread_id if thread_id.startswith(f"{user.id}:") else f"{user.id}:{thread_id}"
+    return await get_run_state(user_id=user.id, thread_id=actual_thread_id)
 
 
 @router.get("/{thread_id}/stream", operation_id="stream_run_execution")
@@ -65,10 +66,8 @@ async def stream_run(
     last_event_id: Annotated[str | None, Header(description="Last received SSE ID on reconnect")] = None,
 ) -> EventSourceResponse:
     """Server-Sent Events endpoint streaming live graph node updates, token usage, and status changes."""
-    if not thread_id.startswith(f"{user.id}:"):
-        raise HTTPException(status_code=404, detail="Run thread not found or access denied")
-
-    job_id = thread_id.split(":", 1)[1] if ":" in thread_id else thread_id
+    actual_thread_id = thread_id if thread_id.startswith(f"{user.id}:") else f"{user.id}:{thread_id}"
+    job_id = actual_thread_id.split(":", 1)[1] if ":" in actual_thread_id else actual_thread_id
     try:
         job = await port.get_job(job_id)
         job_dict = job.model_dump()
@@ -79,7 +78,7 @@ async def stream_run(
     return create_sse_response(
         request=request,
         job=job_dict,
-        thread_id=thread_id,
+        thread_id=actual_thread_id,
         user_id=user.id,
         persona_id=user.persona_id,
         deps=deps,
@@ -93,7 +92,8 @@ async def get_trace(
     user: Annotated[UserResponse, Depends(current_user)],
 ) -> RunTraceResponse:
     """Returns the append-only audit trace for the specified run thread, with optional LangSmith link."""
-    return await get_run_trace(user_id=user.id, thread_id=thread_id)
+    actual_thread_id = thread_id if thread_id.startswith(f"{user.id}:") else f"{user.id}:{thread_id}"
+    return await get_run_trace(user_id=user.id, thread_id=actual_thread_id)
 
 
 @router.post("/{thread_id}/replay", response_model=dict, operation_id="replay_run_checkpoint")
@@ -104,4 +104,5 @@ async def replay_run(
     port: Annotated[MarketplacePort, Depends(get_marketplace_port)],
 ) -> dict:
     """Re-executes the bid graph from a specified historical checkpoint."""
-    return await replay_run_from_checkpoint(user_id=user.id, thread_id=thread_id, req=req, port=port)
+    actual_thread_id = thread_id if thread_id.startswith(f"{user.id}:") else f"{user.id}:{thread_id}"
+    return await replay_run_from_checkpoint(user_id=user.id, thread_id=actual_thread_id, req=req, port=port)

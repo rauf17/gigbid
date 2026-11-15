@@ -1,215 +1,204 @@
 import {
-  MOCK_EVIDENCE,
-  MOCK_JOBS,
-  MOCK_PROPOSALS,
-  MockEvidenceItem,
-  MockJob,
-  MockProposal,
-} from "./mock_data";
+  ApprovalDecisionResponse,
+  ApprovalDetail,
+  AnalyticsResponse,
+  JobDetail,
+  JobSummary,
+  MemoryItem,
+  ProposalPipeline,
+  UserProfile,
+  UserResponse,
+} from "./types";
 
-const IS_MOCK = process.env.NEXT_PUBLIC_MOCK === "1";
-const API_BASE = "";
-
-// In-memory mock store for interactive actions during session/tests
-const mockState = {
-  jobs: [...MOCK_JOBS],
-  proposals: { ...MOCK_PROPOSALS },
-  profile: {
-    persona_id: "ai_ml",
-    email: "reviewer@gigbid.ai",
-    autonomy_mode: "supervised",
-    budget_cap: 10000,
-    saved_searches: ["LangGraph", "FastAPI", "LightGBM", "DuckDB"],
-  },
-  memories: [
-    { id: "mem_001", key: "client_preference:client_enterprise_99", value: "Prefers Docker container deployments" },
-    { id: "mem_002", key: "pricing:ai_ml", value: "Optimal hourly anchor $85-110/hr" },
-  ],
-  simTickCount: 0,
-};
-
-async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
-  if (IS_MOCK) {
-    return handleMockRequest<T>(path, options);
+export function isMockMode(): boolean {
+  if (typeof window !== "undefined") {
+    if ((window as any).__NEXT_PUBLIC_MOCK__ === true) return true;
+    if (/(?:^|;\s*)NEXT_PUBLIC_MOCK=1/.test(document.cookie)) return true;
   }
-
-  try {
-    const res = await fetch(`${API_BASE}${path}`, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      if (res.status === 503) {
-        throw new Error("SERVICE_DEGRADED");
-      }
-      const err = await res.json().catch(() => ({ detail: res.statusText }));
-      throw new Error(err.detail || `Request failed with status ${res.status}`);
+  if (typeof process !== "undefined" && process.env) {
+    const env = process.env;
+    if (env["NEXT_PUBLIC_MOCK"] === "1" || env["MOCK"] === "1") {
+      return true;
     }
-
-    return (await res.json()) as T;
-  } catch (err: any) {
-    if (err.message === "SERVICE_DEGRADED") {
-      throw err;
-    }
-    // Fallback to mock data if backend is offline in development
-    return handleMockRequest<T>(path, options);
   }
+  return false;
 }
 
-function handleMockRequest<T>(path: string, options: RequestInit = {}): T {
-  const method = (options.method || "GET").toUpperCase();
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
-  // Auth & Profile
-  if (path === "/auth/me" || path === "/api/auth/me") {
-    return { email: mockState.profile.email, persona_id: mockState.profile.persona_id } as T;
-  }
-  if (path === "/profile" || path === "/api/profile") {
-    if (method === "PUT" || method === "POST") {
-      const body = JSON.parse((options.body as string) || "{}");
-      if (body.persona_id) mockState.profile.persona_id = body.persona_id;
-      if (body.autonomy_mode) mockState.profile.autonomy_mode = body.autonomy_mode;
-      if (body.budget_cap) mockState.profile.budget_cap = body.budget_cap;
-      return mockState.profile as T;
+function getAuthHeader(): Record<string, string> {
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("gigbid_token");
+    if (token) {
+      return { Authorization: `Bearer ${token}` };
     }
-    return mockState.profile as T;
   }
+  return {};
+}
 
-  // Jobs
-  if (path.startsWith("/jobs") || path.startsWith("/api/jobs")) {
-    const parts = path.split("/");
-    const jobId = parts[parts.length - 1];
-    if (jobId && jobId !== "jobs") {
-      const j = mockState.jobs.find((x) => x.id === jobId) || mockState.jobs[0];
-      return j as T;
-    }
-    return mockState.jobs as T;
+async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  if (isMockMode()) {
+    const { handleMockRequest } = await import("./mock_handler");
+    return handleMockRequest<T>(path, options);
   }
 
-  // Proposals & Approvals
-  if (path.includes("/proposals") || path.includes("/api/proposals")) {
-    const parts = path.split("/");
-    const id = parts[parts.length - 1];
+  const res = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...getAuthHeader(),
+      ...options.headers,
+    },
+    credentials: "include",
+  });
 
-    if (method === "POST" && path.endsWith("/approve")) {
-      const pId = parts[parts.length - 2];
-      const prop = mockState.proposals[pId] || mockState.proposals["job_001"];
-      prop.status = "submitted";
-      const job = mockState.jobs.find((j) => j.id === pId);
-      if (job) job.status = "submitted";
-      return { status: "submitted", proposal: prop } as T;
+  if (!res.ok) {
+    if (res.status === 503) {
+      throw new Error("SERVICE_DEGRADED");
     }
-
-    if (method === "POST" && path.endsWith("/reject")) {
-      const pId = parts[parts.length - 2];
-      const body = JSON.parse((options.body as string) || "{}");
-      const prop = mockState.proposals[pId] || mockState.proposals["job_001"];
-      prop.status = "rejected";
-      prop.rejection_reason = body.reason || "Rejected by user";
-      const job = mockState.jobs.find((j) => j.id === pId);
-      if (job) job.status = "lost";
-      return { status: "rejected", reason: prop.rejection_reason } as T;
-    }
-
-    if (method === "PUT") {
-      const body = JSON.parse((options.body as string) || "{}");
-      const prop = mockState.proposals[id] || mockState.proposals["job_001"];
-      if (body.cover_letter) {
-        prop.cover_letter = body.cover_letter;
-        // Check for simulated compliance violation e.g. telegram, whatsapp, paypal
-        const lower = body.cover_letter.toLowerCase();
-        if (lower.includes("telegram") || lower.includes("whatsapp") || lower.includes("paypal") || lower.includes("crypto")) {
-          prop.compliance_clean = false;
-          prop.compliance_violations = ["Off-platform contact or payment prohibited by policy (POL-001/POL-002)."];
-          return {
-            status: "compliance_violation",
-            violations: prop.compliance_violations,
-            proposal: prop,
-          } as T;
-        } else {
-          prop.compliance_clean = true;
-          prop.compliance_violations = [];
-        }
-      }
-      return prop as T;
-    }
-
-    return (mockState.proposals[id] || mockState.proposals["job_001"]) as T;
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    const detailMsg = typeof err.detail === "object" ? JSON.stringify(err.detail) : err.detail;
+    throw new Error(detailMsg || `Request failed with status ${res.status}`);
   }
 
-  // Simulation tick
-  if (path === "/sim/tick" || path === "/api/sim/tick") {
-    mockState.simTickCount += 1;
-    return { tick: mockState.simTickCount, advanced: true, new_events: 1 } as T;
-  }
-
-  // Memories
-  if (path === "/memory" || path === "/api/memory") {
-    if (method === "DELETE") {
-      mockState.memories = [];
-      return { success: true, cleared: true } as T;
-    }
-    return mockState.memories as T;
-  }
-
-  // Default fallback
-  return {} as T;
+  return (await res.json()) as T;
 }
 
 export const api = {
   auth: {
-    me: () => apiFetch<{ email: string; persona_id: string }>("/api/auth/me"),
-    login: (body: { email: string; password: string }) =>
-      apiFetch<{ access_token: string }>("/api/auth/login", {
+    me: () => apiFetch<UserResponse>("/api/auth/me"),
+    login: async (body: { email: string; password: string }) => {
+      const res = await apiFetch<{ access_token: string; token_type: string }>("/api/auth/login", {
         method: "POST",
         body: JSON.stringify(body),
-      }),
-    logout: () => apiFetch<{ success: boolean }>("/api/auth/logout", { method: "POST" }),
+      });
+      if (typeof window !== "undefined" && res.access_token) {
+        localStorage.setItem("gigbid_token", res.access_token);
+      }
+      return res;
+    },
+    logout: async () => {
+      try {
+        await apiFetch<{ status: string; message: string }>("/api/auth/logout", { method: "POST" });
+      } finally {
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("gigbid_token");
+        }
+      }
+      return { success: true };
+    },
   },
   profile: {
-    get: () => apiFetch<typeof mockState.profile>("/api/profile"),
-    update: (body: Partial<typeof mockState.profile>) =>
-      apiFetch<typeof mockState.profile>("/api/profile", {
+    get: () => apiFetch<UserProfile>("/api/profile"),
+    update: (body: Partial<UserProfile>) =>
+      apiFetch<UserProfile>("/api/profile", {
         method: "PUT",
         body: JSON.stringify(body),
       }),
   },
   jobs: {
-    list: () => apiFetch<MockJob[]>("/api/jobs"),
-    get: (id: string) => apiFetch<MockJob>(`/api/jobs/${id}`),
-  },
-  proposals: {
-    get: (jobId: string) => apiFetch<MockProposal>(`/api/proposals/${jobId}`),
-    update: (jobId: string, body: { cover_letter: string }) =>
-      apiFetch<{ status?: string; violations?: string[]; proposal: MockProposal }>(
-        `/api/proposals/${jobId}`,
-        { method: "PUT", body: JSON.stringify(body) }
-      ),
-    approve: (jobId: string) =>
-      apiFetch<{ status: string; proposal: MockProposal }>(`/api/proposals/${jobId}/approve`, {
-        method: "POST",
-      }),
-    reject: (jobId: string, reason: string) =>
-      apiFetch<{ status: string; reason: string }>(`/api/proposals/${jobId}/reject`, {
+    list: (params?: { category?: string; status?: string; min_fit?: number; limit?: number }) => {
+      const searchParams = new URLSearchParams();
+      if (params?.category) searchParams.set("category", params.category);
+      if (params?.status) searchParams.set("status", params.status);
+      if (params?.min_fit !== undefined) searchParams.set("min_fit", String(params.min_fit));
+      if (params?.limit !== undefined) searchParams.set("limit", String(params.limit));
+      const qs = searchParams.toString();
+      return apiFetch<JobSummary[]>(`/api/jobs${qs ? `?${qs}` : ""}`);
+    },
+    get: (id: string) => apiFetch<JobDetail>(`/api/jobs/${id}`),
+    skip: (id: string, reason: string) =>
+      apiFetch<{ status: string; message: string }>(`/api/jobs/${id}/skip`, {
         method: "POST",
         body: JSON.stringify({ reason }),
       }),
   },
+  runs: {
+    create: (body: { job_id: string; persona_id?: string }) =>
+      apiFetch<{ thread_id: string; status: string }>("/api/runs", {
+        method: "POST",
+        body: JSON.stringify(body),
+      }),
+    get: (threadId: string) =>
+      apiFetch<{
+        thread_id: string;
+        status: string;
+        state_summary: Record<string, any>;
+        current_node: string | null;
+        is_awaiting_approval: boolean;
+      }>(`/api/runs/${threadId}`),
+    trace: (threadId: string) =>
+      apiFetch<{ thread_id: string; trace_id: string | null; trace_url: string | null; traces: any[] }>(
+        `/api/runs/${threadId}/trace`
+      ),
+  },
+  approvals: {
+    list: () => apiFetch<Array<{ thread_id: string; checkpoint_id: string | null; payload: any }>>("/api/approvals"),
+    get: (threadId: string) => apiFetch<ApprovalDetail>(`/api/approvals/${threadId}`),
+    decide: (
+      threadId: string,
+      decision: { action: "approve" | "edit" | "reject"; edited_text?: string; reason?: string }
+    ) =>
+      apiFetch<ApprovalDecisionResponse>(`/api/approvals/${threadId}`, {
+        method: "POST",
+        body: JSON.stringify(decision),
+      }),
+  },
+  proposals: {
+    pipeline: () => apiFetch<ProposalPipeline>("/api/proposals"),
+    get: (jobId: string) => apiFetch<any>(`/api/proposals/${jobId}`),
+    approve: (jobId: string) =>
+      apiFetch<any>(`/api/approvals/${jobId}`, {
+        method: "POST",
+        body: JSON.stringify({ action: "approve" }),
+      }),
+    reject: (jobId: string, reason: string) =>
+      apiFetch<any>(`/api/approvals/${jobId}`, {
+        method: "POST",
+        body: JSON.stringify({ action: "reject", reason }),
+      }),
+    update: (jobId: string, body: { cover_letter: string }) =>
+      apiFetch<any>(`/api/approvals/${jobId}`, {
+        method: "POST",
+        body: JSON.stringify({ action: "edit", edited_text: body.cover_letter }),
+      }),
+  },
+  messages: {
+    list: (convId = "conv_default") =>
+      apiFetch<any[]>(`/api/messages?conversation_id=${convId}`),
+    reply: (convId: string, text: string) =>
+      apiFetch<any>(`/api/messages/${convId}/reply`, {
+        method: "POST",
+        body: JSON.stringify({ text }),
+      }),
+    suggestion: (convId: string) =>
+      apiFetch<any>(`/api/messages/${convId}/suggestion`),
+    approve: (convId: string, body: { action: "approve" | "edit" | "reject"; edited_text?: string }) =>
+      apiFetch<any>(`/api/messages/${convId}/approve`, {
+        method: "POST",
+        body: JSON.stringify(body),
+      }),
+  },
+  analytics: {
+    get: () => apiFetch<AnalyticsResponse>("/api/analytics"),
+  },
+  memory: {
+    list: (namespace?: string) =>
+      apiFetch<MemoryItem[]>(`/api/memory${namespace ? `?namespace=${namespace}` : ""}`),
+    delete: (id: string, namespace = "style") =>
+      apiFetch<{ status: string; message: string }>(`/api/memory/${id}?namespace=${namespace}`, {
+        method: "DELETE",
+      }),
+    clear: () => apiFetch<{ success: boolean; cleared: boolean }>("/api/memory", { method: "DELETE" }),
+  },
   sim: {
     tick: () => apiFetch<{ tick: number; advanced: boolean }>("/api/sim/tick", { method: "POST" }),
   },
-  memory: {
-    list: () => apiFetch<Array<{ id: string; key: string; value: string }>>("/api/memory"),
-    clear: () => apiFetch<{ success: boolean }>("/api/memory", { method: "DELETE" }),
-  },
   health: {
     check: async () => {
+      if (isMockMode()) return { degraded: false };
       try {
-        const res = await fetch("/api/health");
+        const res = await fetch(`${API_BASE}/api/health`);
         if (res.status === 503) return { degraded: true };
         return { degraded: false };
       } catch {

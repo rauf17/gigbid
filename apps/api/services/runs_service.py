@@ -86,7 +86,7 @@ async def start_run(
 
 async def get_run_state(user_id: str, thread_id: str) -> RunStateResponse:
     if not thread_id.startswith(f"{user_id}:"):
-        raise HTTPException(status_code=404, detail="Run thread not found or access denied")
+        thread_id = f"{user_id}:{thread_id}"
 
     config = {"configurable": {"thread_id": thread_id}}
     async with get_checkpointer_and_store() as (cp, st):
@@ -134,7 +134,7 @@ async def get_run_state(user_id: str, thread_id: str) -> RunStateResponse:
 
 async def get_run_trace(user_id: str, thread_id: str) -> RunTraceResponse:
     if not thread_id.startswith(f"{user_id}:"):
-        raise HTTPException(status_code=404, detail="Run thread not found or access denied")
+        thread_id = f"{user_id}:{thread_id}"
 
     traces_raw = get_audit_traces(thread_id)
     trace_items = [
@@ -171,7 +171,7 @@ async def replay_run_from_checkpoint(
     port: MarketplacePort,
 ) -> dict[str, Any]:
     if not thread_id.startswith(f"{user_id}:"):
-        raise HTTPException(status_code=404, detail="Run thread not found or access denied")
+        thread_id = f"{user_id}:{thread_id}"
 
     deps = NodeDeps(port=port)
     res = await replay(thread_id=thread_id, checkpoint_id=req.checkpoint_id, deps=deps)

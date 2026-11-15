@@ -3,115 +3,133 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { RunTimeline, TimelineStep } from "@/components/RunTimeline";
-
-const INITIAL_STEPS: TimelineStep[] = [
-  {
-    id: "step_01",
-    node: "analyst",
-    status: "completed",
-    latency_ms: 1240,
-    tokens: 420,
-    summary: "Extracted 3 atomic requirements and identified skill requirements [Python, LightGBM].",
-    timestamp: new Date(Date.now() - 10000).toISOString(),
-  },
-  {
-    id: "step_02",
-    node: "risk_assessor",
-    status: "completed",
-    latency_ms: 890,
-    tokens: 310,
-    summary: "Evaluated client trust (0.96) and scam probability (0.02). Risk classification: LOW.",
-    timestamp: new Date(Date.now() - 8000).toISOString(),
-  },
-  {
-    id: "step_03",
-    node: "fit_matcher",
-    status: "completed",
-    latency_ms: 640,
-    tokens: 280,
-    summary: "Calibrated similarity score: 0.94. Strong portfolio grounding chunk cs_aiml_001.",
-    timestamp: new Date(Date.now() - 6000).toISOString(),
-  },
-  {
-    id: "step_04",
-    node: "writer",
-    status: "completed",
-    latency_ms: 2450,
-    tokens: 780,
-    summary: "Drafted tailored proposal cover letter with inline evidence markers [E:ai_ml_cs_cs_aiml_001].",
-    timestamp: new Date(Date.now() - 3000).toISOString(),
-  },
-  {
-    id: "step_05",
-    node: "verifier",
-    status: "completed",
-    latency_ms: 1100,
-    tokens: 520,
-    summary: "Audited 5 atomic claims against portfolio. 0 unsupported assertions detected.",
-    timestamp: new Date(Date.now() - 1500).toISOString(),
-  },
-  {
-    id: "step_06",
-    node: "critic",
-    status: "completed",
-    latency_ms: 920,
-    tokens: 390,
-    summary: "Evaluated grounding (0.92) and personalization (0.88). Verdict: ACCEPT.",
-    timestamp: new Date(Date.now() - 800).toISOString(),
-  },
-  {
-    id: "step_07",
-    node: "approval_interrupt",
-    status: "running",
-    latency_ms: 0,
-    tokens: 0,
-    summary: "LangGraph approval interrupt triggered. Awaiting human approval command.",
-    timestamp: new Date().toISOString(),
-  },
-];
+import { api } from "@/lib/client";
 
 export default function RunTracePage() {
   const params = useParams();
-  const runId = (params?.id as string) || "run_demo_001";
-  const [steps, setSteps] = useState<TimelineStep[]>(INITIAL_STEPS);
+  const runId = (params?.id as string) || "run_001";
+  const [steps, setSteps] = useState<TimelineStep[]>([]);
   const [isStreaming, setIsStreaming] = useState(true);
+  const [runStatus, setRunStatus] = useState<string>("running");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Attempt SSE connection if backend is available
-    if (typeof EventSource !== "undefined") {
-      try {
-        const es = new EventSource(`/api/runs/${runId}/events`);
-        es.onmessage = (event) => {
-          try {
-            const data = JSON.parse(event.data);
-            if (data?.node) {
-              setSteps((prev) => [...prev, data]);
-            }
-          } catch {
-            // ignore parse errors
+    // 1. Load initial trace history from backend
+    api.runs.trace(runId)
+      .then((res) => {
+        if (res.traces && res.traces.length > 0) {
+          const loaded: TimelineStep[] = res.traces.map((t, idx) => ({
+            id: t.id ? String(t.id) : `step_${idx}`,
+            node: t.node_name,
+            status: "completed",
+            latency_ms: Math.round(t.duration_ms || 0),
+            tokens: t.tokens || 0,
+            summary: t.observation || `Completed ${t.node_name}`,
+            timestamp: t.created_at || new Date().toISOString(),
+          }));
+          setSteps(loaded);
+        }
+      })
+      .catch((err) => {
+        // If trace fails, log warning
+        console.warn("Could not load initial run trace:", err);
+      });
+
+    // 2. Connect to SSE stream
+    let es: EventSource | null = null;
+    try {
+      es = new EventSource(`/api/runs/${runId}/stream`);
+
+      es.addEventListener("node_update", (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          const nodeName = data.node || "node";
+          const updates = data.updates || {};
+
+          setSteps((prev) => {
+            const nextStep: TimelineStep = {
+              id: `step_${prev.length + 1}`,
+              node: nodeName,
+              status: updates.status === "failed" ? "failed" : "completed",
+              latency_ms: updates.latency_ms || 0,
+              tokens: updates.tokens || 0,
+              summary: updates.summary || `Node ${nodeName} execution completed.`,
+              timestamp: new Date().toISOString(),
+            };
+            return [...prev, nextStep];
+          });
+
+          if (updates.status) {
+            setRunStatus(updates.status);
           }
-        };
-        es.onerror = () => {
-          es.close();
-          setIsStreaming(false);
-        };
-        return () => es.close();
-      } catch {
+        } catch {
+          // ignore parsing error
+        }
+      });
+
+      es.addEventListener("final", (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          setRunStatus(data.status || "stream_completed");
+        } catch {}
         setIsStreaming(false);
-      }
+        es?.close();
+      });
+
+      es.onerror = () => {
+        setIsStreaming(false);
+        es?.close();
+      };
+    } catch (err: any) {
+      setError(err.message || "Failed connecting to SSE stream");
+      setIsStreaming(false);
     }
+
+    return () => {
+      es?.close();
+    };
   }, [runId]);
+
+  const jobId = runId.includes(":") ? runId.split(":")[1] : runId;
+  const isAwaitingApproval = runStatus === "awaiting_approval" || steps.some((s) => s.node === "approval_interrupt" || s.node === "approval");
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-xl font-bold text-slate-900">Execution Trace & State Inspector</h1>
-        <p className="text-xs text-slate-500">
-          Step-by-step audit of LangGraph state transitions, LLM tokens, and node execution latencies.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <a href="/inbox" className="hover:text-slate-800">← Back to Inbox</a>
+            <span>/</span>
+            <span className="font-mono">{runId}</span>
+          </div>
+          <h1 className="text-xl font-bold text-slate-900 mt-1">Live Execution Trace</h1>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {isAwaitingApproval && (
+            <a
+              href={`/studio/${jobId}`}
+              className="px-4 py-2 text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition-all"
+            >
+              Open in Proposal Studio →
+            </a>
+          )}
+        </div>
       </div>
 
-      <RunTimeline runId={runId} steps={steps} isStreaming={isStreaming} />
+      {error && (
+        <div className="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs">
+          <span className="font-semibold">Stream connection error:</span> {error}
+        </div>
+      )}
+
+      {steps.length === 0 && !error ? (
+        <div className="bg-white border border-slate-200 rounded-xl p-8 text-center text-xs text-slate-400">
+          Listening for graph state transitions on thread <span className="font-mono">{runId}</span>...
+        </div>
+      ) : (
+        <RunTimeline runId={runId} steps={steps} isStreaming={isStreaming} />
+      )}
     </div>
   );
 }

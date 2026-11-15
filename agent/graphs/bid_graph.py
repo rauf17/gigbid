@@ -544,14 +544,26 @@ async def node_approval(
 
     # Formulate review payload
     draft_obj = state.get("draft")
+    evidence_lookup = {}
+    for ev in (state.get("evidence") or []):
+        ev_id = getattr(ev, "id", None) or (ev.get("id") if isinstance(ev, dict) else "")
+        if ev_id:
+            evidence_lookup[ev_id] = ev.model_dump() if hasattr(ev, "model_dump") else ev
+
+    job_data = state.get("job", {})
     payload = {
         "thread_id": thread_id,
-        "job_id": state.get("job", {}).get("id", ""),
+        "job_id": job_data.get("id", "") if isinstance(job_data, dict) else getattr(job_data, "id", ""),
+        "job_title": job_data.get("title", "") if isinstance(job_data, dict) else getattr(job_data, "title", ""),
         "draft": draft_obj.model_dump() if hasattr(draft_obj, "model_dump") else draft_obj,
         "claims_matrix": [c.model_dump() if hasattr(c, "model_dump") else c for c in getattr(draft_obj, "claims", [])],
+        "claim_evidence": [c.model_dump() if hasattr(c, "model_dump") else c for c in getattr(draft_obj, "claims", [])],
+        "evidence_store": evidence_lookup,
         "risk_report": state.get("risk").model_dump() if hasattr(state.get("risk"), "model_dump") else state.get("risk"),
         "price_rationale": state.get("quote").model_dump() if hasattr(state.get("quote"), "model_dump") else state.get("quote"),
         "dry_run_preview": preview,
+        "critic_comments": state.get("critiques")[-1].model_dump() if (state.get("critiques") and hasattr(state.get("critiques")[-1], "model_dump")) else None,
+        "compliance_comments": state.get("compliance").model_dump() if (state.get("compliance") and hasattr(state.get("compliance"), "model_dump")) else None,
     }
 
     # Suspend execution until Command(resume=decision) is received

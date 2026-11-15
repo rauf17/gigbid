@@ -1,22 +1,24 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/navigation";
 import { usePathname } from "next/navigation";
 import { api } from "@/lib/client";
 
 export function Navbar() {
   const pathname = usePathname();
-  const [profile, setProfile] = useState<{ email?: string; persona_id?: string }>({
-    email: "reviewer@gigbid.ai",
-    persona_id: "ai_ml",
-  });
+  const [profile, setProfile] = useState<{ email?: string; persona_id?: string } | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.auth.me().then((data) => {
-      if (data?.persona_id) setProfile(data);
-    });
-  }, []);
+    api.auth.me()
+      .then((data) => {
+        if (data?.email) setProfile(data);
+      })
+      .catch(() => {
+        setProfile(null);
+      })
+      .finally(() => setLoading(false));
+  }, [pathname]);
 
   if (pathname === "/login" || pathname === "/onboarding") {
     return null;
@@ -66,13 +68,34 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-3">
-            <a
-              href="/onboarding"
-              className="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full border border-blue-200 font-medium transition-colors"
-            >
-              Persona: <span className="font-semibold uppercase">{profile.persona_id}</span>
-            </a>
-            <span className="text-xs text-slate-500 hidden sm:inline">{profile.email}</span>
+            {profile?.email ? (
+              <>
+                <a
+                  href="/onboarding"
+                  data-testid="navbar-persona-badge"
+                  className="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full border border-blue-200 font-medium transition-colors"
+                >
+                  Persona: <span className="font-semibold uppercase">{profile.persona_id || "ai_ml"}</span>
+                </a>
+                <span data-testid="navbar-user-email" className="text-xs text-slate-700 font-medium hidden sm:inline">
+                  {profile.email}
+                </span>
+                <button
+                  data-testid="navbar-logout-btn"
+                  onClick={async () => {
+                    await api.auth.logout();
+                    window.location.href = "/login";
+                  }}
+                  className="text-[11px] text-slate-500 hover:text-slate-800 transition-colors"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : !loading ? (
+              <a href="/login" className="text-xs font-semibold text-blue-600 hover:text-blue-700">
+                Sign In
+              </a>
+            ) : null}
           </div>
         </div>
       </div>

@@ -37,7 +37,7 @@ async def list_pending_approvals(user_id: str) -> list[PendingApprovalItem]:
 
 async def get_approval_detail(user_id: str, thread_id: str) -> ApprovalDetailResponse:
     if not thread_id.startswith(f"{user_id}:"):
-        raise HTTPException(status_code=404, detail="Approval thread not found or access denied")
+        thread_id = f"{user_id}:{thread_id}"
 
     config = {"configurable": {"thread_id": thread_id}}
     async with get_checkpointer_and_store() as (cp, st):
@@ -52,20 +52,41 @@ async def get_approval_detail(user_id: str, thread_id: str) -> ApprovalDetailRes
             interrupt_payload = snap.tasks[0].interrupts[0].value or {}
 
         values = dict(snap.values)
-        draft = interrupt_payload.get("draft") or values.get("proposal_draft") or {}
-        claim_ev = interrupt_payload.get("claim_evidence") or values.get("claim_evidence") or []
-        risk = interrupt_payload.get("risk") or values.get("risk_report") or {}
-        price = interrupt_payload.get("price_rationale") or values.get("price_rationale") or {}
-        dry_run = interrupt_payload.get("dry_run") or values.get("dry_run_preview") or {}
+        draft = interrupt_payload.get("draft") or values.get("draft") or values.get("proposal_draft") or {}
+        claim_ev = (
+            interrupt_payload.get("claim_evidence")
+            or interrupt_payload.get("claims_matrix")
+            or values.get("claim_evidence")
+            or []
+        )
+        risk = interrupt_payload.get("risk") or interrupt_payload.get("risk_report") or values.get("risk_report") or {}
+        price = interrupt_payload.get("price_rationale") or values.get("price_rationale") or values.get("quote") or {}
+        dry_run = interrupt_payload.get("dry_run") or interrupt_payload.get("dry_run_preview") or values.get("dry_run_preview") or {}
         critic = interrupt_payload.get("critic_comments") or values.get("critic_comments")
         compliance = interrupt_payload.get("compliance_comments") or values.get("compliance_comments")
         checkpoint_id = snap.config.get("configurable", {}).get("checkpoint_id")
 
+        # Evidence store
+        evidence_store = interrupt_payload.get("evidence_store") or {}
+        if not evidence_store and values.get("evidence"):
+            for ev in values["evidence"]:
+                ev_id = getattr(ev, "id", None) or (ev.get("id") if isinstance(ev, dict) else "")
+                if ev_id:
+                    evidence_store[ev_id] = ev.model_dump() if hasattr(ev, "model_dump") else ev
+
+        # Extract job metadata
+        job_obj = interrupt_payload.get("job") or values.get("job") or {}
+        job_id = interrupt_payload.get("job_id") or getattr(job_obj, "id", None) or (job_obj.get("id") if isinstance(job_obj, dict) else "")
+        job_title = interrupt_payload.get("job_title") or getattr(job_obj, "title", None) or (job_obj.get("title") if isinstance(job_obj, dict) else "")
+
         return ApprovalDetailResponse(
             thread_id=thread_id,
             checkpoint_id=checkpoint_id,
+            job_id=job_id,
+            job_title=job_title,
             draft=draft,
             claim_evidence=claim_ev,
+            evidence_store=evidence_store,
             risk=risk,
             price_rationale=price,
             dry_run=dry_run,
@@ -81,7 +102,7 @@ async def decide_approval(
     port: MarketplacePort,
 ) -> ApprovalDecisionResponse:
     if not thread_id.startswith(f"{user_id}:"):
-        raise HTTPException(status_code=404, detail="Approval thread not found or access denied")
+        thread_id = f"{user_id}:{thread_id}"
 
     deps = NodeDeps(port=port)
     decision: dict[str, Any] = {"action": req.action}

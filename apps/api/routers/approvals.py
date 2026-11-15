@@ -38,7 +38,8 @@ async def get_approval(
     user: Annotated[UserResponse, Depends(current_user)],
 ) -> ApprovalDetailResponse:
     """Returns the full approval dossier: proposal draft, claim-evidence mapping, risk, and price rationale."""
-    return await get_approval_detail(user_id=user.id, thread_id=thread_id)
+    actual_thread_id = thread_id if thread_id.startswith(f"{user.id}:") else f"{user.id}:{thread_id}"
+    return await get_approval_detail(user_id=user.id, thread_id=actual_thread_id)
 
 
 @router.post("/{thread_id}", response_model=ApprovalDecisionResponse, operation_id="submit_approval_decision")
@@ -53,4 +54,5 @@ async def post_approval_decision(
     - Reject requires an explicit reason.
     - Edit re-runs compliance verification.
     """
-    return await decide_approval(user_id=user.id, thread_id=thread_id, req=req, port=port)
+    actual_thread_id = thread_id if thread_id.startswith(f"{user.id}:") else f"{user.id}:{thread_id}"
+    return await decide_approval(user_id=user.id, thread_id=actual_thread_id, req=req, port=port)
