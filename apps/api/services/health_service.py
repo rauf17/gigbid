@@ -28,7 +28,7 @@ async def probe_dependencies() -> HealthDependenciesResponse:
 
     # 2. Redis probe
     try:
-        redis_url = os.getenv("REDIS_URL", "redis://localhost:6380/0")
+        redis_url = os.getenv("REDIS_URL", "redis://127.0.0.1:6380/0")
         client = aioredis.from_url(redis_url, socket_timeout=1.0)
         await client.ping()
         await client.aclose()
@@ -42,7 +42,7 @@ async def probe_dependencies() -> HealthDependenciesResponse:
     try:
         async with httpx.AsyncClient(timeout=1.0) as client:
             resp = await client.get(f"{base_mcp}/health")
-            if resp.status_code in {200, 404, 405}:
+            if resp.status_code in {200, 401, 404, 405}:
                 deps["marketplace_mcp"] = DependencyStatus(name="marketplace_mcp", status="ok", details="Reachable")
             else:
                 deps["marketplace_mcp"] = DependencyStatus(

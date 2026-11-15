@@ -44,7 +44,7 @@ async def _enqueue_to_arq_worker(user_id: str, job_id: str) -> bool:
         from arq import create_pool
         from arq.connections import RedisSettings
 
-        redis_url = os.getenv("REDIS_URL", "redis://localhost:6380/0")
+        redis_url = os.getenv("REDIS_URL", "redis://127.0.0.1:6380/0")
         settings = RedisSettings.from_dsn(redis_url)
         pool = await create_pool(settings)
         await pool.enqueue_job("analyse_job", user_id, job_id, _job_id=f"analyse:{user_id}:{job_id}")

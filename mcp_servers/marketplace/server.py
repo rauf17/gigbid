@@ -73,7 +73,8 @@ def create_mcp_server(
     """Builds and registers tools on FastMCP server instance."""
     app_adapter = adapter or get_adapter()
     app_audit = audit_store or AuditStore()
-    app_limiter = rate_limiter or MarketplaceRateLimiter(max_requests=20, window_seconds=60.0)
+    max_reqs = int(os.getenv("MARKETPLACE_RATE_LIMIT", "120"))
+    app_limiter = rate_limiter or MarketplaceRateLimiter(max_requests=max_reqs, window_seconds=60.0)
 
     mcp = FastMCP("Marketplace MCP Server", streamable_http_path="/mcp")
 

@@ -28,7 +28,7 @@ class WorkerSettings:
 
     functions: ClassVar[list[Any]] = [scout_saved_search, analyse_job]
     cron_jobs: ClassVar[list[Any]] = [cron(cron_scout_all, minute={0, 15, 30, 45})]
-    redis_settings = RedisSettings.from_dsn(os.getenv("REDIS_URL", "redis://localhost:6380/0"))
+    redis_settings = RedisSettings.from_dsn(os.getenv("REDIS_URL", "redis://127.0.0.1:6380/0"))
     on_startup = startup
     on_shutdown = shutdown
     max_jobs = 10

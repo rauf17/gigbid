@@ -133,8 +133,8 @@ def create_user(
 
 def seed_reviewer_user() -> dict[str, Any] | None:
     """Seeds the REVIEWER user on application startup from environment variables."""
-    reviewer_email = os.getenv("REVIEWER_EMAIL")
-    reviewer_password = os.getenv("REVIEWER_PASSWORD")
+    reviewer_email = os.getenv("REVIEWER_EMAIL", "reviewer@gigbid.local")
+    reviewer_password = os.getenv("REVIEWER_PASSWORD", "replace_me_reviewer_password")
     if not reviewer_email or not reviewer_password:
         return None
 

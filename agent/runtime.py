@@ -153,6 +153,12 @@ async def pending_approvals(
     except Exception as exc:  # noqa: BLE001
         logger.debug("[runtime] Failed fetching thread list from postgres: %s", exc)
 
+    if hasattr(_GLOBAL_MEMORY_SAVER, "storage"):
+        for k in _GLOBAL_MEMORY_SAVER.storage:
+            tid = k if isinstance(k, str) else str(k)
+            if tid.startswith(prefix) and tid not in thread_ids:
+                thread_ids.append(tid)
+
     if checkpointer is not None and store is not None:
         graph = build_bid_graph(checkpointer=checkpointer, store=store)
         for tid in thread_ids:
