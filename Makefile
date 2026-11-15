@@ -20,6 +20,10 @@ ingest:
 	uv run python -m rag.ingest --persona all
 api:
 	uv run uvicorn apps.api.main:app --reload --port 8000
+worker:
+	uv run arq worker.main.WorkerSettings
+openapi:
+	uv run python scripts/export_openapi.py
 test:
 	uv run pytest -q
 lint:
