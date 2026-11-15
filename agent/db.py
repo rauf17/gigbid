@@ -297,3 +297,35 @@ def clear_memory_tables() -> None:
     _MEMORY_AUDIT_TRACE.clear()
     _MEMORY_DEAD_LETTER.clear()
     _MEMORY_PROPOSAL_SUBMISSIONS.clear()
+
+
+def get_audit_traces(thread_id: str) -> list[dict[str, Any]]:
+    """Retrieves all audit trace events for a given thread."""
+    url = get_db_url()
+    try:
+        import psycopg
+        from psycopg.rows import dict_row
+
+        with psycopg.connect(url, row_factory=dict_row) as conn, conn.cursor() as cur:
+            cur.execute("SELECT * FROM audit_trace WHERE thread_id = %s ORDER BY id ASC", (thread_id,))
+            return [dict(r) for r in cur.fetchall()]
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("[db] Failed reading audit traces from postgres: %s", exc)
+
+    return [t for t in _MEMORY_AUDIT_TRACE if t["thread_id"] == thread_id]
+
+
+def get_all_proposal_submissions() -> list[dict[str, Any]]:
+    """Retrieves all proposal submission records."""
+    url = get_db_url()
+    try:
+        import psycopg
+        from psycopg.rows import dict_row
+
+        with psycopg.connect(url, row_factory=dict_row) as conn, conn.cursor() as cur:
+            cur.execute("SELECT * FROM proposal_submissions ORDER BY created_at DESC")
+            return [dict(r) for r in cur.fetchall()]
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("[db] Failed reading submissions from postgres: %s", exc)
+
+    return list(_MEMORY_PROPOSAL_SUBMISSIONS.values())

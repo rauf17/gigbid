@@ -11,6 +11,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from agent.db import init_db
 from apps.api.auth.router import router as auth_router
 from apps.api.auth.service import seed_reviewer_user
+from apps.api.routers import (
+    analytics_router,
+    approvals_router,
+    health_router,
+    jobs_router,
+    memory_router,
+    messages_router,
+    proposals_router,
+    runs_router,
+    sim_router,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +52,15 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(auth_router)
+    app.include_router(jobs_router)
+    app.include_router(runs_router)
+    app.include_router(approvals_router)
+    app.include_router(proposals_router)
+    app.include_router(memory_router)
+    app.include_router(analytics_router)
+    app.include_router(messages_router)
+    app.include_router(sim_router)
+    app.include_router(health_router)
     return app
 
 
