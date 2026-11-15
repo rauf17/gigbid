@@ -1,6 +1,6 @@
 version: 1
-max_proposal_length: 2500
-max_proposal_words: 400
+max_proposal_length: 1800
+max_proposal_words: 280
 min_proposal_words: 60
 
 rules:
@@ -69,6 +69,8 @@ rules:
         - "(?i)i\\s+(?:read|saw)\\s+your\\s+job\\s+(?:post|posting|description)\\s+with\\s+great\\s+interest"
         - "(?i)i\\s+am\\s+the\\s+(?:best|ideal|perfect)\\s+candidate\\s+for\\s+this\\s+job"
         - "(?i)look\\s+no\\s+further"
+        - "(?i)guaranteed\\s+turnaround"
+        - "(?i)best\\s+price\\s+guaranteed"
       llm_check: true
 
   - id: POL-007-PROPOSAL-LENGTH-LIMIT
@@ -76,7 +78,8 @@ rules:
     description: Proposals must remain concise and readable, not exceeding maximum word and character thresholds.
     severity: fix
     detector:
-      regex: []
+      regex:
+        - "(?s)^.{1801,}$"
       llm_check: false
 
   - id: POL-008-PROMPT-INJECTION-ATTEMPT
@@ -116,3 +119,5 @@ banned_phrases:
   - "contact me on whatsapp"
   - "pay me via paypal"
   - "pay me in crypto"
+  - "guaranteed turnaround"
+  - "best price guaranteed"

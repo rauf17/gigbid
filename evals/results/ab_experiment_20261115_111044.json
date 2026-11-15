@@ -1,0 +1,144 @@
+{
+  "experiment_name": "extension_x2_proposal_strategies",
+  "description": "A/B experiment comparing result-first opener (Arm A) vs question-first opener (Arm B)",
+  "timestamp": "2026-11-15T11:10:44.896280+00:00",
+  "start_time": "2026-11-15T11:10:40.419533+00:00",
+  "commit_sha": "4ae8a327d7f1f6582b78f2e57e197d26db47eb61",
+  "llm_mode": "fake",
+  "models_used": {
+    "analyst": "openai/gpt-oss-20b",
+    "fit_matcher": "openai/gpt-oss-20b",
+    "writer_arm_a": "openai/gpt-oss-120b",
+    "writer_arm_b": "openai/gpt-oss-120b",
+    "verifier": "openai/gpt-oss-120b",
+    "compliance": "deterministic_heuristics"
+  },
+  "total_jobs_evaluated": 15,
+  "jobs_per_persona": 5,
+  "personas": [
+    "ai_ml",
+    "data_analyst",
+    "fullstack"
+  ],
+  "simulator_harness": {
+    "origin": "GigSim (student-built)",
+    "client_decision_mode": "deterministic",
+    "eval_flags": [
+      "--simulator-only"
+    ]
+  },
+  "arm_a": {
+    "strategy": "result_first_metric",
+    "prompt_file": "agent/prompts/writer_arm_a.md",
+    "total_submitted": 15,
+    "reply_count": 0,
+    "reply_rate": 0.0,
+    "hire_count": 0,
+    "hire_rate": 0.0,
+    "ci_95_reply": [
+      0.0,
+      0.0
+    ],
+    "ci_95_hire": [
+      0.0,
+      0.0
+    ]
+  },
+  "arm_b": {
+    "strategy": "question_first_problem",
+    "prompt_file": "agent/prompts/writer_arm_b.md",
+    "total_submitted": 15,
+    "reply_count": 0,
+    "reply_rate": 0.0,
+    "hire_count": 0,
+    "hire_rate": 0.0,
+    "ci_95_reply": [
+      0.0,
+      0.0
+    ],
+    "ci_95_hire": [
+      0.0,
+      0.0
+    ]
+  },
+  "comparison": {
+    "reply_rate_diff": 0.0,
+    "reply_z_stat": 0.0,
+    "reply_p_value": 1.0,
+    "reply_significant_05": false,
+    "reply_diff_ci_95": [
+      0.0,
+      0.0
+    ],
+    "hire_rate_diff": 0.0,
+    "hire_z_stat": 0.0,
+    "hire_p_value": 1.0,
+    "hire_significant_05": false,
+    "hire_diff_ci_95": [
+      0.0,
+      0.0
+    ]
+  },
+  "by_persona": {
+    "ai_ml": {
+      "arm_a": {
+        "total_submitted": 5,
+        "reply_count": 0,
+        "reply_rate": 0.0,
+        "hire_count": 0,
+        "hire_rate": 0.0
+      },
+      "arm_b": {
+        "total_submitted": 5,
+        "reply_count": 0,
+        "reply_rate": 0.0,
+        "hire_count": 0,
+        "hire_rate": 0.0
+      },
+      "reply_rate_diff": 0.0,
+      "reply_z_stat": 0.0,
+      "reply_p_value": 1.0,
+      "significant_05": false
+    },
+    "data_analyst": {
+      "arm_a": {
+        "total_submitted": 5,
+        "reply_count": 0,
+        "reply_rate": 0.0,
+        "hire_count": 0,
+        "hire_rate": 0.0
+      },
+      "arm_b": {
+        "total_submitted": 5,
+        "reply_count": 0,
+        "reply_rate": 0.0,
+        "hire_count": 0,
+        "hire_rate": 0.0
+      },
+      "reply_rate_diff": 0.0,
+      "reply_z_stat": 0.0,
+      "reply_p_value": 1.0,
+      "significant_05": false
+    },
+    "fullstack": {
+      "arm_a": {
+        "total_submitted": 5,
+        "reply_count": 0,
+        "reply_rate": 0.0,
+        "hire_count": 0,
+        "hire_rate": 0.0
+      },
+      "arm_b": {
+        "total_submitted": 5,
+        "reply_count": 0,
+        "reply_rate": 0.0,
+        "hire_count": 0,
+        "hire_rate": 0.0
+      },
+      "reply_rate_diff": 0.0,
+      "reply_z_stat": 0.0,
+      "reply_p_value": 1.0,
+      "significant_05": false
+    }
+  }
+}

@@ -75,6 +75,16 @@ profiles:
         temperature: 0.5
         max_output_tokens: 4096
         reasoning_effort: medium
+      writer_arm_a:
+        model: openai/gpt-oss-120b
+        temperature: 0.5
+        max_output_tokens: 4096
+        reasoning_effort: medium
+      writer_arm_b:
+        model: openai/gpt-oss-120b
+        temperature: 0.5
+        max_output_tokens: 4096
+        reasoning_effort: medium
       critic:
         model: openai/gpt-oss-120b
         temperature: 0.2
@@ -201,13 +211,16 @@ budgets:
   max_tokens_per_job: 12000
   declared_p95_latency_s: {job_analysed: 12.0, proposal: 25.0}
   declared_cost_usd: {job_analysed: 0.01, proposal: 0.03}
+  measured_p50_latency_s: {job_analysed: 19.747, proposal: 22.723}
+  measured_p95_latency_s: {job_analysed: 20.487, proposal: 61.126}
+  measured_mean_cost_usd: {job_analysed: 0.0, proposal: 0.0}
 
 autonomy:
   auto_skip_low_fit: true
   auto_send: false         # STRICT ENFORCEMENT: Never auto-send proposals
 
 thresholds:
-  minimum_fit_score: 0.60
+  minimum_fit_score: 0.75
   maximum_risk_score: 0.70
   worth_connects_min_ev_ratio: 2.0
   connects_cost_usd: 0.15

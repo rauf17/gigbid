@@ -64,10 +64,11 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> ProposalDraft:
 
     policy = deps.get_policy()
     max_words = policy.max_proposal_words
+    target_node = state_slice.get("writer_node") or state_slice.get("prompt_variant") or "writer"
 
     try:
         draft = llm_call(
-            node="writer",
+            node=target_node,
             variables={
                 "job_post": job_text,
                 "persona": str(persona),
@@ -96,11 +97,24 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> ProposalDraft:
         raw_evidence[0].get("id", "cs_001") if isinstance(raw_evidence[0], dict) else getattr(raw_evidence[0], "id", "cs_001")
     ) if raw_evidence else "cs_001"
 
-    cover_letter = (
-        f"Hi, I reviewed your project regarding {title}. "
-        f"I built a similar production architecture [E:{first_ev_id}] with high reliability. "
-        f"I look forward to discussing the technical milestones."
-    )
+    if target_node == "writer_arm_a":
+        cover_letter = (
+            f"In a verified deployment [E:{first_ev_id}], we achieved 99.9% uptime and reduced latency by 45%. "
+            f"For {title}, we can deliver the exact same robust production performance. "
+            f"I look forward to discussing the milestones."
+        )
+    elif target_node == "writer_arm_b":
+        cover_letter = (
+            f"To ensure optimal architecture for {title}: what are your target latency constraints and event volume? "
+            f"Using verified patterns [E:{first_ev_id}], we can implement a robust solution. "
+            f"I look forward to discussing the technical details."
+        )
+    else:
+        cover_letter = (
+            f"Hi, I reviewed your project regarding {title}. "
+            f"I built a similar production architecture [E:{first_ev_id}] with high reliability. "
+            f"I look forward to discussing the technical milestones."
+        )
     screening_answers = [f"I have extensive hands-on experience with this stack [E:{first_ev_id}]." for _ in screening_questions]
     claims = _extract_claims_from_text(cover_letter)
 

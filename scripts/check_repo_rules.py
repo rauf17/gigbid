@@ -105,6 +105,23 @@ for f in files:
             f"hardcoded model name '{match.group(0)}' in {rel} (must be configured in agent/config.yaml)"
         )
 
+# 5. README results numbers -> docs/results_index.md
+readme_path = ROOT / "README.md"
+index_path = ROOT / "docs" / "results_index.md"
+if readme_path.is_file() and index_path.is_file():
+    readme_text = readme_path.read_text(encoding="utf-8")
+    index_text = index_path.read_text(encoding="utf-8")
+    res_match = re.search(r"## Results\s*\n(.*?)(?=\n## |\Z)", readme_text, re.DOTALL)
+    if res_match:
+        section = res_match.group(1)
+        claims = re.findall(r"\b\d+(?:\.\d+)?%?", section)
+        for claim in claims:
+            clean_num = claim.rstrip("%")
+            if claim not in index_text and clean_num not in index_text:
+                fails.append(
+                    f"number claim '{claim}' in README.md ## Results not listed in docs/results_index.md"
+                )
+
 if fails:
     print("REPO RULE FAILURES:"); [print(" -", x) for x in fails]; sys.exit(1)
 print("repo rules OK")
