@@ -9,7 +9,7 @@ GigBid integrates dual MCP interfaces (Marketplace and Portfolio) with determini
 ### Project Links
 - **Vercel Demo (Mock Mode)**: `<VERCEL_URL>`
 - **Walkthrough Video**: `<VIDEO_URL>`
-- **Engineering Write-Up**: `<WRITEUP_URL>`
+- **Engineering Write-Up**: [https://dev.to/rauf17/my-retrieval-evaluation-lied-to-me-three-times-2l8n](https://dev.to/rauf17/my-retrieval-evaluation-lied-to-me-three-times-2l8n)
 - **Repository**: [https://github.com/rauf17/gigbid](https://github.com/rauf17/gigbid)
 - **Demo**: See video (walkthrough recorded against the full live stack on localhost)
 

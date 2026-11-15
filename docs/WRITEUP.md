@@ -1,7 +1,8 @@
 # My Retrieval Evaluation Lied to Me Three Times
 
 **By Rauf**  
-*A reflection on metric hygiene, synthetic evaluation traps, and hard-won lessons from building the GigBid agentic RAG pipeline.*
+*A reflection on metric hygiene, synthetic evaluation traps, and hard-won lessons from building the GigBid agentic RAG pipeline.*  
+**Published on DEV.to**: [https://dev.to/rauf17/my-retrieval-evaluation-lied-to-me-three-times-2l8n](https://dev.to/rauf17/my-retrieval-evaluation-lied-to-me-three-times-2l8n)
 
 ---
 
