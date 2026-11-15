@@ -61,9 +61,21 @@ Every screen in the GigBid web application is wired directly to the live FastAPI
   * Logged-in user email and persona are fetched dynamically from `GET /api/auth/me`.
 
 - **Mock Mode (`NEXT_PUBLIC_MOCK=1`)**:
-  * For offline development and fast CI/CD validation without requiring live databases.
+  * For offline development, fast CI/CD validation, and public Vercel demo without requiring live backend databases.
   * Prominent amber top banner displayed across every page:
     > `DEMO DATA - MOCK MODE ACTIVE (set NEXT_PUBLIC_MOCK=0 or start the backend to use live data)`
+
+---
+
+## Vercel Deployment Settings
+
+For hosting the frontend demo on Vercel:
+- **Framework Preset**: Next.js
+- **Root Directory**: `apps/web`
+- **Environment Variables**:
+  * `NEXT_PUBLIC_MOCK=1` (serves UI with fixture data and visible DEMO DATA banner; no backend dependencies required)
+- **Build Command**: `npm run build`
+- **Output Directory**: `.next`
 
 ---
 

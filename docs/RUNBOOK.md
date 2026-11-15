@@ -15,7 +15,7 @@ Every service in the GigBid architecture has its own dedicated Dockerfile under 
    ```
 2. Configure required environment keys in `.env`:
    - `GROQ_API_KEY`: Groq API key for the open model profile (`openai/gpt-oss-20b` and `openai/gpt-oss-120b`).
-   - `REVIEWER_EMAIL` & `REVIEWER_PASSWORD`: Reviewer credentials seeded on startup.
+   - Reviewer credentials: Set reviewer login in `.env` (see `.env.example`; credentials provided in private Classroom comment).
    - `APP_SECRET_KEY` & `TOKEN_ENCRYPTION_KEY`: Cryptographic signing and Fernet encryption keys.
 
 ### Start the Multi-Service Stack
@@ -55,13 +55,16 @@ GigBid packages the entire multi-agent stack into two deployment formats:
 2. **Single-Container Lean Image** (`infra/docker/space.Dockerfile`): Process manager (`supervisord`) orchestrates all services within one container on port 7860 with Next.js proxying `/api` traffic to FastAPI.
 
 ### Hosting & Deployment Status
-- **Local & Docker Verification**: The single-container `gigbid-space` image builds cleanly and runs locally (`docker run --rm -p 7860:7860 --env-file .env gigbid-space`). It has been verified end-to-end with zero mocks via `python scripts/live_smoke.py http://localhost:7860` and Playwright live E2E specs.
-- **Public Hosting**: Evaluated for Hugging Face Spaces free-tier container deployment. Due to persistent storage and outbound egress constraints without payment cards on public clouds, production execution is maintained locally and via the reproducible `gigbid-space` Docker image.
+- **Frontend (Next.js, `apps/web`)**: Hosted on Vercel in **DEMO MODE** (`NEXT_PUBLIC_MOCK=1`): serves fixture data with a visible `DEMO DATA` banner, not the real agents. URL: `<VERCEL_URL>`.
+- **Full System Execution**: The complete multi-agent system (FastAPI backend, Arq worker, PostgreSQL, Redis, MCP servers, GigSim simulator, and LangGraph agents) runs with `docker compose up` and in the single-container `gigbid-space` image (`infra/docker/space.Dockerfile`).
+- **Public Hosted Backend**: **PENDING** — The Azure student/free account is currently under review and no other free public host could be arranged. The backend will be deployed after approval is confirmed with the course staff.
+- **Reviewer Credentials**: Reviewer login is in the private Classroom comment (no credentials in the repo).
+- **Walkthrough Video**: The demo video (`<VIDEO_URL>`) was recorded against the full stack on localhost.
 
 ### Build-Time Optimizations (Fast Cold Starts)
 The single-container image bakes all static and model assets at build time:
 - **CPU Torch Only**: Lightweight CPU wheel (~180 MB instead of ~2.5 GB CUDA bundle).
-- **Pre-downloaded Models**: Sentence-transformers embeddings (`BAAI/bge-small-en-v1.5`) and reranker (`cross-encoder/ms-marco-MiniLM-L-6-v2`) cached in `/root/.cache/huggingface`.
+- **Pre-downloaded Models**: Sentence-transformers embeddings (`BAAI/bge-small-en-v1.5`) and reranker (`cross-encoder/ms-marco-MiniLM-L-6-v2`) cached in the model cache directory.
 - **Pre-baked RAG Index**: Portfolio chunks, metadata manifests, and BM25 indexes generated via `make data` and `make ingest`.
 - **Pre-compiled Next.js**: Production assets compiled via `npm run build` during image construction.
 
@@ -96,24 +99,22 @@ Run the trace generator script against the live stack:
 python scripts/make_trace_examples.py
 ```
 This generates four distinct execution traces:
-- **(a) Skipped scam job**: Risk assessor triggers policy block on contact info and off-platform payment; decision node emits `skip`.
-- **(b) Approved proposal**: Clean job triggers retrieval, drafting, claim verification, editorial critique, compliance, and approval interrupt; resumed with human approval.
-- **(c) Critic revision loop**: Proposal flagged for generic phrasing or brevity triggers iterative revision edge back to writer before acceptance.
-- **(d) Crash-and-resume**: Graph execution interrupted at human approval survives simulated process crash and successfully resumes from Postgres checkpointer.
-
-*Note*: Public share links for evaluation reports can be published manually via the LangSmith UI ("Share" button on each run).
+- **(a) Skipped scam job (Run `9cb84a55`)**: Skipped-scam trace: run exists in the LangSmith project; a public share link could not be generated before submission. Deterministic regex rule `POL-001` blocks off-platform contact lead without LLM cost.
+- **(b) Approved proposal (Run `faeba433`)**: [LangSmith Trace faeba433](https://smith.langchain.com/public/2aae5f31-ef89-4227-b200-acc3312bfee0/r/faeba433-c7f4-4d05-8b68-5d45da01683f?start_time=2026-11-15T14%3A54%3A04.542224Z) — Full proposal generation pipeline pausing at human approval checkpoint and resuming to submission.
+- **(c) Critic revision loop (Run `bd69772d`)**: [LangSmith Trace bd69772d](https://smith.langchain.com/public/c1f62c90-1db6-4b63-9bc1-a6a708ae541e/r/bd69772d-b602-47d7-b272-712775da298c?start_time=2026-11-15T14%3A54%3A42.910478Z) — Iterative revision loop where the Critic flags generic phrasing and triggers refinement.
+- **(d) Crash-and-resume (Run `8b55430b`)**: [LangSmith Trace 8b55430b](https://smith.langchain.com/public/9abace65-e566-4584-8445-c982b45823ed/r/8b55430b-ea67-4d21-841c-d1bf9cd5c9bb?start_time=2026-11-15T14%3A54%3A52.485806Z) — Durable state recovery from PostgreSQL checkpointer after simulated process termination.
 
 ---
 
 ## 3. Operations & Known Limits
 
 ### Ephemeral Storage
-- Hugging Face Spaces operate with ephemeral root filesystems on container restart.
+- Cloud containers operate with ephemeral root filesystems on container restart.
 - PostgreSQL state and pending approvals reset if the container restarts or reboots.
 - Pre-baked data (jobs, persona portfolio evidence, BM25 indices) is permanently preserved in the container layers.
 
 ### Inactivity Sleep
-- Free-tier Spaces sleep after 48 hours of inactivity.
+- Free-tier containers sleep after extended periods of inactivity.
 - On wakeup, the entrypoint script automatically re-runs database migrations and seeds the reviewer account in $<5$ seconds.
 
 ### Autonomous Scouting Interval: 15m (Sim) vs. 180m (Live)
@@ -131,7 +132,7 @@ Follow this path to evaluate the end-to-end platform in under 3 minutes:
 
 1. **Sign In**:
    - Navigate to `/login`.
-   - Enter `reviewer@gigbid.local` / `REVIEWER_PASSWORD`.
+   - Enter reviewer email / password (from the private Classroom comment).
 2. **Reviewer Persona Onboarding**:
    - Navigate to `/onboarding`.
    - Inspect persona cards (`ai_ml`, `fullstack`, `data_analyst`).

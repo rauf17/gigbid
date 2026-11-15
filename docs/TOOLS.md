@@ -8,7 +8,7 @@ All external marketplace interactions in GigBid are strictly mediated through Mo
 
 - **Host & Port**: `http://127.0.0.1:8002/mcp`
 - **Transport**: Streamable HTTP (`POST /mcp` / SSE)
-- **Authentication**: Bearer Token via `Authorization: Bearer <MARKETPLACE_MCP_TOKEN>` header (HTTP 401 on unauthorized access).
+- **Authentication**: Bearer Token via `Authorization: Bearer $MARKETPLACE_MCP_TOKEN` header (HTTP 401 on unauthorized access).
 - **Rate Limit**: Per-user sliding-window rate limit (default 20 requests/minute, tracked via `X-User-Id` header).
 - **Telemetry & Tracing**: Distributed tracing via `X-Trace-Id` header with automatic append-only SQLite audit logging and PII masking.
 
@@ -114,7 +114,7 @@ All external marketplace interactions in GigBid are strictly mediated through Mo
 
 - **Host & Port**: `http://127.0.0.1:8003/mcp` (or stdio mode via `uv run python -m mcp_servers.workspace.server --stdio`)
 - **Transport**: Streamable HTTP (`POST /mcp` / SSE) and stdio
-- **Authentication**: Bearer Token via `Authorization: Bearer <WORKSPACE_MCP_TOKEN>` header (HTTP 401 on unauthorized access).
+- **Authentication**: Bearer Token via `Authorization: Bearer $WORKSPACE_MCP_TOKEN` header (HTTP 401 on unauthorized access).
 - **Backend Storage**: Local deterministic mock store (`mcp_servers/workspace/state/workspace_state.json`, gitignored) and SQLite audit log (`audit.db`).
 - **Live API Status**: **Real Google Calendar and Gmail APIs are NOT wired (mock only).** Runs strictly over a local deterministic mock store for assignment compliance and sandbox isolation.
 

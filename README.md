@@ -7,10 +7,21 @@ GigBid integrates dual MCP interfaces (Marketplace and Portfolio) with determini
 ---
 
 ### Project Links
-- **Live Deployment**: `<LIVE_URL>`
+- **Vercel Demo (Mock Mode)**: `<VERCEL_URL>`
 - **Walkthrough Video**: `<VIDEO_URL>`
 - **Engineering Write-Up**: `<WRITEUP_URL>`
 - **Repository**: [https://github.com/rauf17/gigbid](https://github.com/rauf17/gigbid)
+- **Demo**: See video (walkthrough recorded against the full live stack on localhost)
+
+---
+
+## Deployment & Hosting Status
+
+- **Frontend (Next.js, `apps/web`)**: Hosted on Vercel in **DEMO MODE** (`NEXT_PUBLIC_MOCK=1`): fixture data with a visible `DEMO DATA` banner, not the real agents. URL: `<VERCEL_URL>`.
+- **Full System Execution**: The complete multi-agent system (FastAPI backend, Arq worker, PostgreSQL, Redis, MCP servers, GigSim simulator, and LangGraph agents) runs with `docker compose up` and in the single-container `gigbid-space` image (`infra/docker/space.Dockerfile`).
+- **Public Hosted Backend**: **PENDING** — The Azure student/free account is currently under review and no other free public host could be arranged. The backend will be deployed after approval is confirmed with the course staff.
+- **Reviewer Credentials**: Reviewer login is in the private Classroom comment (no credentials in the repo).
+- **Walkthrough Video**: The demo video (`<VIDEO_URL>`) was recorded against the full stack on localhost.
 
 ---
 
@@ -70,18 +81,47 @@ docker compose up --build
 ```
 
 ### Reviewer Credentials
-- **URL**: `http://localhost:3000` (or `<LIVE_URL>`)
+- **URL**: `http://localhost:3000` (or `<VERCEL_URL>` in demo mode)
 - Reviewer login is in the private Classroom comment.
 
 ---
 
-## Telemetry & Trace Samples
+## Portfolio MCP Server (Standalone & Claude Desktop)
+
+The Portfolio Model Context Protocol (MCP) server provides read-only tools (`search_evidence`, `get_case_study`, `list_skills`) to explore verified freelancer evidence and case studies.
+
+### Run via `uvx`
+```bash
+uvx --from git+https://github.com/rauf17/gigbid gigbid-portfolio-mcp --stdio
+```
+
+### Claude Desktop Configuration (`claude_desktop_config.json`)
+```json
+{
+  "mcpServers": {
+    "gigbid-portfolio": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/rauf17/gigbid",
+        "gigbid-portfolio-mcp",
+        "--stdio"
+      ]
+    }
+  }
+}
+```
+
+---
+
+## Telemetry & Trace Samples (LangSmith)
 
 When `LANGSMITH_API_KEY` is configured, end-to-end execution traces flow from the UI through FastAPI (`X-Trace-Id`), graph run metadata, and MCP calls to LangSmith with PII anonymization.
 
-- **Trace 1 (Skipped Scam)**: `<TRACE_URL_1>` — Deterministic regex rule `POL-001` blocks off-platform contact lead without LLM cost.
-- **Trace 2 (Approved Proposal)**: `<TRACE_URL_2>` — Full proposal generation pipeline pausing at human approval checkpoint and resuming to submission.
-- **Trace 3 (Critic Loop & Crash-Resume)**: `<TRACE_URL_3>` — Multi-turn proposal revision loop followed by durable checkpoint recovery after simulated process termination.
+- **Approved Proposal (Run `faeba433`)**: [LangSmith Trace faeba433](https://smith.langchain.com/public/2aae5f31-ef89-4227-b200-acc3312bfee0/r/faeba433-c7f4-4d05-8b68-5d45da01683f?start_time=2026-11-15T14%3A54%3A04.542224Z) — Full proposal generation pipeline pausing at human approval checkpoint and resuming to submission.
+- **Critic Revision Loop (Run `bd69772d`)**: [LangSmith Trace bd69772d](https://smith.langchain.com/public/c1f62c90-1db6-4b63-9bc1-a6a708ae541e/r/bd69772d-b602-47d7-b272-712775da298c?start_time=2026-11-15T14%3A54%3A42.910478Z) — Multi-turn proposal revision loop triggered by Critic feedback on phrasing and grounding.
+- **Crash-and-Resume (Run `8b55430b`)**: [LangSmith Trace 8b55430b](https://smith.langchain.com/public/9abace65-e566-4584-8445-c982b45823ed/r/8b55430b-ea67-4d21-841c-d1bf9cd5c9bb?start_time=2026-11-15T14%3A54%3A52.485806Z) — Durable state recovery from PostgreSQL checkpointer after simulated process crash at human approval checkpoint.
+- **Skipped-Scam Trace (Run `9cb84a55-d506-41ac-b460-bd6ba763d9dd`)**: Skipped-scam trace: run exists in the LangSmith project; a public share link could not be generated before submission. Deterministic regex rule `POL-001` blocks off-platform contact lead without LLM cost.
 
 ---
 
