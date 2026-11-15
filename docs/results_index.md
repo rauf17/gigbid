@@ -79,8 +79,10 @@ Source: [evals/results/decision_eval_latest.json](file:///c:/Users/AR/Desktop/Ag
 | **Bid/Skip Precision** | `0.6000` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Precision on bidding recommendations |
 | **Bid/Skip Accuracy** | `0.6923` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Overall classification accuracy |
 | **Total Scam Jobs** | `18` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Placed scam/off-platform diversion opportunities |
+| **Scam Detected Count** | `5` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Scam opportunities intercepted by heuristics (5 of 18) |
 | **Scam Precision** | `1.0000` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Zero false-positive scam accusations |
 | **Scam Recall** | `0.2778` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | 5 / 18 scam leads detected by deterministic heuristics |
+| **Scam F1 Score** | `0.4348` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Harmonic mean of scam precision and recall |
 | **Price In-Band Rate** | `0.8846` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | 88.46% of submitted bid prices fell inside client budget bands |
 | **Decision Latency p50** | `310.64` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | Median triage decision latency in milliseconds |
 | **Decision Latency p95** | `921.85` | [decision_eval_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/decision_eval_latest.json) | 95th percentile triage decision latency in milliseconds |

@@ -145,9 +145,9 @@ synthetic jobs across three personas (511 have gold evidence).
 | `random` | 0.1349 | 0.6806 | 0.3850 | 0.2454 | 0.0 | 0 |
 | `bm25_text` | 0.2760 | 0.6806 | 0.6229 | 0.4720 | 20.4 | 0 |
 | `skill_tag_lookup_REFERENCE`* | 0.4017 | 0.6806 | 0.5680 | 0.5404 | 2.1 | 0 |
-| `v0_naive` | 0.2867 | 0.6806 | 0.7417 | 0.4617 | 88.9 | 0 |
+| **`v0_naive` (active in config)** | **0.2867** | 0.6806 | 0.7417 | 0.4617 | 88.9 | 0 |
 | `v1_decompose` | 0.2276 | 0.6806 | 0.6660 | 0.4014 | 1671.9 | 363,928 |
-| **`v2_hybrid` (shipped)** | **0.3121** | 0.6806 | 0.7363 | 0.4870 | 296.7 | 0 |
+| `v2_hybrid` | 0.3121 | 0.6806 | 0.7363 | 0.4870 | 296.7 | 0 |
 | `v3_rerank` | 0.3308 | 0.6806 | 0.7397 | 0.4878 | 2982.4 | 0 |
 | `v4_outcome` | 0.3298 | 0.6806 | 0.7396 | 0.4880 | 133.2 | 0 |
 | `oracle` | 0.5564 | 0.6806 | 1.0000 | 0.8520 | 0.0 | 0 |
@@ -155,7 +155,7 @@ synthetic jobs across three personas (511 have gold evidence).
 
 \* Reference only. It queries the skills field the gold labels were derived from.
 
-- **Shipped choice:** V2 hybrid (BM25 + dense, reciprocal rank fusion) with persona filtering. The
+- **Active configuration:** `agent/config.yaml` selects `v0_naive` (dense embedding retrieval with persona filtering); `v2_hybrid` (BM25 + dense, reciprocal rank fusion) was evaluated as the primary ablation candidate. The
   reranker gained negligible nDCG@10 over V2 for roughly ten times the latency.
 - **Negative results:** hybrid gained +2.54 points of Recall@5 against a pre-registered +8.
   Decomposition hurt (-5.91 points). Outcome-aware boosting was neutral.
@@ -176,8 +176,9 @@ synthetic jobs across three personas (511 have gold evidence).
 | Decision pipeline | Bid/skip F1 | 0.7500 | 1698.6 |
 | Proposal verification | Unsupported claims after verification | 0.0000 | 1411.7 |
 | Injection defence | Defence effectiveness | 0.7778 | 2722.5 |
+| Scam detection | Precision / Recall ($n=78$, 18 scam) | 1.0000 / 0.2778 | 921.85 |
 
-The injection and proposal evaluations used 10 and 15 samples, so treat them as indicative.
+The injection and proposal evaluations used 10 and 15 samples, so treat them as indicative. Scam detection was evaluated on 18 scam jobs out of 78 total opportunities.
 
 ### Extension X2: proposal A/B test
 
@@ -228,16 +229,18 @@ LangSmith traces with personal data masked.
 
 ## Run it
 
+Tested single-container execution:
+
 ```bash
-git clone https://github.com/rauf17/gigbid.git
-cd gigbid
-cp .env.example .env     # add GROQ_API_KEY and, optionally, LANGSMITH_API_KEY
-make db-up               # Postgres and Redis
-docker compose up --build
+cp .env.example .env
+docker build -f infra/docker/space.Dockerfile -t gigbid-space .
+docker run --rm -p 7860:7860 --env-file .env gigbid-space
 ```
 
-Then open `http://localhost:3000` and sign in with the reviewer login. Operations, schedules and
-recovery steps are in [docs/RUNBOOK.md](docs/RUNBOOK.md).
+Then open `http://localhost:7860` and sign in with reviewer credentials.
+
+> [!NOTE]
+> `docker compose up`: not re-tested; the verified single-container run is `gigbid-space` on port 7860. Operations, schedules and recovery steps are in [docs/RUNBOOK.md](docs/RUNBOOK.md).
 
 | Command | What it does |
 |---|---|
@@ -292,6 +295,7 @@ Claude Desktop (`claude_desktop_config.json`):
 6. **The live Upwork adapter is a stub.** Only GigSim is implemented. The GitHub MCP is not
    integrated, and the Workspace server is a local mock.
 7. **No public backend yet** (see the deployment note above).
+8. **Scam detection.** Evaluated on a small sample of 18 scam jobs (out of 78 total jobs); precision was 1.0000 but recall was low (0.2778, 5 of 18 detected), meaning heuristic scam detection on this sample is small and not reliable for standalone defense.
 
 ---
 
@@ -312,5 +316,5 @@ for the frequent small steps.
 | `rag/` | Ingestion, indexes and retrieval variants |
 | `worker/` | Background jobs |
 | `evals/` | Runners, datasets and committed results |
-| `gigsim/` | Provided simulator (frozen, not modified) |
+| `gigsim/` | Student-built simulator (frozen after review, hash-locked) |
 | `docs/` | Report, write-up, runbook, ADRs, results index |

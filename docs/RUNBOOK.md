@@ -6,6 +6,9 @@ This runbook documents production packaging, local multi-service orchestration v
 
 ## 1. Local Deployment with Docker Compose
 
+> [!NOTE]
+> `docker compose`: not re-tested. The primary, verified execution target is the single-container `gigbid-space` image on port 7860 (`docker build -f infra/docker/space.Dockerfile -t gigbid-space . && docker run --rm -p 7860:7860 --env-file .env gigbid-space`).
+
 Every service in the GigBid architecture has its own dedicated Dockerfile under `infra/docker/`.
 
 ### Prerequisites & Setup

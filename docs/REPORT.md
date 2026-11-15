@@ -180,6 +180,9 @@ Adversarial attacks embedded in untrusted job descriptions attempt to hijack pro
 - **Absolute Risk Reduction**: `0.7000` (70.0 percentage points).
 - **Defense Effectiveness**: `0.7778` (77.78% of attacks successfully neutralized).
 
+### Scam Detection Limitations
+In the triage evaluation (`evals/results/decision_eval_latest.json`, $n=78$, 18 scam jobs), deterministic scam triage achieved precision of `1.0000` (zero false-positive scam flags) but low recall of `0.2778` (5 of 18 scam postings intercepted). Because this evaluation sample is small ($n=18$) and recall is low, scam detection is not reliable for comprehensive standalone defense.
+
 ---
 
 ## 10. Latency, Cost Accounting & Resource Budgets
