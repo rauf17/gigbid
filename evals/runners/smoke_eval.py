@@ -141,6 +141,12 @@ async def run_smoke_eval(
     start_ts = datetime.now(UTC).isoformat()
     per_persona = max(1, n_jobs // len(PERSONAS))
 
+    try:
+        from rag.ingest.pipeline import ingest_all_personas
+        ingest_all_personas(use_hash_embedder=True)
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("[smoke_eval] Ingestion initialization: %s", exc)
+
     retriever = get_retriever(use_hash_embedder=True)
     fake_llm = FakeSmokeChatModel()
     deps = NodeDeps(llm=fake_llm, retriever=retriever)
