@@ -1,112 +1,267 @@
-# GigBid: Autonomous Multi-Agent Freelancer Copilot
+# GigBid: a multi-agent freelancer copilot
 
-GigBid is an autonomous multi-agent freelancer copilot that discovers high-affinity contracts, validates client reliability, and drafts proposals grounded in verified portfolio evidence.
-Operating on LangGraph StateGraphs with durable PostgreSQL checkpoints, the platform enforces mandatory human-in-the-loop approvals before any proposal or message is dispatched.
-GigBid integrates dual MCP interfaces (Marketplace and Portfolio) with deterministic safety guardrails, claim verification, and real-time SSE telemetry.
+[![CI](https://github.com/rauf17/gigbid/actions/workflows/ci.yml/badge.svg)](https://github.com/rauf17/gigbid/actions/workflows/ci.yml)
 
----
+GigBid finds freelance jobs, decides which are worth bidding on, and drafts proposals that cite only
+verified portfolio evidence. A team of LangGraph agents does the analysis, and a human approves
+every proposal and message before it leaves the system.
 
-### Project Links
-- **Vercel Demo (Mock Mode)**: `<VERCEL_URL>`
-- **Walkthrough Video**: `<VIDEO_URL>`
-- **Engineering Write-Up**: [https://dev.to/rauf17/my-retrieval-evaluation-lied-to-me-three-times-2l8n](https://dev.to/rauf17/my-retrieval-evaluation-lied-to-me-three-times-2l8n)
-- **Repository**: [https://github.com/rauf17/gigbid](https://github.com/rauf17/gigbid)
-- **Demo**: See video (walkthrough recorded against the full live stack on localhost)
+AI-4016 R&D Assignment II, by Abdul Rauf (23I-0591). All data is synthetic and the marketplace is the
+GigSim simulator.
 
----
+| | |
+|---|---|
+| **Demo video** | [watch the walkthrough](<VIDEO_URL>) |
+| **Hosted frontend (demo mode)** | [open the Vercel demo](<VERCEL_URL>) |
+| **Write-up** | [My Retrieval Evaluation Lied to Me Three Times](https://dev.to/rauf17/my-retrieval-evaluation-lied-to-me-three-times-2l8n) |
+| **R&D report** | [docs/REPORT.pdf](docs/REPORT.pdf) |
+| **Portfolio MCP server** | [install with `uvx`](#portfolio-mcp-server) |
+| **Public traces** | [three LangSmith traces](#public-traces) |
 
-## Deployment & Hosting Status
-
-- **Frontend (Next.js, `apps/web`)**: Hosted on Vercel in **DEMO MODE** (`NEXT_PUBLIC_MOCK=1`): fixture data with a visible `DEMO DATA` banner, not the real agents. URL: `<VERCEL_URL>`.
-- **Full System Execution**: The complete multi-agent system (FastAPI backend, Arq worker, PostgreSQL, Redis, MCP servers, GigSim simulator, and LangGraph agents) runs with `docker compose up` and in the single-container `gigbid-space` image (`infra/docker/space.Dockerfile`).
-- **Public Hosted Backend**: **PENDING** — The Azure student/free account is currently under review and no other free public host could be arranged. The backend will be deployed after approval is confirmed with the course staff.
-- **Reviewer Credentials**: Reviewer login is in the private Classroom comment (no credentials in the repo).
-- **Walkthrough Video**: The demo video (`<VIDEO_URL>`) was recorded against the full stack on localhost.
-
----
-
-## Architecture Overview
-
-GigBid separates agent coordination into two dedicated, interruptible LangGraph workflows operating over a shared marketplace port and durable persistence layer.
-
-### 1. Bid Evaluation & Proposal Generation Graph (`bid_graph`)
-![Bid Graph](docs/images/bid_graph.png)
-
-- **Analyst Node**: Extracts atomic client requirements, deliverables, technical stack, and budget bounds into a structured `JobSpec`.
-- **Risk Assessor Node**: Executes deterministic safety rules (off-platform contact, unpaid test work, prompt injection) followed by client quality evaluation.
-- **Fit Matcher Node**: Maps job requirements against verified portfolio evidence chunks using dense/hybrid retrieval.
-- **Decision Node**: Deterministic rule adjudicating bid-or-skip action based on minimum fit, risk ceilings, and Connects expected value.
-- **Pricing Node**: Quotes competitive hourly or fixed-price bids within client budget constraints while respecting freelancer floor rates.
-- **Writer Node**: Generates evidence-grounded proposals citing verified portfolio case studies (`[E:id]`).
-- **Claim Verifier Node**: Splits draft into atomic factual claims, verifies semantic entailment against cited evidence, and excises ungrounded claims.
-- **Critic Node**: Evaluates personalization and evidence grounding, triggering revision loops if quality criteria are unmet.
-- **Compliance Node**: Deterministically sanitizes text against policy violations (external contact info, banned spam phrases).
-- **Approval Checkpoint (`interrupt()`)**: Halts execution, writes durable state to PostgreSQL, and waits for human reviewer approval.
-- **Submit Node**: Dispatches approved proposal via the marketplace port.
-
-### 2. Client Conversation & Hold Graph (`conversation_graph`)
-![Conversation Graph](docs/images/conversation_graph.png)
-
-- **Read Messages**: Fetches recent client dialogue from marketplace threads.
-- **Intent Classifier**: Categorizes incoming messages (question, negotiation, interview request, scam signal).
-- **Liaison Draft**: Generates contextual replies incorporating historical style preferences; for interview requests, calls Workspace MCP mock to identify free calendar slots and draft tentative holds.
-- **Compliance & Approval**: Enforces communication policies and pauses at human approval checkpoint before outbound delivery.
-
-### 3. Three-Way State Split
-- **Graph State (`BidGraphState`, `ConversationGraphState`)**: Ephemeral, in-memory execution state passing handoff schemas between pipeline nodes.
-- **Long-Term Memory Store (`AsyncPostgresStore`)**: Cross-thread knowledge persistence tracking promoted user style rules and Laplace-smoothed win rates per category.
-- **Application Database (`PostgreSQL`)**: Relational tenant data, user authentication records, run history, and audit traces.
+> **Deployment status, stated plainly.** The Vercel site is the Next.js frontend in **demo mode**
+> (`NEXT_PUBLIC_MOCK=1`). It shows fixture data under a `DEMO DATA` banner and does **not** run the
+> agents. The full system (API, worker, Postgres, Redis, MCP servers, GigSim and the LangGraph agents)
+> runs with `docker compose up` and in the single-container `gigbid-space` image. A public hosted
+> backend is **pending**: the Azure account is still under review and no other free host could be
+> arranged. It will be deployed once that is confirmed with the course staff. The demo video was
+> recorded against the full stack on localhost. The reviewer login is in the private Classroom
+> comment, not in this repo.
 
 ---
 
-## Quick Start & Local Execution
+## What it does
 
-### Prerequisites
-- Python 3.11+ and `uv`
-- Docker Desktop with Compose
-- Groq API Key (for open-weights LLM inference)
+1. **Triages jobs.** Each job is analysed in parallel for requirements, risk and fit with the portfolio.
+2. **Decides** to bid or skip with a deterministic rule, then prices the bid.
+3. **Writes a grounded proposal.** Every claim cites portfolio evidence (`[E:id]`). A claim verifier
+   removes unsupported claims, a Critic reviews the draft (at most two revisions), and a Compliance
+   Guard sanitises the final text.
+4. **Stops for a human.** The reviewer sees the draft, the evidence behind each claim, the risk
+   report, the price rationale and a dry-run preview. They approve, edit or reject. Nothing is sent
+   before this point.
+5. **Handles client replies** in a second graph with the same approval gate.
+6. **Learns** a style memory from the reviewer's edits and an outcome memory of what won, only through
+   explicit promotion rules.
 
-### Setup Commands
+---
+
+## Architecture
+
+The diagrams below are Mermaid, so GitHub renders them live. Click a diagram to pan and zoom. Static
+PNGs of both graphs are in [docs/images/](docs/images/).
+
+### System overview
+
+```mermaid
+flowchart LR
+    UI["Web app<br/>Next.js"] -->|"REST + SSE"| API["API<br/>FastAPI"]
+    API -->|"enqueue"| W["Worker<br/>Arq on Redis"]
+    W --> BG["Bid graph<br/>LangGraph"]
+    W --> CG["Conversation graph<br/>LangGraph"]
+
+    subgraph MCP ["MCP servers (own tools)"]
+        PF["Portfolio<br/>read-only evidence"]
+        MK["Marketplace<br/>read + write drafts"]
+        WS["Workspace<br/>calendar + email mock"]
+    end
+
+    BG --> PF
+    BG --> MK
+    CG --> MK
+    CG --> WS
+
+    MK --> PORT{{"Marketplace port"}}
+    PORT --> SIM["GigSim<br/>simulator"]
+    PORT -.-> UP["Upwork MCP<br/>adapter stub"]
+
+    BG --> PG[("Postgres<br/>checkpoints + memory")]
+    CG --> PG
+    API --> PG
+    BG -.->|"trace id"| LS["LangSmith"]
+    CG -.-> LS
+```
+
+### Bid graph
+
+```mermaid
+flowchart TD
+    IN["Job from inbox<br/>(worker)"] --> PAR{"Run in parallel"}
+    PAR --> AN["Job Analyst<br/>JobSpec"]
+    PAR --> RK["Risk Assessor<br/>RiskReport"]
+    PAR --> FT["Fit Matcher<br/>FitReport"]
+    AN --> DEC{"Bid or skip?"}
+    RK --> DEC
+    FT --> DEC
+    DEC -->|"skip, with reason"| SK["Skipped"]
+    DEC -->|"bid"| PR["Pricing Strategist<br/>PriceQuote"]
+    PR --> WR["Proposal Writer<br/>ProposalDraft"]
+    WR --> VF["Claim Verifier<br/>drop unsupported claims"]
+    VF --> CR{"Critic"}
+    CR -->|"revise (max 2)"| WR
+    CR -->|"pass"| CP["Compliance Guard"]
+    CP --> AP["Human approval<br/>interrupt()"]
+    AP -->|"approve / edit"| SB["Submit draft<br/>via marketplace port"]
+    AP -->|"reject"| RJ["Rejected, reason saved"]
+```
+
+### Conversation graph
+
+```mermaid
+flowchart TD
+    RM["Read messages"] --> CI{"Classify intent<br/>risk rules first"}
+    CI -->|"scam signal"| FL["Flag only<br/>no reply drafted"]
+    CI -->|"question or negotiation"| DR["Draft reply<br/>uses style memory"]
+    CI -->|"interview request"| SL["List free slots<br/>Workspace MCP"]
+    SL --> DR
+    DR --> CP["Compliance"]
+    CP --> AP["Human approval<br/>interrupt()"]
+    AP -->|"approve"| SD["Send with idempotency key<br/>hold created only now"]
+    AP -->|"reject"| RJ["Rejected"]
+```
+
+### Three kinds of state
+
+| Kind | Where it lives | What it holds |
+|---|---|---|
+| **Graph state** | In memory, per run | Typed hand-offs between nodes (`JobSpec`, `RiskReport`, `FitReport`, `BidDecision`, `PriceQuote`, `ProposalDraft`) |
+| **Long-term memory** | `AsyncPostgresStore` | Style rules promoted after repeated edits, win rates per job category |
+| **Application database** | PostgreSQL | Users, run history, audit trace, LangGraph checkpoints |
+
+More detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/TOOLS.md](docs/TOOLS.md) (every MCP tool),
+[docs/adr/](docs/adr/) (decisions).
+
+---
+
+## Results
+
+Every number here is copied from a file in `evals/results/`, and
+[docs/results_index.md](docs/results_index.md) maps each one to its source file. The dev set is 600
+synthetic jobs across three personas (511 have gold evidence).
+
+### R&D question B: retrieval
+
+| Variant | Recall@5 | Ceiling | MRR | nDCG@10 | p95 (ms) | Tokens |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| `random` | 0.1349 | 0.6806 | 0.3850 | 0.2454 | 0.0 | 0 |
+| `bm25_text` | 0.2760 | 0.6806 | 0.6229 | 0.4720 | 20.4 | 0 |
+| `skill_tag_lookup_REFERENCE`* | 0.4017 | 0.6806 | 0.5680 | 0.5404 | 2.1 | 0 |
+| `v0_naive` | 0.2867 | 0.6806 | 0.7417 | 0.4617 | 88.9 | 0 |
+| `v1_decompose` | 0.2276 | 0.6806 | 0.6660 | 0.4014 | 1671.9 | 363,928 |
+| **`v2_hybrid` (shipped)** | **0.3121** | 0.6806 | 0.7363 | 0.4870 | 296.7 | 0 |
+| `v3_rerank` | 0.3308 | 0.6806 | 0.7397 | 0.4878 | 2982.4 | 0 |
+| `v4_outcome` | 0.3298 | 0.6806 | 0.7396 | 0.4880 | 133.2 | 0 |
+| `oracle` | 0.5564 | 0.6806 | 1.0000 | 0.8520 | 0.0 | 0 |
+| `v0_naive_unfiltered` | 0.0519 | 0.6806 | 0.1904 | 0.0845 | 0.0 | 0 |
+
+\* Reference only. It queries the skills field the gold labels were derived from.
+
+- **Shipped choice:** V2 hybrid (BM25 + dense, reciprocal rank fusion) with persona filtering. The
+  reranker gained +0.0008 nDCG@10 over V2 for roughly ten times the latency.
+- **Negative results:** hybrid gained +2.54 points of Recall@5 against a pre-registered +8.
+  Decomposition hurt (-5.91 points). Outcome-aware boosting was neutral.
+- **Past proposals in the pool** dropped Recall@5 from 0.2867 to 0.0519, so retrieval is restricted to
+  evidence types by default.
+
+### R&D questions A and C
+
+| Question | Status |
+|---|---|
+| A: tool granularity (40 tasks) | **not run**. The design is in the report. |
+| C: single agent vs supervisor vs graph | **not run**. No baseline results exist. |
+
+### Pipeline and defences
+
+| Benchmark | Primary metric | Value | p95 (ms) |
+|:---|:---|:---:|:---:|
+| Decision pipeline | Bid/skip F1 | 0.7500 | 1698.6 |
+| Proposal verification | Unsupported claims after verification | 0.0000 | 1411.7 |
+| Injection defence | Defence effectiveness | 0.7778 | 2722.5 |
+
+The injection and proposal evaluations used 10 and 15 samples, so treat them as indicative.
+
+### Extension X2: proposal A/B test
+
+Two opener strategies on the same 120 jobs: result-first (arm A) and question-first (arm B). Source:
+`ab_experiment_latest.json`.
+
+| | Reply rate | Hire rate |
+|---|:---:|:---:|
+| Arm A | 0.2333 (28/120) | 0.0417 (5/120) |
+| Arm B | 0.1083 (13/120) | 0.0000 (0/120) |
+
+The reply difference is significant (exact McNemar p = 0.0015). The hire difference is **not**
+(Fisher's exact p = 0.0599). GigSim's clients reward numeric specificity by construction, so this
+tests the pipeline and the simulator's rule, not real-world effect.
+
+### Latency and cost budgets
+
+Measured on 20 jobs, with the fallback model and cache in play, so this is **not a clean run**.
+Source: `budget_latest.json`.
+
+| Stage | Declared target | Measured p95 | Mean tokens | Mean cost |
+|:---|:---:|:---:|:---:|:---:|
+| Job analysed | 12.0 s | 9.749 s | 1024.7 | $0.000000 |
+| Proposal | 25.0 s | 8.780 s | 2256.5 | $0.000000 |
+
+In `data/processed/llm_calls.jsonl`, 28 of 87 calls (32.2%) used the fallback model after the primary
+Groq limit was hit, and 26 of 87 were served from cache. The critic-prompt trimming is an estimated
+saving, not measured end to end. The hidden test set was not available, so these are dev-set numbers.
+
+### Change request (our own drill)
+
+No instructor change request was released before 11 Nov, so we ran our own. A new banned phrase, a
+shorter length cap and a higher fit threshold changed only `agent/config.yaml` and
+`data/policy_pack/policy.yaml`, with no Python edits. See [docs/CHANGE_REQUEST.md](docs/CHANGE_REQUEST.md).
+
+---
+
+## Public traces
+
+LangSmith traces with personal data masked.
+
+- **Approved proposal.** [Trace `faeba433`](https://smith.langchain.com/public/2aae5f31-ef89-4227-b200-acc3312bfee0/r/faeba433-c7f4-4d05-8b68-5d45da01683f?start_time=2026-11-15T14%3A54%3A04.542224Z): the run pauses at the approval checkpoint and resumes to submission.
+- **Critic revision loop.** [Trace `bd69772d`](https://smith.langchain.com/public/c1f62c90-1db6-4b63-9bc1-a6a708ae541e/r/bd69772d-b602-47d7-b272-712775da298c?start_time=2026-11-15T14%3A54%3A42.910478Z): the Critic sends the draft back for revision.
+- **Crash and resume.** [Trace `8b55430b`](https://smith.langchain.com/public/9abace65-e566-4584-8445-c982b45823ed/r/8b55430b-ea67-4d21-841c-d1bf9cd5c9bb?start_time=2026-11-15T14%3A54%3A52.485806Z): state is recovered from the Postgres checkpoint after a simulated crash at approval.
+- **Skipped scam.** Run `9cb84a55-d506-41ac-b460-bd6ba763d9dd` exists in the LangSmith project. A public share link could not be generated before submission.
+
+---
+
+## Run it
+
 ```bash
-# 1. Clone repository and initialize environment
 git clone https://github.com/rauf17/gigbid.git
 cd gigbid
-cp .env.example .env
-
-# 2. Launch PostgreSQL (port 5433) and Redis (port 6380)
-make db-up
-
-# 3. Build and launch all local services
+cp .env.example .env     # add GROQ_API_KEY and, optionally, LANGSMITH_API_KEY
+make db-up               # Postgres and Redis
 docker compose up --build
 ```
 
-### Reviewer Credentials
-- **URL**: `http://localhost:3000` (or `<VERCEL_URL>` in demo mode)
-- Reviewer login is in the private Classroom comment.
+Then open `http://localhost:3000` and sign in with the reviewer login. Operations, schedules and
+recovery steps are in [docs/RUNBOOK.md](docs/RUNBOOK.md).
 
----
+| Command | What it does |
+|---|---|
+| `make test` | Unit, contract and integration tests |
+| `make lint` | Ruff and the repo rule checks |
+| `make eval` | Retrieval, decision and outcome evaluations into `evals/results/` |
 
-## Portfolio MCP Server (Standalone & Claude Desktop)
+### Portfolio MCP server
 
-The Portfolio Model Context Protocol (MCP) server provides read-only tools (`search_evidence`, `get_case_study`, `list_skills`) to explore verified freelancer evidence and case studies.
+Read-only tools (`search_evidence`, `get_case_study`, `list_skills`) over the persona portfolio, for
+any MCP client.
 
-### Run via `uvx`
 ```bash
 uvx --from git+https://github.com/rauf17/gigbid gigbid-portfolio-mcp --stdio
 ```
 
-### Claude Desktop Configuration (`claude_desktop_config.json`)
+Claude Desktop (`claude_desktop_config.json`):
+
 ```json
 {
   "mcpServers": {
     "gigbid-portfolio": {
       "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/rauf17/gigbid",
-        "gigbid-portfolio-mcp",
-        "--stdio"
-      ]
+      "args": ["--from", "git+https://github.com/rauf17/gigbid", "gigbid-portfolio-mcp", "--stdio"]
     }
   }
 }
@@ -114,134 +269,48 @@ uvx --from git+https://github.com/rauf17/gigbid gigbid-portfolio-mcp --stdio
 
 ---
 
-## Telemetry & Trace Samples (LangSmith)
+## Safety
 
-When `LANGSMITH_API_KEY` is configured, end-to-end execution traces flow from the UI through FastAPI (`X-Trace-Id`), graph run metadata, and MCP calls to LangSmith with PII anonymization.
-
-- **Approved Proposal (Run `faeba433`)**: [LangSmith Trace faeba433](https://smith.langchain.com/public/2aae5f31-ef89-4227-b200-acc3312bfee0/r/faeba433-c7f4-4d05-8b68-5d45da01683f?start_time=2026-11-15T14%3A54%3A04.542224Z) — Full proposal generation pipeline pausing at human approval checkpoint and resuming to submission.
-- **Critic Revision Loop (Run `bd69772d`)**: [LangSmith Trace bd69772d](https://smith.langchain.com/public/c1f62c90-1db6-4b63-9bc1-a6a708ae541e/r/bd69772d-b602-47d7-b272-712775da298c?start_time=2026-11-15T14%3A54%3A42.910478Z) — Multi-turn proposal revision loop triggered by Critic feedback on phrasing and grounding.
-- **Crash-and-Resume (Run `8b55430b`)**: [LangSmith Trace 8b55430b](https://smith.langchain.com/public/9abace65-e566-4584-8445-c982b45823ed/r/8b55430b-ea67-4d21-841c-d1bf9cd5c9bb?start_time=2026-11-15T14%3A54%3A52.485806Z) — Durable state recovery from PostgreSQL checkpointer after simulated process crash at human approval checkpoint.
-- **Skipped-Scam Trace (Run `9cb84a55-d506-41ac-b460-bd6ba763d9dd`)**: Skipped-scam trace: run exists in the LangSmith project; a public share link could not be generated before submission. Deterministic regex rule `POL-001` blocks off-platform contact lead without LLM cost.
-
----
-
-## Pinned Dependencies (`uv.lock`)
-
-Exact package versions locked for reproducible builds:
-- `langgraph`: `1.2.21`
-- `langchain-core`: `1.8.0`
-- `pydantic`: `2.14.3`
-- `fastapi`: `0.162.5`
-- `psycopg`: `3.3.9`
-- `qdrant-client`: `1.20.0`
-- `arq`: `0.28.0`
-- `mcp`: `1.30.0`
-- `sse-starlette`: `3.7.0`
-- `scipy`: `1.17.1`
-- `groq`: `0.37.1`
+- **Nothing is sent without human approval.** Approval uses LangGraph `interrupt()` and survives
+  restarts because state is checkpointed in Postgres.
+- **Job posts and client messages are untrusted.** They are delimited and scanned for planted
+  instructions, and the agents never follow them.
+- **Platform rules are enforced in code.** Off-platform contact, unpaid test work and guarantees are
+  removed or blocked by deterministic checks.
+- **Personal data is masked** in logs and traces.
 
 ---
 
-## Evaluation Results & Verified Evidence
+## Limitations
 
-All benchmark numbers are copied directly from artifacts in `evals/results/` and mapped in [docs/results_index.md](docs/results_index.md):
-
-### R&D Questions Status
-- **R&D Question A (Tool Granularity)**: `not run` (evaluated 0 tasks; planned 40-task benchmark across monolithic vs fine-grained tool surfaces).
-- **R&D Question B (RAG Retrieval Pipeline)**: Completed across 600 synthetic opportunities (see table below).
-- **R&D Question C (Agent Supervision Hierarchy)**: `not run` (evaluated 0 tasks; centralized supervisor vs choreographed StateGraph).
-
-### Overall Retrieval Performance (R&D Question B)
-*Source: `evals/results/results_table.md` (Commit: `7d8f600` / `d6e46c2`)*
-
-| Variant | Mode | Recall@5 | R@5 Ceiling | MRR | nDCG@10 | p95 Lat (ms) | Tokens | Queries | Embedder |
-|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---|
-| `random` | `deterministic` | **0.1349** | 0.6806 | **0.3850** | **0.2454** | 0.0 | 0 | 511 | `none` |
-| `bm25_text` | `deterministic` | **0.2760** | 0.6806 | **0.6229** | **0.4720** | 20.4 | 0 | 511 | `none` |
-| `skill_tag_lookup_REFERENCE`* | `deterministic` | **0.4017** | 0.6806 | **0.5680** | **0.5404** | 2.1 | 0 | 511 | `none` |
-| `v0_naive` | `deterministic` | **0.2867** | 0.6806 | **0.7417** | **0.4617** | 88.9 | 0 | 511 | `bge-small-en-v1.5` |
-| `v1_decompose` | `real` | **0.2276** | 0.6806 | **0.6660** | **0.4014** | 1671.9 | 363,928 | 511 | `bge-small-en-v1.5` |
-| `v2_hybrid` | `deterministic` | **0.3121** | 0.6806 | **0.7363** | **0.4870** | 296.7 | 0 | 511 | `bge-small-en-v1.5` |
-| `v3_rerank` | `deterministic` | **0.3308** | 0.6806 | **0.7397** | **0.4878** | 2982.4 | 0 | 511 | `bge-small-en-v1.5` |
-| `v4_outcome` | `deterministic` | **0.3298** | 0.6806 | **0.7396** | **0.4880** | 133.2 | 0 | 511 | `bge-small-en-v1.5` |
-| `oracle` | `deterministic` | **0.5564** | 0.6806 | **1.0000** | **0.8520** | 0.0 | 0 | 511 | `bm25` |
-| `v0_naive_unfiltered` | `deterministic` | **0.0519** | 0.6806 | **0.1904** | **0.0845** | 0.0 | 0 | 511 | `bge-small-en-v1.5` |
-
-*\* Reference baseline only: queries the exact skills field gold labels were derived from (answer key leakage).*
-
-### Multi-Agent Pipeline & Defense Performance
-*Source: `evals/results/results_table.md`*
-
-| Benchmark | Mode | Primary Metric | Primary Value | p95 Lat (ms) | Models Used |
-|:---|:---:|:---|:---:|:---:|:---|
-| Decision Pipeline | `real` | Bid/Skip F1 | **0.7500** | 1698.6 | `openai/gpt-oss-20b`, deterministic heuristics |
-| Proposal Verification (R5) | `real` | Post-Verify Unsupported Rate | **0.0000** | 1411.7 | `openai/gpt-oss-120b`, `openai/gpt-oss-20b` |
-| Injection Defense (R9) | `real` | Defense Effectiveness Rate | **0.7778** | 2722.5 | `openai/gpt-oss-20b` |
-
-### Proposal Strategy A/B Experiment (Extension X2)
-*Source: `evals/results/ab_experiment_latest.json` ($N=120$, paired cohort)*
-
-- **Arm A (Result-First Opener)**: Reply Rate = `0.2333` (28/120), Hire Rate = `0.0417` (5/120).
-- **Arm B (Question-First Opener)**: Reply Rate = `0.1083` (13/120), Hire Rate = `0.0000` (0/120).
-- **Statistical Significance**: Reply difference is statistically significant (exact McNemar paired $p = 0.0015$; two-proportion $z = 2.5726$, $p = 0.0101$). Hire difference is NOT statistically significant (Fisher's exact $p = 0.0599 \ge 0.05$). Both arms evaluated the exact same 120 candidate jobs against a simulator that rewards metrics by construction.
-
-### Latency, Cost Accounting & Resource Budgets
-*Source: `evals/results/budget_latest.json` ($N=20$ benchmark jobs, measured with fallback model)*
-
-| Stage | Declared Target | Measured p95 Latency | Mean Tokens | Mean Cost (USD) | Status |
-|:---|:---:|:---:|:---:|:---:|:---:|
-| Job Analysed | $\le 12.0\text{s}$ | **`9.749s`** | 1024.7 tokens | **`$0.000000`** | within target, but measured with fallback model + cache (not a clean run) |
-| Proposal Generation | $\le 25.0\text{s}$ | **`8.780s`** | 2256.5 tokens | **`$0.000000`** | within target, but measured with fallback model + cache (not a clean run) |
-
-> [!NOTE]
-> Budget numbers were **measured with fallback model**: in `data/processed/llm_calls.jsonl`, 28 of 87 calls (32.2%) used fallback model `openai/gpt-oss-20b` after the primary Groq rate limit was reached, and 26 of 87 calls were served from cache. Critic-prompt trimming is an **estimated token saving, not measured end to end**.
+1. **Synthetic data.** Jobs are generated from archetypes. Real postings will be messier.
+2. **Gold labels come from skill tags**, so retrieval scores measure agreement with that key.
+3. **The simulator rewards metric-led proposals**, so the A/B result may not transfer to real clients.
+4. **Small samples.** 60 decision jobs, 15 proposal generations and 10 injection probes, limited by
+   free-tier model quotas.
+5. **Not run:** R&D questions A and C, judge calibration against 30 hand labels, and the blind human panel.
+6. **The live Upwork adapter is a stub.** Only GigSim is implemented. The GitHub MCP is not
+   integrated, and the Workspace server is a local mock.
+7. **No public backend yet** (see the deployment note above).
 
 ---
 
-## Repository Map
+## Pinned versions (`uv.lock`)
 
-```text
-gigbid/
-├── agent/                   # Multi-agent LangGraph workflows, nodes, and policies
-│   ├── graphs/              # bid_graph.py and conversation_graph.py
-│   ├── nodes/               # analyst, risk, fit, decision, pricing, writer, verifier, critic
-│   ├── prompts/             # System prompts and templates (no inline code prompts)
-│   ├── accounting.py        # Token usage aggregation and cost tracking
-│   ├── memory.py            # Long-term style rule and outcome persistence
-│   ├── runtime.py           # Thread execution, checkpoints, and approval interrupts
-│   └── tracing.py           # LangSmith telemetry and PII masking hooks
-├── apps/                    # User interfaces and entrypoints
-│   ├── api/                 # FastAPI backend (auth, runs, SSE stream, reviews, audit)
-│   └── web/                 # Next.js 14 App Router web client (live SSE inbox)
-├── data/                    # Persona archives, synthetic data generators, and policies
-│   ├── personas/            # Verified CVs, case studies, reviews, and repo code
-│   └── policy_pack/         # Declarative safety rules in policy.yaml
-├── docs/                    # Design documentation, images, and research reports
-│   ├── images/              # Rendered architecture graphs and Inspector screenshots
-│   ├── REPORT.pdf           # 10-page engineering design review report
-│   ├── WRITEUP.md           # Narrative essay on RAG evaluation lessons
-│   ├── results_index.md     # Verified metric map linking every claim to JSON files
-│   └── RUNBOOK.md           # Local operations, migrations, and deployment guide
-├── evals/                   # Evaluation harnesses, datasets, and benchmark results
-│   ├── datasets/            # 600-job synthetic evaluation sets across 3 personas
-│   ├── results/             # Verified raw JSON benchmark outputs
-│   └── runners/             # RAG, decision, proposal, injection, and A/B runners
-├── mcp_servers/             # Model Context Protocol service implementations
-│   ├── marketplace/         # GigSim marketplace interface (port 8002)
-│   ├── portfolio/           # Verified evidence discovery interface (port 8001)
-│   └── workspace/           # Mock calendar holds and email drafts (port 8003)
-└── tests/                   # Automated regression and contract test suites
-```
+`langgraph` 1.2.21, `langchain-core` 1.8.0, `pydantic` 2.14.3, `fastapi` 0.162.5, `psycopg` 3.3.9,
+`qdrant-client` 1.20.0, `arq` 0.28.0, `mcp` 1.30.0, `sse-starlette` 3.7.0, `scipy` 1.17.1, `groq` 0.37.1.
+Models are open-weight on Groq: `openai/gpt-oss-120b` for the Writer and Critic, and `openai/gpt-oss-20b`
+for the frequent small steps.
 
----
+## Repository map
 
-## Honest Limitations
-
-1. **Synthetic Evaluation Dataset**: Benchmarks evaluate against 600 synthetically generated job postings across three archetypes; performance on live, unstructured Upwork job postings will exhibit greater stylistic variance.
-2. **Gold Relevance Derived from Skill Tags**: Ground truth relevance was derived from skill co-occurrence in data generation; while realistic, semantic nuances in unstructured text are not fully captured by keyword tag sets.
-3. **Simulator Rewards Metric-Led Proposals**: GigSim's simulated client utility function rewards numerical claim density by construction; empirical response from real human clients may diverge.
-4. **Sample Sizes**: Multi-agent node evaluations sampled 60 decision opportunities, 15 proposal generations, and 10 adversarial injection probes due to LLM provider daily token allowances.
-5. **Upwork Marketplace Adapter is a Stub**: Only the hermetic GigSim simulator port is fully implemented; the live Upwork OAuth scraper adapter remains a documented stub.
-6. **GitHub MCP Integration**: Evidence retrieval currently operates over locally indexed repository files rather than live GitHub API connections.
-7. **Workspace MCP Mock**: Calendar availability and email drafting tools interact with an in-memory JSON mock store rather than live Google Workspace APIs.
-8. **Absence of Human Evaluation Panel**: Proposal grounding and personalization were scored via LLM-as-a-judge (Critic node) rather than an empirical human freelancer review panel.
+| Path | Contents |
+|---|---|
+| `agent/` | Graphs, nodes, hand-off models, memory, prompts, config |
+| `apps/api/`, `apps/web/` | FastAPI backend, Next.js frontend |
+| `mcp_servers/` | Portfolio, Marketplace and Workspace servers |
+| `rag/` | Ingestion, indexes and retrieval variants |
+| `worker/` | Background jobs |
+| `evals/` | Runners, datasets and committed results |
+| `gigsim/` | Provided simulator (frozen, not modified) |
+| `docs/` | Report, write-up, runbook, ADRs, results index |
