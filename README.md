@@ -11,8 +11,8 @@ GigSim simulator.
 
 | | |
 |---|---|
-| **Demo video** | [watch the walkthrough](<VIDEO_URL>) |
-| **Hosted frontend (demo mode)** | [open the Vercel demo](<VERCEL_URL>) |
+| **Demo video** | [Watch the walkthrough](<VIDEO_URL>) |
+| **Hosted frontend (demo mode)** | [Open the Vercel demo](https://gigbit-connect.vercel.app) |
 | **Write-up** | [My Retrieval Evaluation Lied to Me Three Times](https://dev.to/rauf17/my-retrieval-evaluation-lied-to-me-three-times-2l8n) |
 | **R&D report** | [docs/REPORT.pdf](docs/REPORT.pdf) |
 | **Portfolio MCP server** | [install with `uvx`](#portfolio-mcp-server) |
