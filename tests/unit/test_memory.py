@@ -236,7 +236,13 @@ async def test_writer_node_receives_promoted_style_rules(memory_store: InMemoryS
     # Test that writer node receives and incorporates style notes
     captured_vars: dict[str, Any] = {}
 
-    def mock_writer_call(node: str, variables: dict[str, Any], schema: Any, model_override: Any = None) -> Any:
+    def mock_writer_call(
+        node: str,
+        variables: dict[str, Any],
+        schema: Any,
+        model_override: Any = None,
+        **kwargs: Any,
+    ) -> Any:
         nonlocal captured_vars
         captured_vars = variables
         from agent.handoffs import ProposalDraft

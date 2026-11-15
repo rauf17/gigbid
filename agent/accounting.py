@@ -45,7 +45,10 @@ def aggregate_by_node(logs: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
         latencies = [float(e.get("latency_ms", 0.0)) for e in entries if not e.get("cache_hit", False)]
         prompt_tokens = sum(int(e.get("prompt_tokens", 0)) for e in entries)
         completion_tokens = sum(int(e.get("completion_tokens", 0)) for e in entries)
-        total_tokens = prompt_tokens + completion_tokens
+        total_tokens = sum(
+            int(e.get("total_tokens") if e.get("total_tokens") is not None else (int(e.get("prompt_tokens", 0)) + int(e.get("completion_tokens", 0))))
+            for e in entries
+        )
         total_cost = sum(float(e.get("estimated_cost_usd", 0.0)) for e in entries)
         cache_hits = sum(1 for e in entries if e.get("cache_hit", False))
         fallbacks = sum(1 for e in entries if e.get("fallback_used", False))
@@ -77,22 +80,33 @@ def aggregate_by_trace(logs: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     """Aggregates calls, tokens, latency, and cost per execution trace_id."""
     by_trace: dict[str, list[dict[str, Any]]] = {}
     for entry in logs:
-        t_id = entry.get("trace_id", "unknown")
+        t_id = entry.get("trace_id") or entry.get("traceId") or "unknown"
         by_trace.setdefault(t_id, []).append(entry)
 
     summary: dict[str, dict[str, Any]] = {}
     for trace_id, entries in by_trace.items():
-        total_tokens = sum(int(e.get("prompt_tokens", 0)) + int(e.get("completion_tokens", 0)) for e in entries)
+        total_tokens = sum(
+            int(e.get("total_tokens") if e.get("total_tokens") is not None else (int(e.get("prompt_tokens", 0)) + int(e.get("completion_tokens", 0))))
+            for e in entries
+        )
+        prompt_tokens = sum(int(e.get("prompt_tokens", 0)) for e in entries)
+        completion_tokens = sum(int(e.get("completion_tokens", 0)) for e in entries)
         total_cost = sum(float(e.get("estimated_cost_usd", 0.0)) for e in entries)
         total_latency = sum(float(e.get("latency_ms", 0.0)) for e in entries)
         nodes = sorted({e.get("node", "unknown") for e in entries})
+        retries = sum(int(e.get("retries", 0)) for e in entries)
+        fallbacks = sum(1 for e in entries if e.get("fallback_used", False))
 
         summary[trace_id] = {
             "calls": len(entries),
             "nodes_called": nodes,
+            "total_prompt_tokens": prompt_tokens,
+            "total_completion_tokens": completion_tokens,
             "total_tokens": total_tokens,
             "total_cost_usd": round(total_cost, 6),
             "total_latency_ms": round(total_latency, 2),
+            "retries": retries,
+            "fallbacks_used": fallbacks,
         }
 
     return summary
@@ -111,7 +125,10 @@ def compute_overall_metrics(logs: list[dict[str, Any]]) -> dict[str, Any]:
         }
 
     latencies = [float(e.get("latency_ms", 0.0)) for e in logs if not e.get("cache_hit", False)]
-    total_tokens = sum(int(e.get("prompt_tokens", 0)) + int(e.get("completion_tokens", 0)) for e in logs)
+    total_tokens = sum(
+        int(e.get("total_tokens") if e.get("total_tokens") is not None else (int(e.get("prompt_tokens", 0)) + int(e.get("completion_tokens", 0))))
+        for e in logs
+    )
     total_cost = sum(float(e.get("estimated_cost_usd", 0.0)) for e in logs)
     cache_hits = sum(1 for e in logs if e.get("cache_hit", False))
 

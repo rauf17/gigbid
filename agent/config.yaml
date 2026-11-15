@@ -1,3 +1,9 @@
+ci_gates:
+  smoke:
+    max_unsupported_claim_rate: 0.05
+    min_bid_or_skip_f1: 0.70
+    min_retrieval_ndcg_at_10: 0.35
+
 # Models are chosen per node HERE, never in code. Tune by measurement (R&D questions A/B/C).
 marketplace:
   mode: gigsim            # gigsim | upwork

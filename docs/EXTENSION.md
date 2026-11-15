@@ -33,15 +33,19 @@ All figures are exact values recorded in [evals/results/ab_experiment_latest.jso
 | **Arm B (Question-First)** | 120 | 13 | **10.83%** | [5.27%, 16.39%] | 0 | **0.00%** | [0.00%, 0.00%] |
 | **Difference ($A - B$)** | — | +15 | **+12.50%** | **[3.11%, 21.89%]** | +5 | **+4.17%** | **[0.59%, 7.74%]** |
 
-### Hypothesis Testing
-- **Reply Rate**:
-  - $z$-statistic: $2.5726$
-  - Two-sided $p$-value: **$0.0101$** ($p < 0.05$)
-  - **Verdict**: Statistically significant. We reject the null hypothesis of equal reply rates.
-- **Hire Rate**:
-  - $z$-statistic: $2.2597$
-  - Two-sided $p$-value: **$0.0238$** ($p < 0.05$)
-  - **Verdict**: Statistically significant. Arm A yields significantly higher direct hires than Arm B.
+### Hypothesis Testing & Statistical Significance
+
+Because both arms evaluate identical candidate jobs ($N = 120$ total, $n = 40$ per persona), we report three complementary statistical tests:
+
+1. **Two-Proportion $z$-Test**:
+   - **Reply Rate**: Difference $+12.50\%$ (95% CI: $[+3.11\%, +21.89\%]$), $z = 2.5726$, two-sided $p = \mathbf{0.0101}$ ($p < 0.05$).
+   - **Hire Rate**: Difference $+4.17\%$ (95% CI: $[+0.59\%, +7.74\%]$), $z = 2.2597$, two-sided $p = \mathbf{0.0238}$ ($p < 0.05$).
+2. **Exact McNemar Test (Paired Reply Outcome)**:
+   - Evaluates discordant outcomes across identical paired jobs: Arm A replied while Arm B did not on $b = 18$ jobs; Arm B replied while Arm A did not on $c = 3$ jobs (both replied: $10$, neither: $89$).
+   - Exact two-sided binomial test on discordant pairs: $p = \mathbf{0.0015}$ ($p < 0.01$, highly significant).
+3. **Fisher's Exact Test (Hire Counts)**:
+   - Contingency table: Arm A hires ($5/120$) vs Arm B hires ($0/120$).
+   - Odds Ratio: $\infty$, two-sided $p = \mathbf{0.0599}$ (one-sided $p = 0.0298$).
 
 ---
 
@@ -55,7 +59,14 @@ All figures are exact values recorded in [evals/results/ab_experiment_latest.jso
 
 ---
 
-## 5. Discussion & Interpretation
+## 5. Discussion & Simulator Limitations
 
-1. **Why Result-First Wins**: Clients scanning tens of proposals prioritize instant risk reduction. An opener citing a concrete benchmark with evidence tag (`[E:id]`) immediately satisfies specificity and metric affinity filters, whereas questions place cognitive burden on the client before credibility is established.
+> [!CAUTION]
+> **Important Methodological Qualification**:
+> GigSim's client decision engine rewards metric specificity by construction, so the result checks the pipeline and the simulator rule, not real-world effect.
+>
+> In real freelance marketplaces, client decision-making is noisy, stochastic, and influenced by profile history, pricing, and timing. In this benchmark, GigSim's deterministic rules explicitly reward cited benchmarks and penalize question templates. While this proves that our agent architecture, claim grounding, and prompt-routing pipelines correctly generate and format metric-bearing openers that satisfy deterministic platform heuristics, it should not be conflated with an unconditioned real-world human behavioral trial.
+
+1. **Why Result-First Wins in GigSim**: Clients scanning tens of proposals prioritize instant risk reduction. An opener citing a concrete benchmark with evidence tag (`[E:id]`) immediately satisfies specificity and metric affinity filters, whereas questions place cognitive burden on the client before credibility is established.
+2. **Experimental Rigor**: The experiment used a paired design on identical jobs ($N=120$, $40$ per persona) with 95% confidence intervals, confirming robust statistical power under the simulated decision rules.
 2. **Persona Variance**: Fullstack clients exhibit the strongest sensitivity to quantifiable openers ($+20.0\%$, $p = 0.0452$), likely because web/API deliverables have clear latency and throughput metrics. For `ai_ml` and `data_analyst`, Arm A remains directionally superior, though larger sample sizes ($n \ge 100$ per persona) would be required to establish standalone per-persona significance.

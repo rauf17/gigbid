@@ -62,6 +62,7 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> Critique:
                 "evidence_items": str(state_slice.get("evidence_items", "")),
             },
             schema=Critique,
+            trace_id=state_slice.get("trace_id"),
             model_override=deps.llm,
         )
         if isinstance(critique, Critique):

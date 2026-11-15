@@ -24,7 +24,7 @@ from typing import Any
 
 import httpx
 from mcp.shared.memory import create_connected_server_and_client_session
-from scipy.stats import norm
+from scipy.stats import binomtest, fisher_exact, norm
 
 from agent.handoffs import ClaimAnnotation, ProposalDraft
 from agent.llm import load_config
@@ -463,6 +463,36 @@ async def run_ab_experiment(
     overall_a = evaluate_outcomes(arm_a_drafts)
     overall_b = evaluate_outcomes(arm_b_drafts)
 
+    # Paired McNemar Exact Test for reply outcome across identical jobs
+    a_by_job = {d["job_id"]: d for d in arm_a_drafts}
+    b_by_job = {d["job_id"]: d for d in arm_b_drafts}
+    common_jobs = sorted(set(a_by_job.keys()) & set(b_by_job.keys()))
+
+    mcnemar_b = sum(
+        1 for j in common_jobs
+        if (a_by_job[j].get("status") in ["replied", "hired"]) and not (b_by_job[j].get("status") in ["replied", "hired"])
+    )
+    mcnemar_c = sum(
+        1 for j in common_jobs
+        if not (a_by_job[j].get("status") in ["replied", "hired"]) and (b_by_job[j].get("status") in ["replied", "hired"])
+    )
+    mcnemar_both = sum(
+        1 for j in common_jobs
+        if (a_by_job[j].get("status") in ["replied", "hired"]) and (b_by_job[j].get("status") in ["replied", "hired"])
+    )
+    mcnemar_neither = sum(
+        1 for j in common_jobs
+        if not (a_by_job[j].get("status") in ["replied", "hired"]) and not (b_by_job[j].get("status") in ["replied", "hired"])
+    )
+    mcnemar_p = float(binomtest(min(mcnemar_b, mcnemar_c), mcnemar_b + mcnemar_c, 0.5).pvalue) if (mcnemar_b + mcnemar_c) > 0 else 1.0
+
+    # Fisher's Exact Test for hire counts
+    hires_a = overall_a["hire_count"]
+    non_hires_a = overall_a["total_submitted"] - hires_a
+    hires_b = overall_b["hire_count"]
+    non_hires_b = overall_b["total_submitted"] - hires_b
+    odds_ratio, fisher_p = fisher_exact([[hires_a, non_hires_a], [hires_b, non_hires_b]])
+
     # Two-proportion z-tests
     z_reply, p_reply, ci_diff_reply, ci_a_reply, ci_b_reply = compute_two_prop_z_test(
         overall_a["reply_count"], overall_a["total_submitted"],
@@ -542,11 +572,20 @@ async def run_ab_experiment(
             "reply_p_value": round(p_reply, 4),
             "reply_significant_05": bool(p_reply < 0.05),
             "reply_diff_ci_95": [round(ci_diff_reply[0], 4), round(ci_diff_reply[1], 4)],
+            "mcnemar_exact_p_value": round(mcnemar_p, 4),
+            "mcnemar_contingency": {
+                "both_replied": mcnemar_both,
+                "arm_a_only": mcnemar_b,
+                "arm_b_only": mcnemar_c,
+                "neither_replied": mcnemar_neither,
+            },
             "hire_rate_diff": round(overall_a["hire_rate"] - overall_b["hire_rate"], 4),
             "hire_z_stat": round(z_hire, 4),
             "hire_p_value": round(p_hire, 4),
             "hire_significant_05": bool(p_hire < 0.05),
             "hire_diff_ci_95": [round(ci_diff_hire[0], 4), round(ci_diff_hire[1], 4)],
+            "fisher_exact_hire_odds_ratio": round(float(odds_ratio), 4) if not math.isinf(odds_ratio) else "inf",
+            "fisher_exact_hire_p_value": round(float(fisher_p), 4),
         },
         "by_persona": by_persona,
     }

@@ -14,12 +14,14 @@ import math
 import os
 import subprocess
 import time
+import uuid
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 
+from agent.accounting import aggregate_by_trace, load_call_logs
 from agent.llm import DEFAULT_CALL_LOG_PATH, load_config
 from agent.nodes import (
     analyst,
@@ -57,33 +59,24 @@ async def measure_single_job(
     """Runs a single job end-to-end and measures analysis vs proposal timing and token usage."""
     job = job_row["job"]
     call_log_path = DEFAULT_CALL_LOG_PATH
-    initial_log_offset = call_log_path.stat().st_size if call_log_path.is_file() else 0
+    an_trace_id = f"trace_an_{job['id']}_{uuid.uuid4().hex[:8]}"
 
     # Phase 1: Job Analysed
     t0_analysis = time.perf_counter()
-    spec = await analyst.run({"job": job, "persona": persona}, node_deps)
-    risk_rep = await risk_assessor.run({"job": job, "client_history": job.get("client_history")}, node_deps)
-    fit_rep = await fit_matcher.run({"job_spec": spec, "persona": persona, "job": job}, node_deps)
-    dec = await decision.run({"job_spec": spec, "risk_report": risk_rep, "fit_report": fit_rep, "job": job}, node_deps)
-    await pricing.run({"job": job, "job_spec": spec, "risk_report": risk_rep, "fit_report": fit_rep}, node_deps)
+    spec = await analyst.run({"job": job, "persona": persona, "trace_id": an_trace_id}, node_deps)
+    risk_rep = await risk_assessor.run({"job": job, "client_history": job.get("client_history"), "trace_id": an_trace_id}, node_deps)
+    fit_rep = await fit_matcher.run({"job_spec": spec, "persona": persona, "job": job, "trace_id": an_trace_id}, node_deps)
+    dec = await decision.run({"job_spec": spec, "risk_report": risk_rep, "fit_report": fit_rep, "job": job, "trace_id": an_trace_id}, node_deps)
+    await pricing.run({"job": job, "job_spec": spec, "risk_report": risk_rep, "fit_report": fit_rep, "trace_id": an_trace_id}, node_deps)
     t1_analysis = time.perf_counter()
     analysis_latency_s = t1_analysis - t0_analysis
 
-    # Extract LLM logs for analysis phase
-    analysis_tokens = 0
-    analysis_cost = 0.0
-    if call_log_path.is_file():
-        with call_log_path.open("r", encoding="utf-8") as f:
-            f.seek(initial_log_offset)
-            for line in f:
-                if not line.strip():
-                    continue
-                try:
-                    entry = json.loads(line)
-                    analysis_tokens += int(entry.get("prompt_tokens", 0)) + int(entry.get("completion_tokens", 0))
-                    analysis_cost += float(entry.get("estimated_cost_usd", 0.0))
-                except Exception as exc:  # noqa: BLE001
-                    logger.debug("Failed parsing analysis log line: %s", exc)
+    # Extract exact LLM logs for analysis phase using unique trace_id
+    logs = load_call_logs(call_log_path)
+    trace_map = aggregate_by_trace(logs)
+    an_stats = trace_map.get(an_trace_id, {})
+    analysis_tokens = int(an_stats.get("total_tokens", 0))
+    analysis_cost = float(an_stats.get("total_cost_usd", 0.0))
 
     proposal_evaluated = False
     proposal_latency_s = 0.0
@@ -93,7 +86,7 @@ async def measure_single_job(
     # Phase 2: Proposal (run if decision == "bid" or gold says bid to measure proposal phase)
     if dec.action == "bid" or job_row.get("gold", {}).get("bid_or_skip") == "bid":
         proposal_evaluated = True
-        log_offset_prop = call_log_path.stat().st_size if call_log_path.is_file() else 0
+        prop_trace_id = f"trace_prop_{job['id']}_{uuid.uuid4().hex[:8]}"
         t0_prop = time.perf_counter()
 
         evidence_items = []
@@ -114,36 +107,31 @@ async def measure_single_job(
                 "fit_report": fit_rep,
                 "persona": persona,
                 "evidence_items": evidence_items,
+                "trace_id": prop_trace_id,
             },
             node_deps,
         )
         ver_rep = await verifier.run(
-            {"draft": draft, "evidence_items": evidence_items, "persona": persona},
+            {"draft": draft, "evidence_items": evidence_items, "persona": persona, "trace_id": prop_trace_id},
             node_deps,
         )
         await critic.run(
-            {"draft": draft, "job": job, "job_spec": spec, "fit_report": fit_rep, "verification_report": ver_rep},
+            {"draft": draft, "job": job, "job_spec": spec, "fit_report": fit_rep, "verification_report": ver_rep, "trace_id": prop_trace_id},
             node_deps,
         )
         await compliance.run(
-            {"draft": draft, "job": job, "fit_report": fit_rep, "verification_report": ver_rep},
+            {"draft": draft, "job": job, "fit_report": fit_rep, "verification_report": ver_rep, "trace_id": prop_trace_id},
             node_deps,
         )
         t1_prop = time.perf_counter()
         proposal_latency_s = t1_prop - t0_prop
 
-        if call_log_path.is_file():
-            with call_log_path.open("r", encoding="utf-8") as f:
-                f.seek(log_offset_prop)
-                for line in f:
-                    if not line.strip():
-                        continue
-                    try:
-                        entry = json.loads(line)
-                        proposal_tokens += int(entry.get("prompt_tokens", 0)) + int(entry.get("completion_tokens", 0))
-                        proposal_cost += float(entry.get("estimated_cost_usd", 0.0))
-                    except Exception as exc:  # noqa: BLE001
-                        logger.debug("Failed parsing proposal log line: %s", exc)
+        # Extract exact LLM logs for proposal phase using unique trace_id
+        logs_prop = load_call_logs(call_log_path)
+        prop_trace_map = aggregate_by_trace(logs_prop)
+        pr_stats = prop_trace_map.get(prop_trace_id, {})
+        proposal_tokens = int(pr_stats.get("total_tokens", 0))
+        proposal_cost = float(pr_stats.get("total_cost_usd", 0.0))
 
     return {
         "job_id": job["id"],
@@ -164,9 +152,13 @@ async def run_budget_benchmark(
     data_dir: Path = DEFAULT_DATA_DIR,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     smoke: bool = False,
+    cache: bool = False,
 ) -> dict[str, Any]:
-    """Runs n_jobs end to end with LLM_CACHE=0 and computes budget statistics."""
-    os.environ["LLM_CACHE"] = "0"
+    """Runs n_jobs end to end with LLM_CACHE=0 (or cached if specified) and computes budget statistics."""
+    if cache:
+        os.environ["LLM_CACHE"] = "1"
+    elif "LLM_CACHE" not in os.environ:
+        os.environ["LLM_CACHE"] = "0"
     start_ts = datetime.now(UTC).isoformat()
     commit_sha = get_git_commit()
 
@@ -281,6 +273,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Measure Declared Budget")
     parser.add_argument("--n", type=int, default=20, help="Number of jobs to measure")
     parser.add_argument("--smoke", action="store_true", help="Run with smoke/fake model")
+    parser.add_argument("--cache", action="store_true", help="Use on-disk real LLM cache when rate limited")
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR, help="Datasets directory")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR, help="Results directory")
     args = parser.parse_args()
@@ -291,6 +284,7 @@ def main() -> None:
             data_dir=args.data_dir,
             output_dir=args.output_dir,
             smoke=args.smoke,
+            cache=args.cache,
         )
     )
 

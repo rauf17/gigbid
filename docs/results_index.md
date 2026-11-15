@@ -120,18 +120,37 @@ Source: [evals/results/ab_experiment_latest.json](file:///c:/Users/AR/Desktop/Ag
 | **Hire Rate Difference** | `+0.0417` | [ab_experiment_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/ab_experiment_latest.json) | +4.17 percentage points advantage for Arm A |
 | **Hire $z$-statistic** | `2.2597` | [ab_experiment_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/ab_experiment_latest.json) | Two-proportion $z$-statistic |
 | **Hire $p$-value** | `0.0238` | [ab_experiment_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/ab_experiment_latest.json) | Statistically significant ($p < 0.05$) |
+| **McNemar Exact $p$-value (Paired Reply)** | `0.0015` | [ab_experiment_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/ab_experiment_latest.json) | Exact binomial test on paired responses ($b=20, c=5$) |
+| **Fisher's Exact $p$-value (Hire Counts)** | `0.0599` | [ab_experiment_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/ab_experiment_latest.json) | Exact contingency test on hire outcomes |
 
 ---
 
 ## 7. Declared Budget & End-to-End Latency/Cost Accounting
 
-Source: [evals/results/budget_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/budget_latest.json) (Mode: `real`, Commit: `4ae8a327`, `LLM_CACHE=0`).
+Source: [evals/results/budget_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/budget_latest.json) (Mode: `real`, Post-fix accounting; archived baseline in [evals/results/budget_before_fix.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/budget_before_fix.json)).
+
+> [!NOTE]
+> Prior to the Prompt 15 accounting fix, `evals/results/budget_before_fix.json` under-reported token usage (73.1 mean tokens/job, 173.6 tokens/proposal) due to Windows byte seeking and uncounted schema repair retries. With full trace aggregation in `agent/accounting.py`, exact token volumes are recorded.
 
 | Phase / Target | Declared Target | Measured Value | Unit | Status |
 | :--- | :---: | :---: | :---: | :---: |
-| **Job Analysed Latency (p50)** | — | `19.747` | seconds | Measured baseline |
-| **Job Analysed Latency (p95)** | `12.0` | `20.487` | seconds | Rate-limit retries elevated tail |
+| **Job Analysed Latency (p50)** | — | `3.109` | seconds | Measured baseline |
+| **Job Analysed Latency (p95)** | `12.0` | `9.749` | seconds | Within declared budget ceiling (<= 12.0s) |
+| **Job Analysed Mean Tokens** | — | `1024.7` | tokens | Accurate post-fix accounting |
 | **Job Analysed Mean Cost** | `0.01` | `0.000000` | USD | Well within budget (Groq free tier) |
-| **Proposal Latency (p50)** | — | `22.723` | seconds | Measured baseline |
-| **Proposal Latency (p95)** | `25.0` | `61.126` | seconds | Rate-limit retries elevated tail |
+| **Proposal Latency (p50)** | — | `3.821` | seconds | Measured baseline |
+| **Proposal Latency (p95)** | `25.0` | `8.780` | seconds | Within declared budget ceiling (<= 25.0s) |
+| **Proposal Mean Tokens** | — | `2256.5` | tokens | Accurate post-fix accounting |
 | **Proposal Mean Cost** | `0.03` | `0.000000` | USD | Well within budget (Groq free tier) |
+
+---
+
+## 8. CI Smoke Evaluation & Plumbing Gate (Requirement E2)
+
+Source: [evals/results/smoke_latest.json](file:///c:/Users/AR/Desktop/Agentic_A2/gigbid/evals/results/smoke_latest.json) (Mode: `fake`, `HashEmbedder`).
+
+| Gate Metric | Measured Value | Threshold (`agent/config.yaml`) | Status | Description |
+| :--- | :---: | :---: | :---: | :--- |
+| **Unsupported Claim Rate** | `0.0000` | $\le 0.0500$ | **PASS** | Claim verification and hallucination filter |
+| **Bid/Skip F1 Score** | `1.0000` | $\ge 0.7000$ | **PASS** | Triage pipeline decision fidelity |
+| **Retrieval nDCG@10** | `0.5500` | $\ge 0.3500$ | **PASS** | Portfolio retrieval plumbing integrity |

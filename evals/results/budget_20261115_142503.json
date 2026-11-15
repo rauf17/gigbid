@@ -1,0 +1,56 @@
+{
+  "benchmark_name": "declared_budget_measurement",
+  "description": "End-to-end latency and cost accounting with caches cleared (LLM_CACHE=0)",
+  "timestamp": "2026-11-15T14:25:03.933370+00:00",
+  "start_time": "2026-11-15T14:24:06.977736+00:00",
+  "commit_sha": "5e89dc68f523684ed60f1c0e33fecbad1fb0f55a",
+  "llm_mode": "real",
+  "jobs_evaluated": 2,
+  "proposals_evaluated": 2,
+  "job_analysed": {
+    "p50_latency_s": 9.525,
+    "p95_latency_s": 13.462,
+    "mean_tokens": 1138.0,
+    "mean_cost_usd": 0.0,
+    "declared_target_p95_s": 12.0,
+    "declared_target_cost_usd": 0.01,
+    "within_p95_budget": false,
+    "within_cost_budget": true
+  },
+  "proposal": {
+    "p50_latency_s": 8.708,
+    "p95_latency_s": 10.162,
+    "mean_tokens": 0.0,
+    "mean_cost_usd": 0.0,
+    "declared_target_p95_s": 25.0,
+    "declared_target_cost_usd": 0.03,
+    "within_p95_budget": true,
+    "within_cost_budget": true
+  },
+  "measurements": [
+    {
+      "job_id": "job_hist_00031",
+      "persona": "ai_ml",
+      "decision": "bid",
+      "analysis_latency_s": 13.899,
+      "analysis_tokens": 2276,
+      "analysis_cost_usd": 0.0,
+      "proposal_evaluated": true,
+      "proposal_latency_s": 10.323,
+      "proposal_tokens": 0,
+      "proposal_cost_usd": 0.0
+    },
+    {
+      "job_id": "job_hist_00009",
+      "persona": "data_analyst",
+      "decision": "bid",
+      "analysis_latency_s": 5.152,
+      "analysis_tokens": 0,
+      "analysis_cost_usd": 0.0,
+      "proposal_evaluated": true,
+      "proposal_latency_s": 7.093,
+      "proposal_tokens": 0,
+      "proposal_cost_usd": 0.0
+    }
+  ]
+}

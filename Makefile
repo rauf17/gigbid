@@ -43,7 +43,8 @@ eval:
 	uv run python -m evals.runners.rag_eval --variant v0_naive
 	uv run python scripts/results_table.py
 eval-smoke:
-	uv run python -m evals.runners.rag_eval --smoke
+	uv run python evals/runners/smoke_eval.py
+	uv run python scripts/check_thresholds.py
 eval-all:
 	uv run python -m evals.runners.rag_eval --variant random
 	uv run python -m evals.runners.rag_eval --variant bm25_text

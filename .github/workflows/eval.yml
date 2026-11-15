@@ -1,11 +1,23 @@
-name: Smoke eval
-on: [pull_request]
+name: Smoke Eval Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
 jobs:
-  smoke:
+  smoke-eval:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - run: uv sync --extra dev
-      # TODO Phase 5: 30-job smoke eval; fail if unsupported-claims rises or bid/skip F1 drops
-      - run: echo "smoke eval placeholder"
+
+      - name: Install dependencies
+        run: uv sync --extra dev
+
+      - name: Generate evaluation dataset
+        run: make data
+
+      - name: Run CI smoke eval and check gates
+        run: make eval-smoke

@@ -77,6 +77,7 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> ProposalDraft:
                 "max_words": str(max_words),
             },
             schema=ProposalDraft,
+            trace_id=state_slice.get("trace_id"),
             model_override=deps.llm,
         )
         if isinstance(draft, ProposalDraft):

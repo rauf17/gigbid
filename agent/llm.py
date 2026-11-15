@@ -345,6 +345,11 @@ def log_llm_call(
         else:
             safe_entry[k] = v
 
+    if "total_tokens" not in safe_entry:
+        pt = int(safe_entry.get("prompt_tokens", 0) or 0)
+        ct = int(safe_entry.get("completion_tokens", 0) or 0)
+        safe_entry["total_tokens"] = pt + ct
+
     line = json.dumps(safe_entry) + "\n"
     with open(target, "a", encoding="utf-8") as f:
         f.write(line)
@@ -482,9 +487,10 @@ def llm_call(
         except (json.JSONDecodeError, ValidationError, OSError):
             pass
 
-    # 4. Rate Limiting
-    limiter = get_limiter_for_profile(active_profile, config)
-    limiter.acquire(estimated_tokens=max(200, len(messages_str.split()) * 2))
+    # 4. Rate Limiting (apply only to real live provider calls, not mock/test overrides)
+    if model_override is None and _model_override is None:
+        limiter = get_limiter_for_profile(active_profile, config)
+        limiter.acquire(estimated_tokens=max(200, len(messages_str.split()) * 2))
 
     # 5. Execution with Retries & Fallback
     max_retries = int(profile_cfg.get("max_retries", 3))
@@ -515,9 +521,22 @@ def llm_call(
 
             # Check 429 / Retry-After
             retry_after = getattr(exc, "retry_after", None)
+            if retry_after is None and hasattr(exc, "response") and getattr(exc, "response", None) is not None:
+                try:
+                    retry_after = exc.response.headers.get("retry-after")
+                except (AttributeError, KeyError):
+                    pass
+            if retry_after is None:
+                msg = str(exc)
+                match = re.search(r"try again in (\d+(?:\.\d+)?)s", msg)
+                if match:
+                    retry_after = float(match.group(1)) + 0.5
             status_code = getattr(exc, "status_code", None)
 
-            if attempt < max_retries:
+            # If retry_after indicates long daily quota wait (>15s), bypass retries and fall back immediately
+            is_long_wait = retry_after is not None and float(retry_after) > 15.0
+
+            if attempt < max_retries and not is_long_wait:
                 if retry_after is not None:
                     sleep_s = float(retry_after)
                 else:
@@ -529,11 +548,11 @@ def llm_call(
                 )
                 time.sleep(sleep_s)
             else:
-                # Retries exhausted. Attempt fallback if available and not yet tried
+                # Retries exhausted or daily quota limit hit. Attempt fallback if available
                 if not fallback_used and fallback_model_name and fallback_model_name != current_model_name:
                     logger.warning(
-                        "[llm] Retries exhausted on '%s' for node '%s'. Falling back to fallback_model '%s'",
-                        current_model_name, node, fallback_model_name,
+                        "[llm] Attempting fallback to '%s' for node '%s' after status %s / retry_after %s",
+                        fallback_model_name, node, status_code, retry_after,
                     )
                     fallback_used = True
                     try:
@@ -627,6 +646,29 @@ def llm_call(
                 parsed_obj = schema.model_validate(repaired_dict)
                 status = "repaired"
                 retries_used += 1
+
+                # Extract and sum tokens from repair call
+                rep_prompt = 0
+                rep_comp = 0
+                if hasattr(repair_res, "usage_metadata") and repair_res.usage_metadata:
+                    rep_prompt = int(repair_res.usage_metadata.get("input_tokens", 0))
+                    rep_comp = int(repair_res.usage_metadata.get("output_tokens", 0))
+                elif hasattr(repair_res, "response_metadata"):
+                    u = repair_res.response_metadata.get("token_usage", {})
+                    rep_prompt = int(u.get("prompt_tokens", 0))
+                    rep_comp = int(u.get("completion_tokens", 0))
+                if rep_prompt == 0:
+                    rep_prompt = int(len(" ".join(str(m.content) for m in repair_messages).split()) * 1.3)
+                if rep_comp == 0:
+                    rep_comp = int(len(str(repair_res.content).split()) * 1.3)
+                prompt_tokens += rep_prompt
+                completion_tokens += rep_comp
+                cost_usd = calculate_cost_usd(
+                    model_name=current_model_name,
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=completion_tokens,
+                    profile_cfg=profile_cfg,
+                )
             except (json.JSONDecodeError, ValidationError) as second_err:
                 log_llm_call(
                     {

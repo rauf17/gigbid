@@ -48,9 +48,15 @@ docker compose -f infra/docker-compose.yml down
 
 ---
 
-## 2. Hugging Face Space Single-Container Deployment
+## 2. Packaging & Deployment Architecture
 
-GigBid packages the entire stack into a single lean container (`infra/docker/space.Dockerfile`) fitting within Hugging Face Space's free tier (2 vCPU / 16 GB RAM).
+GigBid packages the entire multi-agent stack into two deployment formats:
+1. **Multi-Service Docker Compose** (`infra/docker-compose.yml`): Runs individual services (`web`, `api`, `worker`, `marketplace-mcp`, `portfolio-mcp`, `gigsim`, `postgres`, `redis`) with isolated networking and healthchecks.
+2. **Single-Container Lean Image** (`infra/docker/space.Dockerfile`): Process manager (`supervisord`) orchestrates all services within one container on port 7860 with Next.js proxying `/api` traffic to FastAPI.
+
+### Hosting & Deployment Status
+- **Local & Docker Verification**: The single-container `gigbid-space` image builds cleanly and runs locally (`docker run --rm -p 7860:7860 --env-file .env gigbid-space`). It has been verified end-to-end with zero mocks via `python scripts/live_smoke.py http://localhost:7860` and Playwright live E2E specs.
+- **Public Hosting**: Evaluated for Hugging Face Spaces free-tier container deployment. Due to persistent storage and outbound egress constraints without payment cards on public clouds, production execution is maintained locally and via the reproducible `gigbid-space` Docker image.
 
 ### Build-Time Optimizations (Fast Cold Starts)
 The single-container image bakes all static and model assets at build time:
@@ -61,25 +67,41 @@ The single-container image bakes all static and model assets at build time:
 
 Cold start on boot takes **under 5 seconds** because zero network downloads are performed during boot.
 
-### Step-by-Step Space Creation
-1. Go to [Hugging Face Spaces](https://huggingface.co/new-space) and create a new Space:
-   - **Space Name**: `gigbid-copilot`
-   - **License**: MIT
-   - **Space SDK**: **Docker** (Blank template)
-   - **Hardware**: Free (2 vCPU, 16 GB RAM)
-2. In Space **Settings → Variables and Secrets**, add the following **Repository Secrets**:
-   - `GROQ_API_KEY`: Your Groq API key.
-   - `REVIEWER_EMAIL`: `reviewer@gigbid.local`
-   - `REVIEWER_PASSWORD`: Strong reviewer password.
-   - `TOKEN_ENCRYPTION_KEY`: 32-byte url-safe base64 key (`python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`).
-   - `APP_SECRET_KEY`: Random 32+ character hex string (`python -c "import secrets; print(secrets.token_hex(32))"`).
-3. Push repository to the Space remote:
-   ```bash
-   git remote add space https://huggingface.co/spaces/<YOUR_HF_USERNAME>/gigbid-copilot
-   git push space main
-   ```
-4. Access the public URL:
-   `https://<YOUR_HF_USERNAME>-gigbid-copilot.hf.space`
+---
+
+## 3. Tracing & Observability (LangSmith, Requirement E3)
+
+GigBid integrates LangSmith for distributed multi-agent trace visualization, debugging, and audit logging.
+
+### Configuration
+Tracing is enabled by setting `LANGSMITH_API_KEY` in `.env`:
+```bash
+LANGSMITH_API_KEY=lsv2_pt_...
+LANGSMITH_PROJECT=gigbid
+LANGSMITH_ENDPOINT=https://api.smith.langchain.com
+```
+If `LANGSMITH_API_KEY` is omitted, tracing is silently turned off with zero overhead, ensuring test suites and CI run without external network dependencies.
+
+### End-to-End Trace Flow & PII Masking
+1. **Trace ID Propagation**: `X-Trace-Id` header is received by FastAPI middleware (or generated as a UUID) and passed to:
+   - Graph run metadata (`run_id`, `thread_id`, `job_id`, `persona`, `hashed_user_id`, `node_models`)
+   - `MarketplacePort` MCP client headers (`X-Trace-Id`)
+   - PostgreSQL `audit_trace` durable log rows
+   - LangSmith run tags and metadata
+2. **PII Masking**: All emails, phone numbers, crypto wallet addresses, credit cards, and IBAN numbers are automatically redacted using `agent.pii.mask_pii_obj` via the LangSmith client `anonymizer` hook before telemetry leaves the host.
+
+### Generating Canonical Trace Examples
+Run the trace generator script against the live stack:
+```bash
+python scripts/make_trace_examples.py
+```
+This generates four distinct execution traces:
+- **(a) Skipped scam job**: Risk assessor triggers policy block on contact info and off-platform payment; decision node emits `skip`.
+- **(b) Approved proposal**: Clean job triggers retrieval, drafting, claim verification, editorial critique, compliance, and approval interrupt; resumed with human approval.
+- **(c) Critic revision loop**: Proposal flagged for generic phrasing or brevity triggers iterative revision edge back to writer before acceptance.
+- **(d) Crash-and-resume**: Graph execution interrupted at human approval survives simulated process crash and successfully resumes from Postgres checkpointer.
+
+*Note*: Public share links for evaluation reports can be published manually via the LangSmith UI ("Share" button on each run).
 
 ---
 

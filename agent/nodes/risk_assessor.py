@@ -108,6 +108,7 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> RiskReport:
                 "client_profile": client_summary,
             },
             schema=RiskReport,
+            trace_id=state_slice.get("trace_id"),
             model_override=deps.llm,
         )
         if isinstance(parsed, RiskReport):

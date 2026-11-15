@@ -38,6 +38,7 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> JobSpec:
                 "persona": str(persona),
             },
             schema=JobSpec,
+            trace_id=state_slice.get("trace_id"),
             model_override=deps.llm,
         )
         if isinstance(spec, JobSpec):
