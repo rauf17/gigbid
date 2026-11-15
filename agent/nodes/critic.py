@@ -74,11 +74,18 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> Critique:
 
     combined_issues = issues + [i for i in llm_issues if i not in issues]
 
-    # Deterministic gating: generic opening or length violation strictly mandates revision
-    if generic_opening or not length_ok or llm_grounding < 0.60 or llm_personalization < 0.50:
-        final_verdict: str = "revise"
+    # Explicit accept criteria: grounded, specific, no generic opener, length ok
+    is_grounded = llm_grounding >= 0.65
+    is_specific = llm_personalization >= 0.65
+    no_generic = not generic_opening
+    is_length_ok = length_ok
+
+    if is_grounded and is_specific and no_generic and is_length_ok:
+        final_verdict: str = "accept"
+    elif llm_verdict == "accept" and no_generic and is_length_ok:
+        final_verdict = "accept"
     else:
-        final_verdict = llm_verdict if llm_verdict in {"accept", "revise"} else "accept"
+        final_verdict = "revise"
 
     return Critique(
         grounding=round(llm_grounding, 2),

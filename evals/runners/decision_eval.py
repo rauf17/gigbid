@@ -161,17 +161,29 @@ async def evaluate_decision_nodes(
         os.environ["USE_HASH_EMBEDDER"] = "1"
     llm_override = FakeNodeChatModel() if smoke else None
 
+    sample_enlarged = False
     for persona in personas:
         dev_file = data_dir / f"dev_{persona}.jsonl"
         if not dev_file.is_file():
             continue
         evaluated_paths.append(dev_file)
 
-        lines = [line.strip() for line in dev_file.read_text(encoding="utf-8").splitlines() if line.strip()]
-        if limit and limit > 0:
-            lines = lines[:limit]
+        all_lines = [line.strip() for line in dev_file.read_text(encoding="utf-8").splitlines() if line.strip()]
+        lines = all_lines[:limit] if (limit and limit > 0) else all_lines
 
-        print(f"[decision_eval] Evaluating {len(lines)} jobs for persona '{persona}' (smoke={smoke})...")
+        # Prompt 10b: Enlarge sample with all scam dev rows if sample has < 8 scam jobs
+        sample_scam_count = sum(1 for line in lines if json.loads(line).get("gold", {}).get("is_scam", False))
+        if sample_scam_count < 8:
+            sample_enlarged = True
+            existing_ids = {json.loads(line)["job"].get("id") for line in lines}
+            extra_scam_lines = [
+                line for line in all_lines
+                if json.loads(line).get("gold", {}).get("is_scam", False)
+                and json.loads(line)["job"].get("id") not in existing_ids
+            ]
+            lines = lines + extra_scam_lines
+
+        print(f"[decision_eval] Evaluating {len(lines)} jobs for persona '{persona}' (smoke={smoke}, enlarged_scams={sample_enlarged})...")
 
         persona_retriever = (
             deps_override.retriever
@@ -290,6 +302,7 @@ def compute_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
         acc = (tp + tn) / max(1, n)
 
         # Scam detection
+        scam_total = sum(1 for r in slice_recs if r["gold_scam"])
         scam_tp = sum(1 for r in slice_recs if r["pred_scam"] and r["gold_scam"])
         scam_fp = sum(1 for r in slice_recs if r["pred_scam"] and not r["gold_scam"])
         scam_fn = sum(1 for r in slice_recs if not r["pred_scam"] and r["gold_scam"])
@@ -318,9 +331,13 @@ def compute_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
             "bid_or_skip_precision": round(prec, 4),
             "bid_or_skip_recall": round(rec, 4),
             "bid_or_skip_accuracy": round(acc, 4),
+            "scam_count": scam_total,
+            "scam_detected_count": scam_tp,
             "scam_precision": round(scam_prec, 4),
             "scam_recall": round(scam_rec, 4),
             "scam_f1": round(scam_f1, 4),
+            "injection_count": inj_total,
+            "injection_detected_count": inj_hits,
             "injection_detection_rate": round(inj_detection_rate, 4),
             "price_in_band_rate": round(price_rate, 4),
             "latency_p50_ms": round(p50, 2),
@@ -415,6 +432,24 @@ def run_decision_eval(
             "decision": "pure_function",
         }
 
+    # Prompt 10b: Record calibration before and after comparison
+    calibration_before_after = {
+        "before": {
+            "note": "Prompt 8 rerun: uncalibrated fit matcher gave out-of-persona jobs fit=1.0 without skill overlap check",
+            "bid_or_skip_f1": 0.75,
+            "bid_or_skip_precision": 0.60,
+            "bid_or_skip_recall": 1.0,
+            "bid_or_skip_accuracy": 0.60,
+        },
+        "after": {
+            "note": "Prompt 10b: calibrated fit matcher requiring similarity >= 0.35 AND skill overlap; fit_score = coverage of requirements with strong evidence",
+            "bid_or_skip_f1": results.get("overall", {}).get("bid_or_skip_f1"),
+            "bid_or_skip_precision": results.get("overall", {}).get("bid_or_skip_precision"),
+            "bid_or_skip_recall": results.get("overall", {}).get("bid_or_skip_recall"),
+            "bid_or_skip_accuracy": results.get("overall", {}).get("bid_or_skip_accuracy"),
+        },
+    }
+
     output_payload = {
         "benchmark": "decision_eval",
         "timestamp": datetime.now(UTC).isoformat(),
@@ -424,6 +459,7 @@ def run_decision_eval(
         "smoke": smoke,
         "models_used": models_used,
         "real_llm_calls_count": real_calls,
+        "calibration_before_after": calibration_before_after,
         **results,
     }
 

@@ -23,6 +23,9 @@ from pathlib import Path
 from typing import Any, TypeVar
 
 import yaml
+from dotenv import load_dotenv
+
+load_dotenv()
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from pydantic import BaseModel, ValidationError
@@ -425,10 +428,10 @@ def llm_call(
         model_name = getattr(model, "model_name", getattr(model, "model", type(model).__name__))
         temperature = getattr(model, "temperature", 0.0)
     else:
-        model = get_llm(node=node, profile=active_profile, config_path=config_path)
-        model_name = getattr(model, "model_name", "unknown")
         node_cfg = profile_cfg.get("nodes", {}).get(node, {})
+        model_name = node_cfg.get("model", "openai/gpt-oss-20b")
         temperature = float(node_cfg.get("temperature", 0.7))
+        model = None
 
     # 3. Check On-Disk Cache (if LLM_CACHE=1)
     use_cache = os.getenv("LLM_CACHE") == "1"
@@ -489,6 +492,8 @@ def llm_call(
 
     retries_used = 0
     fallback_used = False
+    if model is None:
+        model = get_llm(node=node, profile=active_profile, config_path=config_path)
     current_model = model
     current_model_name = model_name
 

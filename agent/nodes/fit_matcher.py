@@ -42,7 +42,16 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> FitReport:
     matrix: list[FitMatrixRow] = []
     gaps: list[str] = []
     reasons: list[str] = []
-    weighted_strengths: list[float] = []
+    strong_count = 0
+
+    # Load calibration thresholds from agent/config.yaml
+    from agent.llm import load_config
+
+    cfg = load_config()
+    fm_cfg = cfg.get("fit_matcher", {})
+    sim_threshold = float(fm_cfg.get("similarity_threshold", 0.35))
+    require_skill_overlap = bool(fm_cfg.get("require_skill_overlap", True))
+    min_skill_overlap = int(fm_cfg.get("min_skill_overlap", 1))
 
     # Evaluate each atomic requirement
     for req in spec.requirements:
@@ -61,18 +70,46 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> FitReport:
             best_score = max(h.score for h in hits)
             evidence_ids = [h.id for h in hits[:3]]
 
-            # Map retrieval score to strength
-            if best_score >= 0.35:
+            # Skill overlap check between requirement and evidence skills
+            req_lower = req.text.lower()
+            matching_spec_skills = [
+                s for s in spec.skills if s.lower() in req_lower or req_lower in s.lower()
+            ]
+            if not matching_spec_skills and len(req.text) <= 40:
+                matching_spec_skills = [req.text]
+
+            # Check if any top hit possesses overlapping skill
+            has_skill_overlap = False
+            for h in hits[:3]:
+                ev_skills = [s.lower() for s in getattr(h, "skills", [])]
+                overlap = sum(
+                    1
+                    for ms in matching_spec_skills
+                    if ms.lower() in ev_skills
+                    or any(ms.lower() in es or es in ms.lower() for es in ev_skills)
+                    or ms.lower() in h.text.lower()
+                )
+                if overlap >= min_skill_overlap:
+                    has_skill_overlap = True
+                    break
+
+            if not require_skill_overlap:
+                has_skill_overlap = True
+
+            # Strength requires BOTH similarity threshold AND skill overlap
+            if best_score >= sim_threshold and has_skill_overlap:
                 strength: str = "strong"
-                weighted_strengths.append(1.0 if req.kind == "must_have" else 0.8)
-                reasons.append(f"Strong match for '{req.text[:40]}...' using [{', '.join(evidence_ids[:2])}].")
+                strong_count += 1
+                reasons.append(
+                    f"Strong match for '{req.text[:40]}...' using [{', '.join(evidence_ids[:2])}]."
+                )
             elif best_score >= 0.10:
                 strength = "weak"
-                weighted_strengths.append(0.5 if req.kind == "must_have" else 0.4)
-                reasons.append(f"Partial match for '{req.text[:40]}...' using [{evidence_ids[0]}].")
+                reasons.append(
+                    f"Partial match for '{req.text[:40]}...' using [{evidence_ids[0]}]."
+                )
             else:
                 strength = "none"
-                weighted_strengths.append(0.0)
                 gaps.append(req.text)
                 reasons.append(f"No strong evidence found for '{req.text[:40]}...'.")
 
@@ -91,18 +128,16 @@ async def run(state_slice: dict[str, Any], deps: NodeDeps) -> FitReport:
                     strength="none",
                 )
             )
-            weighted_strengths.append(0.0)
             gaps.append(req.text)
             reasons.append(f"Missing evidence for requirement: {req.text}")
 
-    # Compute coverage-weighted fit score
+    # Compute fit score: coverage of requirements with strong evidence
     total_reqs = len(spec.requirements)
     if total_reqs > 0:
-        raw_score = sum(weighted_strengths) / float(total_reqs)
-        fit_score = max(0.0, min(1.0, raw_score))
+        fit_score = float(strong_count) / float(total_reqs)
+        fit_score = max(0.0, min(1.0, fit_score))
     else:
-        # Fallback if no decomposed requirements
-        fit_score = 0.50
+        fit_score = 0.0
 
     return FitReport(
         matrix=matrix,

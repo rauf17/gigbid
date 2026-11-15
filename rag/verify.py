@@ -22,27 +22,57 @@ _PERSONA_CORPUS_CACHE: dict[str, dict[str, Any]] = {}
 
 
 def split_claims(text: str) -> list[str]:
-    """Deterministically splits proposal text into atomic verifiable factual sentences.
+    """Deterministically splits proposal text into atomic verifiable factual claims (sentence/clause level).
 
-    Filters out conversational greetings, closing salutations, and screening headers.
+    Filters out conversational greetings, pure questions, closing sign-offs, and screening pleasantries,
+    typically yielding 4-10 atomic verifiable factual claims per letter.
     """
-    raw_sentences = re.split(r"(?<=[.!?])\s+", text.strip())
-    claims: list[str] = []
+    if not text or not text.strip():
+        return []
 
+    # 1. Normalize paragraphs and line breaks
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n+", text.strip()) if p.strip()]
+
+    # Skip patterns for pleasantries, sign-offs, and conversation wrappers
     skip_patterns = [
-        r"(?i)^(?:hi|hello|dear|greetings)\b",
-        r"(?i)^(?:best|regards|sincerely|thanks|thank\s+you)\b",
-        r"(?i)^(?:looking\s+forward|let\s+me\s+know|feel\s+free)\b",
-        r"(?i)^i\s+look\s+forward\s+to\b",
+        r"(?i)^(?:hi|hello|hey|dear|greetings)\b",
+        r"(?i)^(?:best|regards|sincerely|warmly|cheers|thanks|thank\s+you|yours|all\s+the\s+best)\b",
+        r"(?i)^(?:looking\s+forward|i\s+look\s+forward|let\s+me\s+know|feel\s+free|excited\s+to\s+connect|hope\s+to\s+hear)\b",
     ]
 
-    for s in raw_sentences:
-        clean = s.strip()
-        if len(clean) < 15:
-            continue
-        if any(re.search(pat, clean) for pat in skip_patterns):
-            continue
-        claims.append(clean)
+    claims: list[str] = []
+
+    for para in paragraphs:
+        # Split paragraph into sentences or semicolon-delimited clauses
+        raw_units = re.split(r"(?<=[.!?])\s+|\n+|(?:;\s+)", para)
+        for unit in raw_units:
+            clean = unit.strip()
+            # Strip bullet prefixes (- , * , 1. )
+            clean = re.sub(r"^[-*•]\s+|\b\d+\.\s+", "", clean).strip()
+            if not clean or len(clean) < 15:
+                continue
+
+            # Strip leading greeting clause if present e.g. "Dear Client, I built ..." -> "I built ..."
+            greeting_prefix = re.match(r"(?i)^(?:hi|hello|hey|dear)\s+[^,.:\n]+,\s*", clean)
+            if greeting_prefix:
+                clean_remainder = clean[greeting_prefix.end():].strip()
+                if len(clean_remainder) >= 15:
+                    clean = clean_remainder
+                else:
+                    continue
+
+            # Skip pure questions (ending in ? or standard inquiry phrasing)
+            if clean.endswith("?") or re.match(
+                r"(?i)^(?:could|would|can|should|do|does|are|is|will|how|what|why|when|where)\s+(?:you|we|your)\b",
+                clean,
+            ):
+                continue
+
+            # Skip pure pleasantries and sign-offs
+            if any(re.search(pat, clean) for pat in skip_patterns):
+                continue
+
+            claims.append(clean)
 
     return claims
 

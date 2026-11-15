@@ -19,6 +19,7 @@ dist/
 build/
 apps/web/playwright-report/
 apps/web/test-results/
+*.tsbuildinfo
 # generated / private data
 data/raw/
 data/processed/index/

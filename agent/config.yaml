@@ -4,6 +4,11 @@ marketplace:
   max_requests_per_minute: 20
   live_poll_interval_minutes: 180
 
+fit_matcher:
+  similarity_threshold: 0.35
+  require_skill_overlap: true
+  min_skill_overlap: 1
+
 profiles:
   open:                   # REQUIRED: open-weight only (Groq provider)
     provider: groq
