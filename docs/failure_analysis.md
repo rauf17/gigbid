@@ -2,7 +2,7 @@
 
 This document provides a systematic analysis of real failure cases encountered across benchmark runs in `evals/results/`.
 
-Every case below is documented and verified from actual result artifacts (`evals/results/ablation_latest.json`). Per project audit rules, only failures that trace to an existing result file are listed as real failures; taxonomy classes that recorded no per-job failures in official artifacts are explicitly itemized.
+Every case below is documented and verified from actual result artifacts (`evals/results/ablation_latest.json`). Per project audit rules, only failures with traceable individual job records in result files are listed in the case breakdown; taxonomy classes with aggregate-only metrics or zero recorded failures are explicitly itemized.
 
 ---
 
@@ -22,7 +22,7 @@ The platform defines 8 taxonomy classes:
 
 ## Recorded Real Failure Cases (Traced to `evals/results/ablation_latest.json`)
 
-All 5 traced failures occurred under the **Missed Evidence** taxonomy class during the RAG pipeline ablation experiment on persona `fullstack`.
+All 5 traced per-job failures occurred under the **Missed Evidence** taxonomy class during the RAG pipeline ablation experiment on persona `fullstack`.
 
 ### Case 1: Entity Down-Ranking by Cross-Encoder / Hybrid Fusion
 - **Job ID**: `job_hist_00943`
@@ -32,7 +32,7 @@ All 5 traced failures occurred under the **Missed Evidence** taxonomy class duri
 - **What Happened**: Cross-encoder reranker / hybrid BM25 sparse fusion dropped nDCG@10 from 0.6049 (V0 Naive) to 0.0000 and Recall@5 from 0.3333 to 0.0000 on "Senior LLM Engineer for Production RAG Pipeline", missing gold chunk `fullstack_cs_cs_fs_010`.
 - **Root Cause**: BM25 keyword fusion and cross-encoder relevance scoring over-weighted generic resume matches (`fullstack_cv`) and pushed exact technical entity matches (`saas-subscription-core`, `rev_fullstack_010`) out of top-5.
 - **Fix Tried**: V4 outcome-aware heuristic reranking adding review rating weighting and technical token preservation.
-- **Measured Before / After**: Domain nDCG@10 improved from 0.4993 (V0) to 0.5252 (V4) (`evals/results/ablation_latest.json`).
+- **Aggregate effect of related change (not a per-job rerun)**: Domain nDCG@10 improved from 0.4993 (V0) to 0.5252 (V4) (`evals/results/ablation_latest.json`).
 
 ---
 
@@ -44,7 +44,7 @@ All 5 traced failures occurred under the **Missed Evidence** taxonomy class duri
 - **What Happened**: Reciprocal Rank Fusion (RRF) scored nDCG@10 = 0.0000 (Recall@5 = 0.0000 vs 0.3333 in V0), missing all 3 gold evidence chunks.
 - **Root Cause**: BM25 vocabulary mismatch on hyphenated skill tags (`pgvector`, `LangChain`) diluted sparse scores, allowing general web development chunks to rank higher.
 - **Fix Tried**: Query decomposition (V1) to issue atomic sub-queries per skill requirement.
-- **Measured Before / After**: Overall V2 Hybrid achieved Recall@5 = 0.3121 vs V0 = 0.2867 across the full 511-query dev corpus (`evals/results/ablation_latest.json`).
+- **Aggregate effect of related change (not a per-job rerun)**: V1 decomposition dropped Recall@5 to 0.2276 (underperforming baseline V0 = 0.2867); V2 Hybrid achieved Recall@5 = 0.3121 across the 511-query dev corpus (`evals/results/ablation_latest.json`).
 
 ---
 
@@ -56,7 +56,7 @@ All 5 traced failures occurred under the **Missed Evidence** taxonomy class duri
 - **What Happened**: Top-5 retrieval missed gold repository chunk `fullstack_repo_saas-subscription-core` (nDCG@10 drop = 0.6049).
 - **Root Cause**: Repository summaries lacked rich contextual narratives compared to full case studies, resulting in lower dense cosine similarity.
 - **Fix Tried**: Ingestion enrichment prepending repository README descriptions and architecture bullet points.
-- **Measured Before / After**: V3 reranker overall Recall@5 rose from 0.2867 to 0.3308 (`evals/results/ablation_latest.json`).
+- **Aggregate effect of related change (not a per-job rerun)**: V3 reranker overall Recall@5 rose from 0.2867 to 0.3308 (`evals/results/ablation_latest.json`).
 
 ---
 
@@ -68,7 +68,7 @@ All 5 traced failures occurred under the **Missed Evidence** taxonomy class duri
 - **What Happened**: Gold testimonial `fullstack_review_rev_fullstack_010` was demoted out of top-5 (nDCG@10 drop = 0.6049).
 - **Root Cause**: Testimonials are short text snippets (30–60 tokens), causing cross-encoders trained on long passage pairs to assign lower raw logits.
 - **Fix Tried**: V4 outcome heuristic multiplier adding a +0.15 score boost for 5-star client reviews.
-- **Measured Before / After**: V4 maintained overall nDCG@10 = 0.4880 across all 511 dev queries (`evals/results/ablation_latest.json`).
+- **Aggregate effect of related change (not a per-job rerun)**: V4 maintained overall nDCG@10 = 0.4880 across all 511 dev queries (`evals/results/ablation_latest.json`).
 
 ---
 
@@ -80,18 +80,20 @@ All 5 traced failures occurred under the **Missed Evidence** taxonomy class duri
 - **What Happened**: Dense retriever retrieved distractor case studies (`fullstack_cs_cs_fs_015`, `019`, `020`) ahead of gold evidence `fullstack_cs_cs_fs_010`.
 - **Root Cause**: Vector space proximity across technical terms pulled general fullstack case studies with high generic term overlap instead of the specific RAG case study.
 - **Fix Tried**: Mandatory persona-scoped metadata filtering combined with exact entity boost.
-- **Measured Before / After**: Filtered baseline achieved Recall@5 = 0.2867 (nDCG@10 = 0.4617) vs unfiltered Recall@5 = 0.0519 (nDCG@10 = 0.0845) (`evals/results/ablation_latest.json`).
+- **Aggregate effect of related change (not a per-job rerun)**: Filtered baseline achieved Recall@5 = 0.2867 (nDCG@10 = 0.4617) vs unfiltered Recall@5 = 0.0519 (nDCG@10 = 0.0845) (`evals/results/ablation_latest.json`).
 
 ---
 
-## Taxonomy Classes with No Recorded Per-Job Failures in Result Artifacts
+## Taxonomy Classes & Aggregate Failure Traceability Audit
 
-The remaining 7 taxonomy classes recorded zero individual failure cases in the benchmark result files (`evals/results/*.json`):
+The assignment specification targets $\ge 10$ real failed jobs. However, official benchmark result files (`evals/results/*.json`) contain exactly 5 failure entries with traceable individual job IDs (the 5 cases above from `evals/results/ablation_latest.json`). The remaining classes break down as follows:
 
-1. **Wrong Skip**: None recorded. `evals/results/decision_eval_latest.json` records aggregate macro metrics (Bid/Skip Recall = 1.0000, Macro F1 = 0.7500); no individual misclassified job IDs are emitted in the result artifact.
-2. **Mispriced**: None recorded. `evals/results/decision_eval_latest.json` records aggregate price-in-band rate = 0.9000 (90.0%); no individual mispriced job IDs are emitted in the result artifact.
-3. **Unsupported Claim**: None recorded. `evals/results/proposal_eval_latest.json` records post-verification unsupported claim rate = 0.0000 (0.00%); all claims in evaluated proposals were substantiated by cited chunks.
-4. **Generic Opening**: None recorded. `evals/results/proposal_eval_latest.json` records compliance clean rate = 1.0000 (100.0%); no proposals failed opening greeting checks in the benchmark.
-5. **Compliance Miss**: None recorded. Compliance clean rate = 1.0000 across all 3 personas in `evals/results/proposal_eval_latest.json`; zero policy violations detected.
-6. **Injection**: None recorded as individual job rows. `evals/results/injection_eval_latest.json` records aggregate defense rates across 10 evaluation trials (Attack Success Rate 0.9000 unshielded vs 0.2000 shielded, Defense Effectiveness 0.7778); per-job failure rows are not output by the runner.
-7. **Tool Error**: None recorded. Zero MCP tool exceptions or database errors occurred during benchmark execution.
+1. **Injection (Real Failures, Aggregate Record Only)**: `evals/results/injection_eval_latest.json` records that with defenses active, 2 of 10 adversarial attacks succeeded (Attack Success Rate with Defenses = 0.2000; 1 in `ai_ml`, 1 in `data_analyst`). These 2 adversarial penetrations are real platform failures, but the eval runner recorded only aggregate metrics without preserving individual job IDs.
+2. **Wrong Skip & False Bids (Real Failures, Aggregate Record Only)**: `evals/results/decision_eval_latest.json` achieved Bid/Skip precision of 0.6000 across 78 evaluation jobs (meaning 40.0% of bids were false positives placed on non-viable jobs), and scam recall was 0.2778 (missing 13 of 18 scam postings). These represent real decision failures, but the runner emitted only aggregate counts rather than per-job failure ID lists.
+3. **Unsupported Claim**: Zero failures recorded in `evals/results/proposal_eval_latest.json` (post-verification unsupported claim rate = 0.0000; two-stage claim verifier eliminated 100% of detected hallucinations).
+4. **Generic Opening**: Zero failures recorded in `evals/results/proposal_eval_latest.json` (compliance clean rate = 1.0000; no generic epistolary openings passed the critic loop).
+5. **Compliance Miss**: Zero failures recorded in `evals/results/proposal_eval_latest.json` (100.0% clean compliance rate; 0 policy infractions across all evaluated proposals).
+6. **Mispriced**: Aggregate price-in-band rate achieved 0.8846 in `evals/results/decision_eval_latest.json` (88.5% within client willingness-to-pay), but no per-job failure IDs were emitted.
+7. **Tool Error**: Zero failures recorded across benchmark runs (0 MCP tool exceptions or database errors).
+
+**Summary**: Rather than fabricating synthetic job identifiers to reach the 10-job threshold, exactly 5 traceable per-job failures are reported from the result artifacts, alongside the aggregate counts of injection penetrations (2) and decision false bids.

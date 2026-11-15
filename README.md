@@ -150,8 +150,8 @@ All benchmark numbers are copied directly from artifacts in `evals/results/` and
 
 | Stage | Declared Target | Measured p95 Latency | Mean Tokens | Mean Cost (USD) | Status |
 |:---|:---:|:---:|:---:|:---:|:---:|
-| Job Analysed | $\le 12.0\text{s}$ | **`9.749s`** | 1024.7 tokens | **`$0.000000`** | **PASS** (within budget) |
-| Proposal Generation | $\le 25.0\text{s}$ | **`8.780s`** | 2256.5 tokens | **`$0.000000`** | **PASS** (within budget) |
+| Job Analysed | $\le 12.0\text{s}$ | **`9.749s`** | 1024.7 tokens | **`$0.000000`** | within target, but measured with fallback model + cache (not a clean run) |
+| Proposal Generation | $\le 25.0\text{s}$ | **`8.780s`** | 2256.5 tokens | **`$0.000000`** | within target, but measured with fallback model + cache (not a clean run) |
 
 > [!NOTE]
 > Budget numbers were **measured with fallback model**: in `data/processed/llm_calls.jsonl`, 28 of 87 calls (32.2%) used fallback model `openai/gpt-oss-20b` after the primary Groq rate limit was reached, and 26 of 87 calls were served from cache. Critic-prompt trimming is an **estimated token saving, not measured end to end**.

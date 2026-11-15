@@ -1,7 +1,7 @@
 # GigBid Engineering Design Review & Technical Report
 
 **System**: GigBid Autonomous Multi-Agent Freelancer Platform  
-**Authors**: Engineering Team (AI-4016 R&D Assignment)  
+**Author**: Abdul Rauf (23I-0591) — AI-4016 R&D Assignment  
 **Date**: November 2026 | **Version**: 1.0.0  
 **Artifact Repository**: `https://github.com/rauf17/gigbid` | **Commit**: `da8b1df`  
 
@@ -89,6 +89,12 @@ R&D Question B evaluates retrieval strategies for grounding proposal generation 
 
 *\* Reference only (answer-key leakage via direct skill-tag query).*
 
+### Downstream End-to-End Evaluation & Judge Calibration
+- **Judge Calibration (Cohen's Kappa on 30 Labelled Items)**: `not run` (planned inter-annotator calibration between LLM judge and human ratings on 30 proposal items was not executed; result file does not exist).
+- **Human Freelancer Panel**: `not run` (no empirical human panel review conducted; evaluation relied on automated verifier and simulator heuristics).
+- **Per-Variant Judge Score**: `not run` (automated downstream proposal quality scoring per RAG retrieval variant was not run).
+- **GigSim Reply Rate per RAG Variant**: `not run` (downstream simulator bidding was evaluated across strategy arms in Extension X2, but was not run per RAG retrieval variant).
+
 ### Shipped Production Choice
 We shipped **V2 Hybrid with Persona Metadata Filtering**. It delivers `0.3121` Recall@5 (`0.3450` in AI/ML) and `0.4870` nDCG@10 within an acceptable `296.7ms` p95 latency envelope, avoiding the `2,982.4ms` latency penalty of transformer cross-encoders.
 
@@ -142,17 +148,19 @@ We evaluated two distinct proposal writing strategies over a paired cohort of $N
 
 ## 8. Failure Analysis Summary
 
-Documented from verified failure traces in `evals/results/ablation_latest.json` (`docs/failure_analysis.md`). Per truth audit rules, only failures with traceable job records in result files are listed as real failures; remaining taxonomy classes recorded zero per-job failures in official artifacts:
+Documented from verified failure traces in `evals/results/ablation_latest.json` (`docs/failure_analysis.md`). Per truth audit rules, only failures with traceable individual job records in result files are listed in the table:
 
-| Failure Class | Example Job ID | Root Cause | Implemented Resolution | Verified Impact |
+| Failure Class | Example Job ID | Root Cause | Implemented Resolution | Aggregate effect of related change (not a per-job rerun) |
 | :--- | :--- | :--- | :--- | :--- |
 | **Missed Evidence** | `job_hist_00943` | Cross-encoder overweighted general terms | Outcome-aware heuristic reranking | AI/ML nDCG: `0.4993` $\rightarrow$ `0.5252` |
-| **Missed Evidence** | `job_stream_00031` | Sparse BM25 keyword dilution on tags | Query decomposition (V1) | Recall@5: `0.2867` $\rightarrow$ `0.3121` |
+| **Missed Evidence** | `job_stream_00031` | Sparse BM25 keyword dilution on tags | Query decomposition (V1: 0.2276) / Hybrid (V2) | V1 dropped to `0.2276`; V2 reached `0.3121` |
 | **Missed Evidence** | `job_stream_00340` | Inadequate repo chunk narrative density | Repository README enrichment | Recall@5: `0.2867` $\rightarrow$ `0.3308` |
 | **Missed Evidence** | `job_stream_00454` | Truncated review snippet logits | 5-star review score boost (+0.15) | nDCG@10 maintained `0.4880` |
 | **Missed Evidence** | `job_stream_00472` | Distractor proximity across domains | Mandatory persona metadata filtering | Recall@5: `0.0519` $\rightarrow$ `0.2867` |
 
-*\* Note: The remaining 7 taxonomy classes (Wrong Skip, Mispriced, Unsupported Claim, Generic Opening, Compliance Miss, Injection, Tool Error) recorded zero per-job failure traces in result JSONs, achieving 100% compliance clean rate, 0.00% unsupported claims, and 77.8% injection defense effectiveness in aggregate benchmark runs.*
+> [!NOTE]
+> **Traceability & Sample Size Audit**:
+> The assignment specification asks for $\ge 10$ real failed jobs. However, exactly 5 individual failed jobs trace to official result artifacts (`ablation_latest.json` failure cases in Missed Evidence: `job_hist_00943`, `job_stream_00031`, `job_stream_00340`, `job_stream_00454`, `job_stream_00472`). Real failures also occurred in adversarial injection defense (2 of 10 attacks succeeded with defenses, 20.0% ASR in `injection_eval_latest.json`) and decision false bids (precision 0.60 on 78 jobs in `decision_eval_latest.json`), but their eval runners recorded only aggregate benchmark metrics without outputting per-job failure ID lists. Rather than inventing synthetic job IDs, exactly 5 traceable per-job failures are documented from the artifacts.
 
 ---
 
@@ -185,13 +193,13 @@ Evaluated across $n=20$ benchmark jobs using open-weights models (`openai/gpt-os
 | Target / Metric | Declared Target | Measured Baseline | Post-Fix Value | Status |
 | :--- | :---: | :---: | :---: | :---: |
 | **Job Analysed Latency (p50)** | — | 19.75s | **`3.109s`** | Measured baseline |
-| **Job Analysed Latency (p95)** | $\le 12.0\text{s}$ | 20.49s | **`9.749s`** | **PASS** (within budget) |
+| **Job Analysed Latency (p95)** | $\le 12.0\text{s}$ | 20.49s | **`9.749s`** | within target, but measured with fallback model + cache (not a clean run) |
 | **Job Analysed Mean Tokens** | — | 73.1 tokens* | **`1024.7` tokens** | Post-fix accurate accounting |
-| **Job Analysed Mean Cost** | $\le \$0.01$ | $0.000000 | **`$0.000000`** | **PASS** (free tier) |
+| **Job Analysed Mean Cost** | $\le \$0.01$ | $0.000000 | **`$0.000000`** | within target, but measured with fallback model + cache (not a clean run) |
 | **Proposal Latency (p50)** | — | 22.72s | **`3.821s`** | Measured baseline |
-| **Proposal Latency (p95)** | $\le 25.0\text{s}$ | 61.13s | **`8.780s`** | **PASS** (within budget) |
+| **Proposal Latency (p95)** | $\le 25.0\text{s}$ | 61.13s | **`8.780s`** | within target, but measured with fallback model + cache (not a clean run) |
 | **Proposal Mean Tokens** | — | 173.6 tokens* | **`2256.5` tokens** | Post-fix accurate accounting |
-| **Proposal Mean Cost** | $\le \$0.03$ | $0.000000 | **`$0.000000`** | **PASS** (free tier) |
+| **Proposal Mean Cost** | $\le \$0.03$ | $0.000000 | **`$0.000000`** | within target, but measured with fallback model + cache (not a clean run) |
 
 > [!WARNING]
 > **Measurement Notice (Fallback Model & Cache Service)**:
