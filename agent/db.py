@@ -44,10 +44,44 @@ DDL_PROPOSAL_SUBMISSIONS = "".join([  # noqa: FLY002
     "bid_amount DOUBLE PRECISION, proposal_text TEXT, created_at TIMESTAMPTZ DEFAULT NOW());",
 ])
 
+DDL_USERS = "".join([  # noqa: FLY002
+    "CREATE TABLE IF NOT EXISTS users (",
+    "id TEXT PRIMARY KEY, email TEXT UNIQUE NOT NULL, ",
+    "password_hash TEXT NOT NULL, persona_id TEXT NOT NULL DEFAULT 'ai_ml', ",
+    "created_at TIMESTAMPTZ DEFAULT NOW());",
+])
+
+DDL_USER_PROFILES = "".join([  # noqa: FLY002
+    "CREATE TABLE IF NOT EXISTS user_profiles (",
+    "user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, ",
+    "persona_id TEXT NOT NULL DEFAULT 'ai_ml', ",
+    "hourly_rate DOUBLE PRECISION DEFAULT 50.0, floor_rate DOUBLE PRECISION DEFAULT 30.0, ",
+    "filters JSONB DEFAULT '{}'::jsonb, weekly_connects_budget INT DEFAULT 40, ",
+    "autonomy_level TEXT DEFAULT 'semi_autonomous', saved_searches JSONB DEFAULT '[]'::jsonb, ",
+    "updated_at TIMESTAMPTZ DEFAULT NOW());",
+])
+
+DDL_USER_CONNECTIONS = "".join([  # noqa: FLY002
+    "CREATE TABLE IF NOT EXISTS user_connections (",
+    "user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, ",
+    "encrypted_marketplace_token TEXT, updated_at TIMESTAMPTZ DEFAULT NOW());",
+])
+
+DDL_JOB_SKIPS = "".join([  # noqa: FLY002
+    "CREATE TABLE IF NOT EXISTS job_skips (",
+    "id BIGSERIAL PRIMARY KEY, user_id TEXT NOT NULL, ",
+    "job_id TEXT NOT NULL, reason TEXT, created_at TIMESTAMPTZ DEFAULT NOW(), ",
+    "CONSTRAINT unq_user_job_skip UNIQUE(user_id, job_id));",
+])
+
 # In-memory storage for offline unit test fallbacks
 _MEMORY_AUDIT_TRACE: list[dict[str, Any]] = []
 _MEMORY_DEAD_LETTER: list[dict[str, Any]] = []
 _MEMORY_PROPOSAL_SUBMISSIONS: dict[str, dict[str, Any]] = {}
+_MEMORY_USERS: dict[str, dict[str, Any]] = {}
+_MEMORY_USER_PROFILES: dict[str, dict[str, Any]] = {}
+_MEMORY_USER_CONNECTIONS: dict[str, str] = {}
+_MEMORY_JOB_SKIPS: dict[tuple[str, str], dict[str, Any]] = {}
 
 
 def get_db_url() -> str:
@@ -79,9 +113,15 @@ def init_db(conn_string: str | None = None) -> bool:
             cur.execute(DDL_AUDIT_TRACE)
             cur.execute(DDL_DEAD_LETTER)
             cur.execute(DDL_PROPOSAL_SUBMISSIONS)
+            cur.execute(DDL_USERS)
+            cur.execute(DDL_USER_PROFILES)
+            cur.execute(DDL_USER_CONNECTIONS)
+            cur.execute(DDL_JOB_SKIPS)
             cur.execute("CREATE INDEX IF NOT EXISTS idx_audit_trace_thread ON audit_trace(thread_id);")
             cur.execute("CREATE INDEX IF NOT EXISTS idx_dead_letter_thread ON dead_letter(thread_id);")
             cur.execute("CREATE INDEX IF NOT EXISTS idx_proposal_submissions_job ON proposal_submissions(job_id);")
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);")
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_job_skips_user_job ON job_skips(user_id, job_id);")
 
         # Initialize LangGraph Checkpointer & Store schemas
         from langgraph.checkpoint.postgres import PostgresSaver
