@@ -166,12 +166,12 @@ Documented from verified failure traces in `evals/results/ablation_latest.json` 
 
 ## 9. Safety, Platform Respect & Injection Defense
 
-### Inviolable Platform Guardrails
-The system strictly enforces four non-negotiable boundaries:
-1. **Never Solicit Off-Platform Contact**: Pre-contract sharing of email, phone, Telegram, or WhatsApp is prohibited.
-2. **Never Agree to Unpaid Work**: Free test tasks, sample deliverables, or speculative projects are blocked.
-3. **Never Facilitate Off-Platform Payments**: Escrow bypass via crypto, cash, or direct wire is intercepted.
-4. **Never Auto-Dispatch Bids**: Proposals require explicit human reviewer sign-off via `interrupt()`.
+### Platform Guardrail Policies
+The system enforces four primary platform compliance checks:
+1. **No Off-Platform Contact**: Pre-contract sharing of email, phone, Telegram, or WhatsApp is flagged and removed.
+2. **No Unpaid Work**: Free test tasks, sample deliverables, or speculative projects are intercepted.
+3. **No Off-Platform Payments**: Escrow bypass via crypto, cash, or direct wire is intercepted.
+4. **Human Review Before Send**: Outgoing proposals require explicit human reviewer sign-off via `interrupt()`.
 
 ### Adversarial Injection Defense (Requirement R9)
 Adversarial attacks embedded in untrusted job descriptions attempt to hijack prompt execution. We tested 10 adversarial attacks (`evals/results/injection_eval_latest.json`):

@@ -21,7 +21,7 @@ GigSim simulator.
 > **Deployment status, stated plainly.** The Vercel site is the Next.js frontend in **demo mode**
 > (`NEXT_PUBLIC_MOCK=1`). It shows fixture data under a `DEMO DATA` banner and does **not** run the
 > agents. The full system (API, worker, Postgres, Redis, MCP servers, GigSim and the LangGraph agents)
-> runs with `docker compose up` and in the single-container `gigbid-space` image. A public hosted
+> runs in the single-container `gigbid-space` image (a docker compose file exists but was not re-tested). A public hosted
 > backend is **pending**: the Azure account is still under review and no other free host could be
 > arranged. It will be deployed once that is confirmed with the course staff. The demo video was
 > recorded against the full stack on localhost. The reviewer login is in the private Classroom
@@ -173,7 +173,7 @@ synthetic jobs across three personas (511 have gold evidence).
 
 | Benchmark | Primary metric | Value | p95 (ms) |
 |:---|:---|:---:|:---:|
-| Decision pipeline | Bid/skip F1 | 0.7500 | 921.85 |
+| Decision pipeline ($n=78$) | Bid/skip F1 | 0.7500 | 921.85 |
 | Proposal verification | Unsupported claims after verification | 0.0000 | 1411.7 |
 | Injection defence | Defence effectiveness | 0.7778 | 2722.5 |
 | Scam detection | Precision / Recall ($n=78$, 18 scam) | 1.0000 / 0.2778 | 921.85 |
@@ -274,13 +274,10 @@ Claude Desktop (`claude_desktop_config.json`):
 
 ## Safety
 
-- **Nothing is sent without human approval.** Approval uses LangGraph `interrupt()` and survives
-  restarts because state is checkpointed in Postgres.
-- **Job posts and client messages are untrusted.** They are delimited and scanned for planted
-  instructions, and the agents never follow them.
-- **Platform rules are enforced in code.** Off-platform contact, unpaid test work and guarantees are
-  removed or blocked by deterministic checks.
-- **Personal data is masked** in logs and traces.
+- **Human approval before send.** Outgoing proposals and messages require human authorization via LangGraph `interrupt()`, which persists across restarts through PostgreSQL checkpoints.
+- **Untrusted data is delimited and scanned.** Job posts and client messages are treated as untrusted input, wrapped in boundary delimiters and scanned for planted instructions. In evaluation (`injection_eval_latest.json`), measured injection attack success fell from 0.90 to 0.20 on a 10-sample probe, showing defenses reduce risk but some attacks still get through.
+- **Platform rule checks.** Deterministic regex and policy rules flag off-platform contact, unpaid work requests, and prohibited guarantees before proposals are reviewed; scam recall is 0.2778 on 18 scam jobs (see Limitations).
+- **Personal data is masked** in audit logs and traces.
 
 ---
 
