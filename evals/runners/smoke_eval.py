@@ -31,7 +31,7 @@ class FakeSmokeChatModel(BaseChatModel):
     _current_gold: ClassVar[dict[str, Any]] = {}
 
     def set_gold(self, gold: dict[str, Any]) -> None:
-        self._current_gold = gold
+        FakeSmokeChatModel._current_gold = gold
 
     def _generate(self, messages: list[BaseMessage], stop: list[str] | None = None, **kwargs: Any) -> Any:
         last_content = str(messages[-1].content) if messages else ""
