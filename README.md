@@ -11,7 +11,7 @@ GigSim simulator.
 
 | | |
 |---|---|
-| **Demo video** | [Watch the walkthrough](<VIDEO_URL>) |
+| **Demo video** | [Watch the walkthrough](https://drive.google.com/file/d/1jhDHnP6n6WOdW9uqqUUIWLFxXHCsQft5/view?usp=sharing) |
 | **Hosted frontend (demo mode)** | [Open the Vercel demo](https://gigbit-connect.vercel.app) |
 | **Write-up** | [My Retrieval Evaluation Lied to Me Three Times](https://dev.to/rauf17/my-retrieval-evaluation-lied-to-me-three-times-2l8n) |
 | **R&D report** | [docs/REPORT.pdf](docs/REPORT.pdf) |
